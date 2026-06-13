@@ -1,0 +1,183 @@
+import ThemeProvider from "@/components/ThemeProvider";
+import type { Metadata, Viewport } from "next";
+import { Geist_Mono, Inter } from "next/font/google";
+import "./globals.css";
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+
+const inter = Inter({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0f1a" },
+  ],
+  width: "device-width",
+  initialScale: 1,
+};
+
+const BASE_URL = "https://hasnat0006.dev";
+
+export const metadata: Metadata = {
+  metadataBase: new URL(BASE_URL),
+  title: {
+    default:
+      "Yusuf Reza Hasnat | Algorithmic Systems Engineer & Competitive Programmer",
+    template: "%s | Yusuf Reza Hasnat",
+  },
+  description:
+    "Portfolio of Yusuf Reza Hasnat — Algorithmic Systems Engineer, Competitive Programmer (Specialist @ Codeforces), ICPC Asia Dhaka Regionalist, and Biomedical Researcher at MIST. 1500+ problems solved.",
+  keywords: [
+    "Yusuf Reza Hasnat",
+    "hasnat0006",
+    "competitive programming",
+    "ICPC",
+    "Codeforces Specialist",
+    "software engineer",
+    "biomedical research",
+    "algorithm",
+    "MIST CSE",
+    "Military Institute of Science and Technology",
+    "problem solver",
+    "full-stack developer",
+    "Tekarsh",
+    "Career Climb",
+  ],
+  authors: [{ name: "Yusuf Reza Hasnat", url: BASE_URL }],
+  creator: "Yusuf Reza Hasnat",
+  publisher: "Yusuf Reza Hasnat",
+  alternates: {
+    canonical: BASE_URL,
+  },
+  openGraph: {
+    title: "Yusuf Reza Hasnat | hasnat0006.dev",
+    description:
+      "Algorithmic Systems Engineer, Competitive Programmer (Specialist @ CF), ICPC Asia Dhaka Regionalist & Biomedical Researcher. 1500+ problems solved.",
+    url: BASE_URL,
+    siteName: "hasnat0006.dev",
+    locale: "en_US",
+    type: "website",
+    countryName: "Bangladesh",
+    emails: ["yusufrezahasnat0006@gmail.com"],
+    images: [
+      {
+        url: `${BASE_URL}/hasnat.jpeg`,
+        width: 512,
+        height: 512,
+        alt: "Yusuf Reza Hasnat — Portfolio",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Yusuf Reza Hasnat | hasnat0006.dev",
+    description:
+      "Algorithmic Systems Engineer, Competitive Programmer (Specialist @ CF), ICPC Asia Dhaka Regionalist & Biomedical Researcher.",
+    images: [`${BASE_URL}/hasnat.jpeg`],
+    creator: "@hasnat0006",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  category: "technology",
+  classification: "Portfolio",
+  verification: {
+    google: "YOUR_GOOGLE_SEARCH_CONSOLE_VERIFICATION_CODE",
+  },
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html
+      lang="en"
+      className={`${inter.variable} ${geistMono.variable} h-full antialiased`}
+      suppressHydrationWarning
+    >
+      <head>
+        {/* Prevent flash of wrong theme */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem("portfolio-theme");if(t==="dark"||(!t&&window.matchMedia("(prefers-color-scheme:dark)").matches)){document.documentElement.classList.add("dark")}}catch(e){}})()`,
+          }}
+        />
+        {/* JSON-LD Structured Data for Google Knowledge Graph */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Person",
+              name: "Yusuf Reza Hasnat",
+              alternateName: "hasnat0006",
+              givenName: "Yusuf Reza",
+              familyName: "Hasnat",
+              url: BASE_URL,
+              image: `${BASE_URL}/hasnat.jpeg`,
+              email: "yusufrezahasnat0006@gmail.com",
+              jobTitle: [
+                "Algorithmic Systems Engineer",
+                "Competitive Programmer",
+                "Biomedical Researcher",
+              ],
+              description:
+                "Competitive Programmer (Specialist @ Codeforces), ICPC Asia Dhaka Regionalist, and CSE undergraduate at MIST with 1500+ problems solved.",
+              knowsAbout: [
+                "Algorithm Design",
+                "Data Structures",
+                "Competitive Programming",
+                "Web Development",
+                "Biomedical Data Pipelines",
+                "Machine Learning",
+              ],
+              alumniOf: {
+                "@type": "CollegeOrUniversity",
+                name: "Military Institute of Science and Technology (MIST)",
+                identifier: "MIST",
+              },
+              affiliation: {
+                "@type": "Organization",
+                name: "MIST Computer Club",
+              },
+              sameAs: [
+                "https://github.com/hasnat0006",
+                "https://linkedin.com/in/yusufrezahasnat",
+                "https://codeforces.com/profile/Hasnat0006",
+              ],
+              mainEntityOfPage: {
+                "@type": "WebSite",
+                "@id": BASE_URL,
+                name: "Yusuf Reza Hasnat - Portfolio",
+                url: BASE_URL,
+              },
+              nationality: {
+                "@type": "Country",
+                name: "Bangladesh",
+              },
+            }),
+          }}
+        />
+      </head>
+      <body className="min-h-full flex flex-col transition-colors duration-300">
+        <ThemeProvider>{children}</ThemeProvider>
+      </body>
+    </html>
+  );
+}
