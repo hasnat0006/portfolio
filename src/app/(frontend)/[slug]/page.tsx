@@ -17,7 +17,7 @@ export async function generateMetadata({
 
   if (!page) {
     return {
-      title: "Page Not Found | hasnat0006.dev",
+      title: `Page Not Found | ${new URL(process.env.NEXT_PUBLIC_BASE_URL!).hostname}`,
     };
   }
 

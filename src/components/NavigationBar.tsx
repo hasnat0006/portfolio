@@ -59,7 +59,9 @@ export default function NavigationBar() {
           style={{ color: "var(--text-accent)" }}
         >
           <span style={{ color: "var(--text-muted)" }}>~/</span>
-          <span className="font-bold">hasnat0006.dev</span>
+          <span className="font-bold">
+            {new URL(process.env.NEXT_PUBLIC_BASE_URL!).hostname}
+          </span>
         </a>
 
         {/* Desktop nav */}

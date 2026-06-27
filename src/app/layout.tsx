@@ -30,7 +30,7 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-const BASE_URL = "https://hasnat0006.vercel.app";
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL!;
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
@@ -63,11 +63,11 @@ export const metadata: Metadata = {
     canonical: BASE_URL,
   },
   openGraph: {
-    title: "Yusuf Reza Hasnat | hasnat0006.vercel.app",
+    title: `Yusuf Reza Hasnat | ${new URL(BASE_URL).hostname}`,
     description:
       "Algorithmic Systems Engineer, Competitive Programmer (Specialist @ CF), ICPC Asia Dhaka Regionalist & Biomedical Researcher. 1500+ problems solved.",
     url: BASE_URL,
-    siteName: "hasnat0006.vercel.app",
+    siteName: new URL(BASE_URL).hostname,
     locale: "en_US",
     type: "website",
     countryName: "Bangladesh",
@@ -83,7 +83,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Yusuf Reza Hasnat | hasnat0006.vercel.app",
+    title: `Yusuf Reza Hasnat | ${new URL(BASE_URL).hostname}`,
     description:
       "Algorithmic Systems Engineer, Competitive Programmer (Specialist @ CF), ICPC Asia Dhaka Regionalist & Biomedical Researcher.",
     images: [`${BASE_URL}/hasnat.jpeg`],
@@ -102,9 +102,6 @@ export const metadata: Metadata = {
   },
   category: "technology",
   classification: "Portfolio",
-  verification: {
-    google: "YOUR_GOOGLE_SEARCH_CONSOLE_VERIFICATION_CODE",
-  },
 };
 
 export default function RootLayout({
@@ -181,6 +178,34 @@ export default function RootLayout({
               nationality: {
                 "@type": "Country",
                 name: "Bangladesh",
+              },
+            }),
+          }}
+        />
+        {/* JSON-LD WebSite schema with SearchAction */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              "@id": `${BASE_URL}/#website`,
+              url: BASE_URL,
+              name: "Yusuf Reza Hasnat - Portfolio",
+              description:
+                "Portfolio of Yusuf Reza Hasnat — Algorithmic Systems Engineer, Competitive Programmer, and Biomedical Researcher.",
+              publisher: {
+                "@type": "Person",
+                "@id": `${BASE_URL}/#person`,
+                name: "Yusuf Reza Hasnat",
+              },
+              potentialAction: {
+                "@type": "SearchAction",
+                target: {
+                  "@type": "EntryPoint",
+                  urlTemplate: `${BASE_URL}/?q={search_term_string}`,
+                },
+                "query-input": "required name=search_term_string",
               },
             }),
           }}

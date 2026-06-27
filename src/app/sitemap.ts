@@ -1,7 +1,7 @@
 import { getAllSlugs } from "@/data/pages";
 import type { MetadataRoute } from "next";
 
-const BASE_URL = "https://hasnat0006.dev";
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL!;
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const slugs = getAllSlugs();

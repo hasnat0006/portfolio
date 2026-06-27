@@ -56,9 +56,11 @@ export default function ProjectCard({
 
   useEffect(() => {
     if (!githubUrl) return;
-    fetch(
-      `https://api.github.com/repos/hasnat0006/${githubUrl?.split("/").pop()}`,
-    )
+    const parts = githubUrl.replace("https://github.com/", "").split("/");
+    if (parts.length < 2) return;
+    const owner = parts[0];
+    const repo = parts[1];
+    fetch(`https://api.github.com/repos/${owner}/${repo}`)
       .then((r) => r.json())
       .then((data) => {
         if (data && !data.message) {
