@@ -139,5 +139,6 @@ export const PROJECTS: Project[] = [
     githubUrl: "https://github.com/hasnat0006/RedSet",
     duration: "3 months",
     collaborators: [{ name: "Hasnat Hasan", github: "hasnat0006" }],
+    photoUrl: [ "projects/redset/1.png" ]
   },
 ];

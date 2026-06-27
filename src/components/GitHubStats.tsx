@@ -20,7 +20,10 @@ export default function GitHubStats() {
     fetch("/api/github/stats")
       .then((r) => r.json())
       .then((data) => {
-        setStats(data);
+        // Guard against malformed data (e.g. API returns an error object)
+        if (data && typeof data === "object" && Array.isArray(data.languages)) {
+          setStats(data as GitHubStatsData);
+        }
         setLoading(false);
       })
       .catch(() => setLoading(false));
