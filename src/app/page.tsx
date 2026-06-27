@@ -64,39 +64,6 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ── Research Section ────────────────────────────────────── */}
-        <section id="research" className="px-4 py-16 md:py-24">
-          <div className="max-w-4xl mx-auto">
-            <div className="flex items-center gap-3 mb-2">
-              <span
-                className="text-code text-sm"
-                style={{ color: "var(--text-accent)" }}
-              >
-                $
-              </span>
-              <h2
-                className="text-heading text-2xl md:text-3xl"
-                style={{ color: "var(--text-primary)" }}
-              >
-                cat ./research
-              </h2>
-            </div>
-            <p
-              className="text-code text-sm ml-6 mb-10"
-              style={{ color: "var(--text-muted)" }}
-            >
-              Peer-reviewed scientific contributions
-            </p>
-
-            <PublicationCard
-              title="Biomedical Computational Data Pipelines"
-              description="Co-authored peer-reviewed scientific paper indexed in PubMed, focusing on computational data pipelines for biomedical research. The work involves large-scale data processing, statistical analysis, and pipeline optimization for clinical research workflows."
-              indexedIn="PubMed"
-              domain="Biomedical / Computational Data Pipelines"
-            />
-          </div>
-        </section>
-
         {/* ── Achievements Section ───────────────────────────────── */}
         <section id="achievements" className="px-4 py-16 md:py-24">
           <div className="max-w-5xl mx-auto">
