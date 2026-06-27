@@ -1,16 +1,24 @@
 import ThemeProvider from "@/components/ThemeProvider";
 import type { Metadata, Viewport } from "next";
-import { Geist_Mono, Inter } from "next/font/google";
+import { Inter, JetBrains_Mono, Sora } from "next/font/google";
 import "./globals.css";
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
+  display: "swap",
 });
 
-const inter = Inter({
-  variable: "--font-geist-sans",
+const sora = Sora({
+  variable: "--font-sora",
   subsets: ["latin"],
+  display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains-mono",
+  subsets: ["latin"],
+  display: "swap",
 });
 
 export const viewport: Viewport = {
@@ -22,13 +30,12 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-const BASE_URL = "https://hasnat0006.dev";
+const BASE_URL = "https://hasnat0006.vercel.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: {
-    default:
-      "Yusuf Reza Hasnat | Algorithmic Systems Engineer & Competitive Programmer",
+    default: "Yusuf Reza Hasnat",
     template: "%s | Yusuf Reza Hasnat",
   },
   description:
@@ -56,11 +63,11 @@ export const metadata: Metadata = {
     canonical: BASE_URL,
   },
   openGraph: {
-    title: "Yusuf Reza Hasnat | hasnat0006.dev",
+    title: "Yusuf Reza Hasnat | hasnat0006.vercel.app",
     description:
       "Algorithmic Systems Engineer, Competitive Programmer (Specialist @ CF), ICPC Asia Dhaka Regionalist & Biomedical Researcher. 1500+ problems solved.",
     url: BASE_URL,
-    siteName: "hasnat0006.dev",
+    siteName: "hasnat0006.vercel.app",
     locale: "en_US",
     type: "website",
     countryName: "Bangladesh",
@@ -76,7 +83,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Yusuf Reza Hasnat | hasnat0006.dev",
+    title: "Yusuf Reza Hasnat | hasnat0006.vercel.app",
     description:
       "Algorithmic Systems Engineer, Competitive Programmer (Specialist @ CF), ICPC Asia Dhaka Regionalist & Biomedical Researcher.",
     images: [`${BASE_URL}/hasnat.jpeg`],
@@ -108,10 +115,14 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${inter.variable} ${sora.variable} ${jetbrainsMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <head>
+        <meta
+          name="google-site-verification"
+          content="AnbzusuoDN1cBbBsp1oWGo-7eHr0aVgLI94uA_289wc"
+        />
         {/* Prevent flash of wrong theme */}
         <script
           dangerouslySetInnerHTML={{

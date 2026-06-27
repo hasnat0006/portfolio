@@ -24,7 +24,7 @@ export default function PublicationCard({
       {/* Index Badge */}
       <div className="flex items-center gap-2 mb-4">
         <span
-          className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-mono font-semibold border"
+          className="inline-flex items-center px-2.5 py-1 rounded-md text-meta font-semibold border"
           style={{
             background: "var(--bg-badge)",
             color: "var(--text-accent)",
@@ -45,24 +45,21 @@ export default function PublicationCard({
           </svg>
           {indexedIn}
         </span>
-        <span
-          className="text-xs font-mono"
-          style={{ color: "var(--text-muted)" }}
-        >
+        <span className="text-meta" style={{ color: "var(--text-muted)" }}>
           peer-reviewed
         </span>
       </div>
 
       {/* Title */}
       <h3
-        className="text-lg font-bold font-mono mb-2 transition-colors"
+        className="text-subheading text-lg mb-2 transition-colors"
         style={{ color: "var(--text-accent-secondary)" }}
       >
         {title}
       </h3>
 
       {/* Domain */}
-      <div className="text-xs font-mono mb-3">
+      <div className="text-meta mb-3">
         <span style={{ color: "var(--text-muted)" }}>domain:</span>{" "}
         <span style={{ color: "var(--text-accent)" }}>{domain}</span>
       </div>
@@ -81,7 +78,7 @@ export default function PublicationCard({
           href={`https://doi.org/${doi}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 text-xs font-mono transition-colors px-3 py-1.5 rounded-md border"
+          className="inline-flex items-center gap-2 text-small text-xs transition-colors px-3 py-1.5 rounded-md border"
           style={{
             color: "var(--text-accent)",
             borderColor: "var(--border-accent)",

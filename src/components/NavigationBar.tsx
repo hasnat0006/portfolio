@@ -55,7 +55,7 @@ export default function NavigationBar() {
         {/* Logo */}
         <a
           href="#hero"
-          className="font-mono text-sm flex items-center gap-1.5 transition-colors"
+          className="text-code text-sm flex items-center gap-1.5 transition-colors"
           style={{ color: "var(--text-accent)" }}
         >
           <span style={{ color: "var(--text-muted)" }}>~/</span>
@@ -68,7 +68,7 @@ export default function NavigationBar() {
             <a
               key={label}
               href={href}
-              className="font-mono text-xs px-3 py-1.5 rounded transition-all duration-200"
+              className="text-small text-xs px-3 py-1.5 rounded transition-all duration-200"
               style={{
                 color:
                   activeSection === label
@@ -209,7 +209,7 @@ export default function NavigationBar() {
                 key={label}
                 href={href}
                 onClick={() => setMobileOpen(false)}
-                className="font-mono text-sm px-3 py-2 rounded transition-colors"
+                className="text-small text-sm px-3 py-2 rounded transition-colors"
                 style={{
                   color:
                     activeSection === label

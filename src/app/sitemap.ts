@@ -1,46 +1,25 @@
-import { safeFetch } from "@/sanity/lib/client";
-import { SITEMAP_QUERY } from "@/sanity/lib/queries";
+import { getAllSlugs } from "@/data/pages";
 import type { MetadataRoute } from "next";
 
 const BASE_URL = "https://hasnat0006.dev";
 
-type SitemapData = {
-  pages: Array<{ slug: string; _updatedAt: string }>;
-  projects: Array<{ slug: string; _updatedAt: string }>;
-};
+export default function sitemap(): MetadataRoute.Sitemap {
+  const slugs = getAllSlugs();
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  // CRITICAL: stega: false to prevent invisible characters in sitemap URLs
-  const data = await safeFetch<SitemapData>(
-    SITEMAP_QUERY,
-    {},
-    { stega: false },
-  );
-
-  const pages: MetadataRoute.Sitemap = (data?.pages ?? []).map((page) => ({
-    url: `${BASE_URL}/${page.slug}`,
-    lastModified: new Date(page._updatedAt),
-    changeFrequency: "monthly",
+  const pages: MetadataRoute.Sitemap = slugs.map((slug) => ({
+    url: `${BASE_URL}/${slug}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
     priority: 0.8,
   }));
-
-  const projects: MetadataRoute.Sitemap = (data?.projects ?? []).map(
-    (project) => ({
-      url: `${BASE_URL}/projects/${project.slug}`,
-      lastModified: new Date(project._updatedAt),
-      changeFrequency: "monthly",
-      priority: 0.6,
-    }),
-  );
 
   return [
     {
       url: BASE_URL,
       lastModified: new Date(),
-      changeFrequency: "weekly",
+      changeFrequency: "weekly" as const,
       priority: 1,
     },
     ...pages,
-    ...projects,
   ];
 }

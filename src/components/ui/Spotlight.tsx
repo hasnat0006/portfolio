@@ -1,6 +1,12 @@
 "use client";
 
-import { useRef, useState, useCallback, type ReactNode, type MouseEvent } from "react";
+import {
+  useCallback,
+  useRef,
+  useState,
+  type MouseEvent,
+  type ReactNode,
+} from "react";
 
 export default function Spotlight({
   children,

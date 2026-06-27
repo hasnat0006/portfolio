@@ -48,9 +48,9 @@ export default function HeroSection() {
       <section id="hero" className="max-w-5xl mx-auto w-full">
         <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
           {/* Profile image */}
-          <div className="shrink-0 animate-fadeIn">
+          <div className="shrink-0 animate-fadeIn transition-all duration-500 hover:scale-[1.04]">
             <div
-              className="relative w-40 h-40 md:w-52 md:h-52 rounded-full overflow-hidden"
+              className="relative w-40 h-40 md:w-64 md:h-64 rounded-full overflow-hidden"
               style={{
                 border: "3px solid var(--border-accent)",
                 boxShadow: "var(--shadow-glow)",
@@ -71,26 +71,28 @@ export default function HeroSection() {
           <div className="text-center md:text-left animate-fadeIn">
             <Sparkles particleCount={15} />
             <div
-              className="font-mono text-sm mb-3"
+              className="text-meta mb-3"
               style={{ color: "var(--text-muted)" }}
             >
               <span style={{ color: "var(--text-accent)" }}>$</span> whoami
             </div>
 
             <h1
-              className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4 font-mono tracking-tight"
-              style={{ color: "var(--text-accent)" }}
+              className="text-hero text-4xl sm:text-5xl md:text-6xl mb-4"
+              style={{ color: "var(--text-primary)" }}
             >
               Yusuf Reza Hasnat
             </h1>
 
             {/* Typing animation subtitle */}
             <div
-              className="font-mono text-lg md:text-xl mb-6 h-8"
+              className="text-body text-lg md:text-xl mb-6 -mt-2 h-8"
               style={{ color: "var(--text-secondary)" }}
             >
               <span style={{ color: "var(--text-accent)" }}>→</span>{" "}
-              <span>{displayTitle}</span>
+              <span style={{ color: "var(--text-accent)" }}>
+                {displayTitle}
+              </span>
               <span
                 className="inline-block w-0.5 h-5 align-middle animate-pulse ml-0.5"
                 style={{ background: "var(--text-accent)" }}
@@ -99,11 +101,11 @@ export default function HeroSection() {
 
             {/* Bio */}
             <div
-              className="text-sm max-w-xl mb-8"
+              className="text-sm max-w-xl mb-8 -mt-2"
               style={{ color: "var(--text-secondary)" }}
             >
               <TextGenerateEffect
-                words="Building efficient projects, competing in ICPC and multiple IUPCs. Short bio will come here soon..."
+                words="Computer Science undergraduate and competitive programmer focused on software engineering, AI and modern web technologies. Passionate about building clean, scalable, and impactful digital solutions."
                 delay={30}
               />
             </div>
@@ -114,7 +116,7 @@ export default function HeroSection() {
                 href="https://linkedin.com/in/yusufrezahasnat"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="transition-all duration-300"
+                className="transition-all duration-300 hover:scale-110"
                 style={{ color: "var(--text-muted)" }}
                 onMouseEnter={(e) =>
                   (e.currentTarget.style.color = "var(--text-accent)")
@@ -136,7 +138,7 @@ export default function HeroSection() {
               </a>
               <a
                 href="mailto:yusufrezahasnat0006@gmail.com"
-                className="transition-all duration-300"
+                className="transition-all duration-300 hover:scale-110"
                 style={{ color: "var(--text-muted)" }}
                 onMouseEnter={(e) =>
                   (e.currentTarget.style.color = "var(--text-accent)")
@@ -160,7 +162,7 @@ export default function HeroSection() {
                 href="https://github.com/hasnat0006"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="transition-all duration-300"
+                className="transition-all duration-300 hover:scale-110"
                 style={{ color: "var(--text-muted)" }}
                 onMouseEnter={(e) =>
                   (e.currentTarget.style.color = "var(--text-accent)")
@@ -184,7 +186,7 @@ export default function HeroSection() {
                 href="https://codeforces.com/profile/Hasnat0006"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="transition-all duration-300"
+                className="transition-all duration-300 hover:scale-110"
                 style={{ color: "var(--text-muted)" }}
                 onMouseEnter={(e) =>
                   (e.currentTarget.style.color = "var(--text-accent)")
@@ -204,91 +206,194 @@ export default function HeroSection() {
                   <path d="M4.5 7.5C5.328 7.5 6 8.172 6 9v10.5c0 .828-.672 1.5-1.5 1.5h-3C.672 21 0 20.328 0 19.5V9c0-.828.672-1.5 1.5-1.5h3zm9-4.5c.828 0 1.5.672 1.5 1.5v15c0 .828-.672 1.5-1.5 1.5h-3c-.828 0-1.5-.672-1.5-1.5V4.5c0-.828.672-1.5 1.5-1.5h3zm9 7.5c.828 0 1.5.672 1.5 1.5v7.5c0 .828-.672 1.5-1.5 1.5h-3c-.828 0-1.5-.672-1.5-1.5V12c0-.828.672-1.5 1.5-1.5h3z" />
                 </svg>
               </a>
+              <a
+                href="https://www.instagram.com/hasnat_0006"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="transition-all duration-300 hover:scale-110"
+                style={{ color: "var(--text-muted)" }}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.color = "var(--text-accent)")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.color = "var(--text-muted)")
+                }
+                aria-label="Instagram"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
+                </svg>
+              </a>
+              <a
+                href="https://www.facebook.com/yusufreza.hasnat"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="transition-all duration-300 hover:scale-110"
+                style={{ color: "var(--text-muted)" }}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.color = "var(--text-accent)")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.color = "var(--text-muted)")
+                }
+                aria-label="Facebook"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                </svg>
+              </a>
+              <a
+                href="https://x.com/hasnat_0006"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="transition-all duration-300 hover:scale-110"
+                style={{ color: "var(--text-muted)" }}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.color = "var(--text-accent)")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.color = "var(--text-muted)")
+                }
+                aria-label="X (formerly Twitter)"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                </svg>
+              </a>
+              <a
+                href="https://wa.me/8801790879452"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="transition-all duration-300 hover:scale-110"
+                style={{ color: "var(--text-muted)" }}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.color = "var(--text-accent)")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.color = "var(--text-muted)")
+                }
+                aria-label="WhatsApp"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                </svg>
+              </a>
             </div>
 
-            {/* Problem-solving stats badge */}
-            {/* <div className="flex flex-wrap gap-2 mb-6 justify-center md:justify-start">
-              <span
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-mono"
+            {/* CV button */}
+            <div className="flex flex-wrap justify-center md:justify-start">
+              <a
+                href="/yusuf_reza_hasnat_cv.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group relative inline-flex items-center gap-3 px-6 py-3 rounded-xl text-sm font-semibold overflow-hidden transition-all duration-500"
                 style={{
-                  background: "var(--bg-badge)",
                   color: "var(--text-accent)",
-                  border: "1px solid var(--border-accent)",
+                  background: "var(--bg-card)",
                 }}
-              >
-                ◉ 1500+ problems solved
-              </span>
-              <span
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-mono"
-                style={{
-                  background: "var(--category-iupc-bg)",
-                  color: "var(--category-iupc)",
-                  border: "1px solid var(--category-iupc-border)",
+                onMouseEnter={(e) => {
+                  const btn = e.currentTarget;
+                  btn.style.borderColor = "transparent";
+                  btn.style.boxShadow =
+                    "0 0 30px rgba(5, 150, 105, 0.15), 0 0 60px rgba(5, 150, 105, 0.05)";
+                  btn.style.transform = "translateY(-2px)";
+                  btn.style.background = "var(--bg-card-hover)";
                 }}
-              >
-                🏅 Specialist at Codeforces
-              </span>
-              <span
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-mono"
-                style={{
-                  background: "var(--category-icpc-bg)",
-                  color: "var(--category-icpc)",
-                  border: "1px solid var(--category-icpc-border)",
+                onMouseLeave={(e) => {
+                  const btn = e.currentTarget;
+                  btn.style.borderColor = "transparent";
+                  btn.style.boxShadow = "none";
+                  btn.style.transform = "translateY(0)";
+                  btn.style.background = "var(--bg-card)";
                 }}
+                aria-label="View CV"
               >
-                🌍 ICPC Regionalist
-              </span>
-            </div> */}
-
-            {/* Navigation links */}
-            <div className="flex flex-wrap justify-center md:justify-start gap-3">
-              {[
-                {
-                  label: "projects",
-                  href: "#projects",
-                  icon: "M2 6a2 2 0 012-2h5l2 2h9a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V6z",
-                },
-                {
-                  label: "achievements",
-                  href: "#achievements",
-                  icon: "M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z",
-                },
-                {
-                  label: "github",
-                  href: "#github",
-                  icon: "M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12",
-                },
-              ].map(({ label, href, icon }) => (
-                <a
-                  key={label}
-                  href={href}
-                  className="group flex items-center justify-center w-10 h-10 rounded-lg transition-all duration-300"
+                {/* Animated gradient border */}
+                <span
+                  className="absolute inset-0 rounded-xl pointer-events-none"
                   style={{
-                    color: "var(--text-accent)",
-                    border: "1px solid var(--border-accent)",
-                    background: "transparent",
+                    padding: "1px",
+                    background:
+                      "conic-gradient(from 0deg, transparent, var(--text-accent), transparent 30%, transparent 60%, var(--text-accent-secondary), transparent 80%)",
+                    WebkitMask:
+                      "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+                    WebkitMaskComposite: "xor",
+                    maskComposite: "exclude",
+                    animation: "rotateBorder 3s linear infinite",
+                    opacity: 0.6,
+                    transition: "opacity 0.4s ease",
                   }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = "var(--bg-badge)";
-                    e.currentTarget.style.borderColor = "var(--border-hover)";
+                />
+                {/* Glow dot */}
+                <span
+                  className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full animate-ping"
+                  style={{
+                    background: "var(--text-accent)",
+                    opacity: 0.4,
                   }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = "transparent";
-                    e.currentTarget.style.borderColor = "var(--border-accent)";
-                  }}
-                  aria-label={label}
+                />
+                {/* File icon */}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="relative z-10 transition-transform duration-500 group-hover:scale-110"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="18"
-                    height="18"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                  >
-                    <path d={icon} />
-                  </svg>
-                </a>
-              ))}
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                  <polyline points="14 2 14 8 20 8" />
+                  <line x1="16" y1="13" x2="8" y2="13" />
+                  <line x1="16" y1="17" x2="8" y2="17" />
+                </svg>
+                {/* Text */}
+                <span className="relative z-10">View My CV</span>
+                {/* External link arrow */}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="relative z-10 transition-all duration-500 group-hover:translate-x-1 group-hover:-translate-y-1"
+                >
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                  <polyline points="15 3 21 3 21 9" />
+                  <line x1="10" y1="14" x2="21" y2="3" />
+                </svg>
+              </a>
             </div>
           </div>
         </div>
