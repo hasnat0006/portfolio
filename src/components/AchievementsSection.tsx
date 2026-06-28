@@ -94,8 +94,6 @@ function percentile(rank: number, total: number) {
   return Math.round(((total - rank) / total) * 100);
 }
 
-
-
 // ─────────────────────────────────────────────────────────────────────────────
 // ── CSS (injected once)
 // ─────────────────────────────────────────────────────────────────────────────
@@ -706,13 +704,13 @@ function OtherCard({
       ref={viewRef}
       style={{
         opacity: inView ? 1 : 0,
-        transform: inView ? "none" : "translateY(20px)",
-        transition: `opacity 0.5s ease ${(index % 4) * 80}ms, transform 0.5s ease ${(index % 4) * 80}ms`,
+        transform: inView ? "none" : "translateY(24px)",
+        transition: `opacity 0.55s ease ${(index % 4) * 90}ms, transform 0.55s cubic-bezier(0.23,1,0.32,1) ${(index % 4) * 90}ms`,
       }}
     >
       <div
         ref={tiltRef as React.RefObject<HTMLDivElement>}
-        className="ach-shimmer-hover relative overflow-hidden rounded-xl p-4 flex items-start gap-3"
+        className="ach-shimmer-hover relative overflow-hidden rounded-2xl p-5"
         style={{
           background: "var(--bg-card)",
           backdropFilter: "blur(20px)",
@@ -721,9 +719,9 @@ function OtherCard({
             ? "1px solid rgba(52,211,153,0.4)"
             : "1px solid var(--border-accent)",
           boxShadow: hovered
-            ? "0 12px 40px rgba(0,0,0,0.2), 0 0 0 1px rgba(52,211,153,0.1), 0 0 24px rgba(52,211,153,0.05)"
+            ? "0 20px 60px rgba(0,0,0,0.25), 0 0 0 1px rgba(52,211,153,0.15), 0 0 40px rgba(52,211,153,0.06)"
             : "0 2px 12px rgba(0,0,0,0.08)",
-          transform: `perspective(800px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) translateZ(2px)`,
+          transform: `perspective(900px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) translateZ(4px)`,
           transition: hovered
             ? "transform 0.1s ease, border-color 0.2s ease, box-shadow 0.2s ease"
             : "transform 0.4s cubic-bezier(0.23,1,0.32,1), border-color 0.3s ease, box-shadow 0.3s ease",
@@ -733,80 +731,153 @@ function OtherCard({
         onMouseEnter={onEnter}
         onMouseLeave={onLeave}
       >
-        {/* Gradient overlay */}
+        {/* Top accent bar */}
         <div
-          className="absolute inset-0 rounded-xl pointer-events-none"
+          className="absolute top-0 left-0 right-0 h-[2px] rounded-t-2xl pointer-events-none"
           style={{
             background: hovered
-              ? "linear-gradient(135deg, rgba(52,211,153,0.07) 0%, transparent 60%)"
+              ? "linear-gradient(90deg, rgba(52,211,153,0.7), rgba(34,211,238,0.5), transparent)"
+              : "linear-gradient(90deg, rgba(52,211,153,0.3), transparent)",
+            transition: "background 0.4s ease",
+          }}
+        />
+
+        {/* Gradient overlay on hover */}
+        <div
+          className="absolute inset-0 rounded-2xl pointer-events-none"
+          style={{
+            background: hovered
+              ? "linear-gradient(135deg, rgba(52,211,153,0.08) 0%, transparent 50%, rgba(34,211,238,0.04) 100%)"
               : "transparent",
             transition: "background 0.4s ease",
           }}
         />
 
-        {/* Spotlight */}
+        {/* Cursor spotlight */}
         {hovered && (
           <div
-            className="absolute pointer-events-none rounded-full"
+            className="absolute pointer-events-none"
             style={{
               left: spotlight.x,
               top: spotlight.y,
-              width: 200,
-              height: 200,
-              transform: "translate(-50%,-50%)",
+              width: 260,
+              height: 260,
+              transform: "translate(-50%, -50%)",
               background:
-                "radial-gradient(circle, rgba(52,211,153,0.08) 0%, transparent 65%)",
+                "radial-gradient(circle, rgba(52,211,153,0.09) 0%, transparent 65%)",
+              borderRadius: "50%",
             }}
           />
         )}
 
-        <span className="text-xl flex-shrink-0 relative z-10">{icon}</span>
+        {/* Header row — icon bubble + badge pills */}
+        <div className="flex items-center justify-between gap-2 mb-4 relative z-10">
+          {/* Glowing icon bubble */}
+          <div
+            className="flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-xl text-xl"
+            style={{
+              background: hovered
+                ? "rgba(52,211,153,0.15)"
+                : "rgba(52,211,153,0.08)",
+              border: hovered
+                ? "1px solid rgba(52,211,153,0.35)"
+                : "1px solid rgba(52,211,153,0.18)",
+              boxShadow: hovered ? "0 0 16px rgba(52,211,153,0.25)" : "none",
+              transition: "all 0.3s ease",
+            }}
+          >
+            {icon}
+          </div>
 
-        <div className="flex-1 min-w-0 relative z-10">
-          <p
-            className="text-sm font-semibold leading-snug"
-            style={{ color: "var(--text-primary)" }}
+          {/* Badge pills */}
+          <div className="flex items-center gap-2">
+            <span
+              className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full uppercase tracking-widest"
+              style={{
+                color: "var(--text-accent)",
+                background: "rgba(52,211,153,0.1)",
+                border: "1px solid rgba(52,211,153,0.3)",
+              }}
+            >
+              {ach.type}
+            </span>
+          </div>
+        </div>
+
+        {/* Title + detail */}
+        <div className="relative z-10">
+          <h4
+            className="text-sm font-semibold leading-snug mb-1"
+            style={{
+              color: "var(--text-primary)",
+              textShadow: hovered ? "0 0 20px rgba(52,211,153,0.15)" : "none",
+              transition: "text-shadow 0.3s ease",
+            }}
           >
             {ach.title}
-          </p>
+          </h4>
           {ach.detail && (
             <p
-              className="text-xs font-mono mt-1"
+              className="text-xs font-mono"
               style={{ color: "var(--text-muted)" }}
             >
               {ach.detail}
             </p>
           )}
-          {ach.post_url && ach.post_url.length > 0 && (
-            <div className="flex gap-1.5 mt-2">
-              {ach.post_url.map((url, i) => (
-                <a
-                  key={i}
-                  href={url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1 text-xs font-mono px-2 py-0.5 rounded-md"
-                  style={{
-                    color: "var(--text-accent)",
-                    background: "rgba(52,211,153,0.08)",
-                    border: "1px solid rgba(52,211,153,0.18)",
-                    transition: "all 0.2s ease",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = "var(--text-accent)";
-                    e.currentTarget.style.color = "#0a0f1a";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = "rgba(52,211,153,0.08)";
-                    e.currentTarget.style.color = "var(--text-accent)";
-                  }}
-                >
-                  🔗 Post
-                </a>
-              ))}
-            </div>
-          )}
+          {/* Hosted by */}
+          <p
+            className="text-xs font-mono mt-1.5"
+            style={{ color: "var(--text-muted)" }}
+          >
+            Hosted by:{" "}
+            <span style={{ color: "var(--text-secondary)" }}>
+              {ach.hosted_by}
+            </span>
+          </p>
         </div>
+
+        {/* Footer links */}
+        {ach.post_url && ach.post_url.length > 0 && (
+          <div
+            className="flex flex-wrap items-center gap-2 mt-4 pt-3 relative z-10"
+            style={{ borderTop: "1px solid rgba(52,211,153,0.1)" }}
+          >
+            {ach.post_url.map((url, i) => (
+              <a
+                key={i}
+                href={url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 text-xs font-mono px-3 py-1.5 rounded-lg"
+                style={{
+                  color: "var(--text-accent)",
+                  background: "rgba(52,211,153,0.08)",
+                  border: "1px solid rgba(52,211,153,0.2)",
+                  transition: "all 0.2s ease",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = "var(--text-accent)";
+                  e.currentTarget.style.color = "#0a0f1a";
+                  e.currentTarget.style.transform = "translateY(-1px)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = "rgba(52,211,153,0.08)";
+                  e.currentTarget.style.color = "var(--text-accent)";
+                  e.currentTarget.style.transform = "none";
+                }}
+              >
+                <svg
+                  className="inline-block w-3 h-3"
+                  viewBox="0 0 512 512"
+                  fill="currentColor"
+                >
+                  <path d="M352 0c-12.9 0-24.6 7.8-29.6 19.8s-2.2 25.7 6.9 34.9L370.7 96 201.4 265.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L416 141.3l41.4 41.4c9.2 9.2 22.9 11.9 34.9 6.9s19.8-16.6 19.8-29.6V32c0-17.7-14.3-32-32-32H352zM80 32C35.8 32 0 67.8 0 112V432c0 44.2 35.8 80 80 80H400c44.2 0 80-35.8 80-80V320c0-17.7-14.3-32-32-32s-32 14.3-32 32V432c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V112c0-8.8 7.2-16 16-16H192c17.7 0 32-14.3 32-32s-14.3-32-32-32H80z" />
+                </svg>
+                Post_{i + 1}
+              </a>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
@@ -824,7 +895,11 @@ export default function AchievementsSection() {
     KEY_CONTEST_ACHIEVEMENTS.length + CONTEST_ACHIEVEMENTS.length;
 
   return (
-    <section id="achievements" className="px-4 py-16 md:py-24">
+    <section
+      id="achievements"
+      className="px-4 py-16 md:py-24"
+      style={{ scrollMarginTop: "5rem" }}
+    >
       {/* Inject animations */}
       <style>{STYLES}</style>
 

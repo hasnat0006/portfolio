@@ -16,6 +16,7 @@ export interface OtherAchievement {
   hosted_by: string;
   photo_url?: string[];
   post_url?: string[];
+  type:string
 }
 
 export const KEY_CONTEST_ACHIEVEMENTS: ContestAchievement[] = [
@@ -274,20 +275,24 @@ export const OTHER_ACHIEVEMENTS: OtherAchievement[] = [
     title: "Dean Award",
     detail: "Maintaining a CGPA of 3.75 or above in level 3",
     hosted_by: "Military Institute of Science and Technology (MIST)",
+    type:"Academic"
   },
   {
     title: "First Solver — Problem H",
     detail: "IUT Inter-University Programming Contest 2024 — Apr 2024",
-    hosted_by: "University of Dhaka",
+    hosted_by: "Islamic University of Technology (IUT)",
+    type:"First Solver"
   },
   {
     title: "15th — MIST Independence Day Programming Contest 2023",
     detail: "MIST_CG0naiCP0nai",
-    hosted_by: "University of Dhaka",
+    hosted_by: "MIST Computer Club (MCC)",
+    type:"Rank"
   },
   {
     title: "Promising Team_name — Independence Day Programming Contest 2023",
     detail: "",
-    hosted_by: "University of Dhaka",
+    hosted_by: "MIST Computer Club (MCC)",
+    type:"Recognition"
   },
 ];

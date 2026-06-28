@@ -7,34 +7,42 @@ const NAV_LINKS = [
   { label: "home", href: "#hero" },
   { label: "projects", href: "#projects" },
   { label: "achievements", href: "#achievements" },
+  { label: "experience", href: "#experience" },
   { label: "github", href: "#github" },
   { label: "codeforces", href: "#codeforces" },
 ];
 
 export default function NavigationBar() {
   const [scrolled, setScrolled] = useState(false);
-  const [activeSection, setActiveSection] = useState("hero");
+  const [activeSection, setActiveSection] = useState(NAV_LINKS[0].label);
   const [mobileOpen, setMobileOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
-      const sections = NAV_LINKS.map((link) =>
-        document.querySelector(link.href),
-      );
-      for (let i = sections.length - 1; i >= 0; i--) {
-        const section = sections[i];
-        if (section) {
-          const rect = section.getBoundingClientRect();
-          if (rect.top <= 150) {
-            setActiveSection(NAV_LINKS[i].label);
-            break;
-          }
+
+      const THRESHOLD = 200;
+
+      // Find the last (bottom-most) section whose top has scrolled past the threshold.
+      // Iterating forward gives us the section closest to the bottom that is still
+      // "at or above" the threshold line — that's the section the user is currently viewing.
+      let current = NAV_LINKS[0].label;
+
+      for (const link of NAV_LINKS) {
+        const el = document.querySelector(link.href);
+        if (!el) continue;
+        const rect = el.getBoundingClientRect();
+        if (rect.top <= THRESHOLD) {
+          current = link.label;
         }
       }
+
+      setActiveSection(current);
     };
+
     window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll(); // Initialise on mount (handles page load with hash fragment)
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 

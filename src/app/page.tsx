@@ -1,10 +1,10 @@
 import AchievementsSection from "@/components/AchievementsSection";
 import CodeforcesStats from "@/components/CodeforcesStats";
+import ExperienceSection from "@/components/ExperienceSection";
 import GitHubStats from "@/components/GitHubStats";
 import HeroSection from "@/components/HeroSection";
 import NavigationBar from "@/components/NavigationBar";
 import ProjectCard from "@/components/ProjectCard";
-import PublicationCard from "@/components/PublicationCard";
 import { PROJECTS } from "@/data/projects";
 
 export default function HomePage() {
@@ -17,7 +17,11 @@ export default function HomePage() {
         <HeroSection />
 
         {/* ── Projects Section ───────────────────────────────────── */}
-        <section id="projects" className="px-4 py-16 md:py-24">
+        <section
+          id="projects"
+          className="px-4 py-16 md:py-24"
+          style={{ scrollMarginTop: "5rem" }}
+        >
           <div className="max-w-6xl mx-auto">
             <div className="flex items-center gap-3 mb-2">
               <span
@@ -62,11 +66,14 @@ export default function HomePage() {
         {/* ── Achievements Section ───────────────────────────────── */}
         <AchievementsSection />
 
+        {/* ── Experience Section ────────────────────────────────── */}
+        <ExperienceSection />
+
         {/* ── GitHub Stats Section ─────────────────────────────────── */}
         <section
           id="github"
           className="px-4 py-16 md:py-24"
-          style={{ background: "var(--bg-secondary)" }}
+          style={{ background: "var(--bg-secondary)", scrollMarginTop: "5rem" }}
         >
           <div className="max-w-4xl mx-auto">
             <div className="flex items-center gap-3 mb-2">
@@ -94,7 +101,11 @@ export default function HomePage() {
         </section>
 
         {/* ── Codeforces Stats Section ─────────────────────────────── */}
-        <section id="codeforces" className="px-4 py-16 md:py-24">
+        <section
+          id="codeforces"
+          className="px-4 py-16 md:py-24"
+          style={{ scrollMarginTop: "5rem" }}
+        >
           <div className="max-w-4xl mx-auto">
             <div className="flex items-center gap-3 mb-2">
               <span
@@ -130,10 +141,6 @@ export default function HomePage() {
           className="max-w-4xl mx-auto text-center"
           style={{ color: "var(--text-muted)" }}
         >
-          <p className="text-code text-sm">
-            <span style={{ color: "var(--text-accent)" }}>$</span> echo
-            &quot;Built with Next.js &amp; Tailwind CSS&quot;
-          </p>
           <p className="mt-2" style={{ color: "var(--text-muted)" }}>
             &copy; {new Date().getFullYear()} Yusuf Reza Hasnat. All rights
             reserved.

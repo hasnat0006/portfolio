@@ -45,7 +45,11 @@ export default function HeroSection() {
 
   return (
     <GridBackground className="min-h-[80vh] flex items-center justify-center px-4 py-20">
-      <section id="hero" className="max-w-5xl mx-auto w-full">
+      <section
+        id="hero"
+        className="max-w-5xl mx-auto w-full"
+        style={{ scrollMarginTop: "5rem" }}
+      >
         <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
           {/* Profile image */}
           <div className="shrink-0 animate-fadeIn transition-all duration-500 hover:scale-[1.04]">

@@ -48,8 +48,8 @@
 .dark {
   --bg-primary: #0a0f1a;
   --bg-secondary: #111827;
-  --bg-card: #0d0d0d;
-  --bg-card-hover: #1a1a1a;
+  --bg-card: #111827;
+  --bg-card-hover: #1e293b;
   --bg-nav: rgba(10, 15, 26, 0.9);
   --bg-code: #1e293b;
   --bg-badge: rgba(5, 150, 105, 0.1);
