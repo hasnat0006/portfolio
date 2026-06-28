@@ -83,6 +83,7 @@ function getIcon(title: string) {
   if (t.includes("first solver") || t.includes("solver")) return "⚡";
   if (t.includes("globally") || t.includes("hacker cup")) return "🌐";
   if (t.includes("promising")) return "⭐";
+  if(t.includes("dean")) return "📖";
   return "🎯";
 }
 

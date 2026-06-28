@@ -39,7 +39,7 @@ export interface VolunteerExperience {
 export const education: Education[] = [
   {
     name_of_institution: "Military Institute of Science and Technology",
-    degree: "Bachelor of Science and Engineering (B.Sc.Eng.)",
+    degree: "Bachelor of Science and Engineering",
     field_of_study: "Computer Science and Engineering",
     start_date: "May 2022",
     end_date: "June 2026",

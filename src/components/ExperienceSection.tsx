@@ -183,7 +183,6 @@ function IconChevron({
   );
 }
 
-
 /** Thin horizontal separator with a centred label — identical to AchievementsSection's SectionDivider */
 function SectionDivider({ label }: { label: string }) {
   const { ref, inView } = useInView();
@@ -455,7 +454,7 @@ function EducationCard({ item, index }: { item: Education; index: number }) {
         }}
       >
         {/* Top row: institution + date */}
-        <div className="flex items-start justify-between gap-3 flex-wrap">
+        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-1 md:gap-3">
           <div className="flex-1 min-w-0">
             <p
               className="text-md font-semibold leading-snug"
@@ -477,7 +476,7 @@ function EducationCard({ item, index }: { item: Education; index: number }) {
             </p>
           </div>
           <span
-            className="text-xs font-mono flex-shrink-0 whitespace-nowrap"
+            className="text-xs font-mono md:text-right md:flex-shrink-0 md:whitespace-nowrap"
             style={{ color: "var(--text-muted)" }}
           >
             {item.start_date} — {item.end_date}
@@ -527,7 +526,7 @@ function WorkCard({ item, index }: { item: WorkExperience; index: number }) {
           boxShadow: "var(--shadow-sm)",
         }}
       >
-        <div className="flex items-start justify-between gap-3 flex-wrap">
+        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-1 md:gap-3">
           <div className="flex-1 min-w-0">
             <p
               className="text-md font-semibold leading-snug"
@@ -543,7 +542,7 @@ function WorkCard({ item, index }: { item: WorkExperience; index: number }) {
             </p>
           </div>
           <span
-            className="text-xs font-mono flex-shrink-0 whitespace-nowrap"
+            className="text-xs font-mono md:text-right md:flex-shrink-0 md:whitespace-nowrap"
             style={{ color: "var(--text-muted)" }}
           >
             {item.start_date} — {item.end_date}
@@ -611,7 +610,7 @@ function VolunteerCard({
           boxShadow: "var(--shadow-sm)",
         }}
       >
-        <div className="flex items-start justify-between gap-3 flex-wrap">
+        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-1 md:gap-3">
           <div className="flex-1 min-w-0">
             <p
               className="text-md font-semibold leading-snug"
@@ -627,7 +626,7 @@ function VolunteerCard({
             </p>
           </div>
           <span
-            className="text-xs font-mono flex-shrink-0 whitespace-nowrap"
+            className="text-xs font-mono md:text-right md:flex-shrink-0 md:whitespace-nowrap"
             style={{ color: "var(--text-muted)" }}
           >
             {item.start_date} — {item.end_date}

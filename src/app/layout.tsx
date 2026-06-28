@@ -1,6 +1,7 @@
 import ThemeProvider from "@/components/ThemeProvider";
 import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono, Sora } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 
 const inter = Inter({
@@ -39,7 +40,7 @@ export const metadata: Metadata = {
     template: "%s | Yusuf Reza Hasnat",
   },
   description:
-    "Portfolio of Yusuf Reza Hasnat — Algorithmic Systems Engineer, Competitive Programmer (Specialist @ Codeforces), ICPC Asia Dhaka Regionalist, and Biomedical Researcher at MIST. 1500+ problems solved.",
+    "Portfolio of Yusuf Reza Hasnat — Software Engineer, Competitive Programmer (Specialist @ Codeforces), ICPC Asia Dhaka Regionalist and CSE undergraduate at MIST. 1500+ problems solved.",
   keywords: [
     "Yusuf Reza Hasnat",
     "hasnat0006",
@@ -65,7 +66,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: `Yusuf Reza Hasnat | ${new URL(BASE_URL).hostname}`,
     description:
-      "Algorithmic Systems Engineer, Competitive Programmer (Specialist @ CF), ICPC Asia Dhaka Regionalist & Biomedical Researcher. 1500+ problems solved.",
+      "Software Engineer, Competitive Programmer (Specialist @ CF), ICPC Asia Dhaka Regionalist & MIST CSE Undergraduate. 1500+ problems solved.",
     url: BASE_URL,
     siteName: new URL(BASE_URL).hostname,
     locale: "en_US",
@@ -85,7 +86,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: `Yusuf Reza Hasnat | ${new URL(BASE_URL).hostname}`,
     description:
-      "Algorithmic Systems Engineer, Competitive Programmer (Specialist @ CF), ICPC Asia Dhaka Regionalist & Biomedical Researcher.",
+      "Software Engineer, Competitive Programmer (Specialist @ CF), ICPC Asia Dhaka Regionalist & MIST CSE Undergraduate.",
     images: [`${BASE_URL}/hasnat.jpeg`],
     creator: "@hasnat0006",
   },
@@ -121,7 +122,9 @@ export default function RootLayout({
           content="AnbzusuoDN1cBbBsp1oWGo-7eHr0aVgLI94uA_289wc"
         />
         {/* Prevent flash of wrong theme */}
-        <script
+        <Script
+          id="theme-init"
+          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: `(function(){try{var t=localStorage.getItem("portfolio-theme");if(t==="dark"||(!t&&window.matchMedia("(prefers-color-scheme:dark)").matches)){document.documentElement.classList.add("dark")}}catch(e){}})()`,
           }}
@@ -141,7 +144,7 @@ export default function RootLayout({
               image: `${BASE_URL}/hasnat.jpeg`,
               email: "yusufrezahasnat0006@gmail.com",
               jobTitle: [
-                "Algorithmic Systems Engineer",
+                "Software Engineer",
                 "Competitive Programmer",
                 "Biomedical Researcher",
               ],

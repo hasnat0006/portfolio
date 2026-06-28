@@ -279,7 +279,7 @@ export const OTHER_ACHIEVEMENTS: OtherAchievement[] = [
   },
   {
     title: "First Solver — Problem H",
-    detail: "IUT Inter-University Programming Contest 2024 — Apr 2024",
+    detail: "IUT Inter-University Programming Contest 2024",
     hosted_by: "Islamic University of Technology (IUT)",
     type:"First Solver"
   },
@@ -290,8 +290,8 @@ export const OTHER_ACHIEVEMENTS: OtherAchievement[] = [
     type:"Rank"
   },
   {
-    title: "Promising Team_name — Independence Day Programming Contest 2023",
-    detail: "",
+    title: "Promising Team — Independence Day Programming Contest 2023",
+    detail: "Special recognition for being a promising team in the contest",
     hosted_by: "MIST Computer Club (MCC)",
     type:"Recognition"
   },
