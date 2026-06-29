@@ -138,7 +138,10 @@ export const PROJECTS: Project[] = [
     techStack: ["Java", "JavaFX", "Scene Builder", "Xampp", "MySQL"],
     githubUrl: "https://github.com/hasnat0006/RedSet",
     duration: "3 months",
-    collaborators: [{ name: "Hasnat Hasan", github: "hasnat0006" }],
-    photoUrl: [ "projects/redset/1.png" ]
+    collaborators: [
+      { name: "Tanvin Sarkar Pallob", github: "Tanvin2442002" },
+      { name: "Syed Tamal", github: "Tamal267" },
+    ],
+    photoUrl: ["projects/redset/1.png"],
   },
 ];

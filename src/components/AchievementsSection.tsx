@@ -83,7 +83,7 @@ function getIcon(title: string) {
   if (t.includes("first solver") || t.includes("solver")) return "⚡";
   if (t.includes("globally") || t.includes("hacker cup")) return "🌐";
   if (t.includes("promising")) return "⭐";
-  if(t.includes("dean")) return "📖";
+  if (t.includes("dean")) return "📖";
   return "🎯";
 }
 
@@ -580,28 +580,36 @@ function ContestRow({
       </td>
 
       {/* Rank */}
-      <td className="py-3 px-3 w-16">
+      <td className="py-3 px-0 min-w-24">
         {ach.standings_url ? (
-          <a
-            href={ach.standings_url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-lg font-bold font-mono no-underline hover:underline"
-            style={{
-              color: rankColor,
-              textShadow:
-                rankNum <= 50 ? "0 0 10px rgba(52,211,153,0.3)" : "none",
-              transition: "opacity 0.2s ease",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.opacity = "0.8";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.opacity = "1";
-            }}
-          >
-            #{ach.rank}
-          </a>
+          <div className="flex flex-col items-center">
+            <a
+              href={ach.standings_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-lg font-bold font-mono no-underline hover:underline"
+              style={{
+                color: rankColor,
+                textShadow:
+                  rankNum <= 50 ? "0 0 10px rgba(52,211,153,0.3)" : "none",
+                transition: "opacity 0.2s ease",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.opacity = "0.8";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.opacity = "1";
+              }}
+            >
+              #{ach.rank}
+            </a>
+            <p
+              className="text-xs font-mono mt-0.5 tracking-tighter"
+              style={{ color: "var(--text-muted)" }}
+            >
+              out of {ach.total_teams}
+            </p>
+          </div>
         ) : (
           <span
             className="text-lg font-bold font-mono"
