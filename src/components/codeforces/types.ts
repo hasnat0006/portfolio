@@ -73,6 +73,8 @@ export interface ContestRow {
   oldRating: number;
   newRating: number;
   delta: number;
+  problemsSolved: number;
+  totalParticipants?: number;
 }
 
 export interface RecentProblem {

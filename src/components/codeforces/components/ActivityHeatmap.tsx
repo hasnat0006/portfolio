@@ -79,10 +79,10 @@ export function ActivityHeatmap({ heatmap, currentStreak, longestStreak }: Props
     }
   });
 
-  const CELL = 12;
-  const GAP = 2;
+  const CELL = 16;
+  const GAP = 3;
   const STEP = CELL + GAP;
-  const LEFT_PAD = 28; // space for weekday labels
+  const LEFT_PAD = 30; // space for weekday labels
 
   return (
     <>

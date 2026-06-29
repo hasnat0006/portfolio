@@ -75,7 +75,7 @@ export default function HomePage() {
           className="px-4 py-16 md:py-24"
           style={{ background: "var(--bg-secondary)", scrollMarginTop: "5rem" }}
         >
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-6xl mx-auto">
             <div className="flex items-center gap-3 mb-2">
               <span
                 className="text-code text-sm"
@@ -94,7 +94,7 @@ export default function HomePage() {
               className="text-code text-sm ml-6 mb-10"
               style={{ color: "var(--text-muted)" }}
             >
-              Live GitHub analytics &amp; repository statistics
+              Open Source &amp; Development Analytics
             </p>
             <GitHubStats />
           </div>
@@ -125,7 +125,8 @@ export default function HomePage() {
               className="text-code text-sm ml-6 mb-10"
               style={{ color: "var(--text-muted)" }}
             >
-              Solving algorithmic problems, participating in contests, and continuously improving through competitive programming.
+              Solving algorithmic problems, participating in contests, and
+              continuously improving through competitive programming.
             </p>
             <CodeforcesStats />
           </div>

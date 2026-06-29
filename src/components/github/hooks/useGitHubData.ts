@@ -1,17 +1,17 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import type { CFApiResponse } from "../types";
+import type { GitHubApiResponse } from "../types";
 
-const CACHE_KEY = "cf_dashboard_v3";
+const CACHE_KEY = "gh_dashboard_v3";
 const CACHE_TTL_MS = 60 * 60 * 1000; // 1 hour
 
 interface CacheEntry {
-  data: CFApiResponse;
+  data: GitHubApiResponse;
   timestamp: number;
 }
 
-function readCache(): CFApiResponse | null {
+function readCache(): GitHubApiResponse | null {
   try {
     const raw = localStorage.getItem(CACHE_KEY);
     if (!raw) return null;
@@ -26,7 +26,7 @@ function readCache(): CFApiResponse | null {
   }
 }
 
-function writeCache(data: CFApiResponse): void {
+function writeCache(data: GitHubApiResponse): void {
   try {
     localStorage.setItem(
       CACHE_KEY,
@@ -37,14 +37,14 @@ function writeCache(data: CFApiResponse): void {
   }
 }
 
-export interface CodeforcesDataState {
+export interface GitHubDataState {
   loading: boolean;
   error: string | null;
-  data: CFApiResponse | null;
+  data: GitHubApiResponse | null;
 }
 
-export function useCodeforcesData(): CodeforcesDataState {
-  const [state, setState] = useState<CodeforcesDataState>({
+export function useGitHubData(): GitHubDataState {
+  const [state, setState] = useState<GitHubDataState>({
     loading: true,
     error: null,
     data: null,
@@ -56,19 +56,18 @@ export function useCodeforcesData(): CodeforcesDataState {
     if (fetched.current) return;
     fetched.current = true;
 
-    // Try localStorage cache first
     const cached = readCache();
     if (cached) {
       setState({ loading: false, error: null, data: cached });
       return;
     }
 
-    fetch("/api/codeforces")
+    fetch("/api/github/stats")
       .then((res) => {
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         return res.json();
       })
-      .then((json: CFApiResponse & { error?: string }) => {
+      .then((json: GitHubApiResponse & { error?: string }) => {
         if (json.error) throw new Error(json.error);
         writeCache(json);
         setState({ loading: false, error: null, data: json });
@@ -76,7 +75,7 @@ export function useCodeforcesData(): CodeforcesDataState {
       .catch((err: Error) => {
         setState({
           loading: false,
-          error: err.message || "Failed to load Codeforces data",
+          error: err.message || "Failed to load GitHub data",
           data: null,
         });
       });
