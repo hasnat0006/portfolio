@@ -13,7 +13,11 @@ const CSS = `
 }
 `;
 
-interface Tooltip { day: HeatmapDay; x: number; y: number }
+interface Tooltip {
+  day: HeatmapDay;
+  x: number;
+  y: number;
+}
 interface Props {
   heatmap: HeatmapDay[];
   currentStreak: number;
@@ -21,11 +25,29 @@ interface Props {
   totalContributions: number;
 }
 
-const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-const WEEKDAY_LABELS = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+const MONTHS = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
+const WEEKDAY_LABELS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const LEVEL_OPACITY = [0.07, 0.25, 0.5, 0.75, 1];
 
-export function ContributionHeatmap({ heatmap, currentStreak, longestStreak, totalContributions }: Props) {
+export function ContributionHeatmap({
+  heatmap,
+  currentStreak,
+  longestStreak,
+  totalContributions,
+}: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
   const [tooltip, setTooltip] = useState<Tooltip | null>(null);
@@ -33,7 +55,12 @@ export function ContributionHeatmap({ heatmap, currentStreak, longestStreak, tot
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setVisible(true); }, { threshold: 0.05 });
+    const obs = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) setVisible(true);
+      },
+      { threshold: 0.05 },
+    );
     obs.observe(el);
     return () => obs.disconnect();
   }, []);
@@ -41,7 +68,10 @@ export function ContributionHeatmap({ heatmap, currentStreak, longestStreak, tot
   // Group into weeks (columns of 7)
   const firstDay = new Date(heatmap[0]?.date ?? new Date());
   const startPad = firstDay.getDay();
-  const padded: (HeatmapDay | null)[] = [...Array(startPad).fill(null), ...heatmap];
+  const padded: (HeatmapDay | null)[] = [
+    ...Array(startPad).fill(null),
+    ...heatmap,
+  ];
   const weeks: (HeatmapDay | null)[][] = [];
   for (let i = 0; i < padded.length; i += 7) weeks.push(padded.slice(i, i + 7));
 
@@ -52,12 +82,18 @@ export function ContributionHeatmap({ heatmap, currentStreak, longestStreak, tot
     for (const day of week) {
       if (!day) continue;
       const m = new Date(day.date).getMonth();
-      if (m !== lastMonth) { lastMonth = m; monthLabels.push({ col, month: MONTHS[m] }); }
+      if (m !== lastMonth) {
+        lastMonth = m;
+        monthLabels.push({ col, month: MONTHS[m] });
+      }
       break;
     }
   });
 
-  const CELL = 16, GAP = 3, STEP = CELL + GAP, LEFT = 30;
+  const CELL = 16,
+    GAP = 3,
+    STEP = CELL + GAP,
+    LEFT = 30;
 
   return (
     <>
@@ -65,26 +101,55 @@ export function ContributionHeatmap({ heatmap, currentStreak, longestStreak, tot
       <div
         ref={ref}
         className="rounded-2xl p-5 md:p-6"
-        style={{ background: "var(--bg-card)", border: "1px solid var(--border-primary)" }}
+        style={{
+          background: "var(--bg-card)",
+          border: "1px solid var(--border-primary)",
+        }}
       >
         {/* Header */}
         <div className="flex flex-wrap items-start justify-between gap-3 mb-4">
           <div>
-            <h3 className="text-subheading font-semibold text-sm" style={{ color: "var(--text-secondary)" }}>
+            <h3
+              className="text-subheading font-semibold text-sm"
+              style={{ color: "var(--text-secondary)" }}
+            >
               Contribution Activity
             </h3>
-            <p className="text-meta mt-0.5" style={{ color: "var(--text-muted)", fontSize: "0.7rem" }}>
+            <p
+              className="text-meta mt-0.5"
+              style={{ color: "var(--text-muted)", fontSize: "0.7rem" }}
+            >
               {totalContributions.toLocaleString()} total contributions
             </p>
           </div>
           <div className="flex gap-4">
             <div className="text-center">
-              <p className="text-code font-bold text-lg" style={{ color: "var(--text-accent)" }}>{currentStreak}</p>
-              <p className="text-meta" style={{ color: "var(--text-muted)", fontSize: "0.65rem" }}>Current streak</p>
+              <p
+                className="text-code font-bold text-lg"
+                style={{ color: "var(--text-accent)" }}
+              >
+                {currentStreak}
+              </p>
+              <p
+                className="text-meta"
+                style={{ color: "var(--text-muted)", fontSize: "0.65rem" }}
+              >
+                Current streak
+              </p>
             </div>
             <div className="text-center">
-              <p className="text-code font-bold text-lg" style={{ color: "#f59e0b" }}>{longestStreak}</p>
-              <p className="text-meta" style={{ color: "var(--text-muted)", fontSize: "0.65rem" }}>Longest streak</p>
+              <p
+                className="text-code font-bold text-lg"
+                style={{ color: "#f59e0b" }}
+              >
+                {longestStreak}
+              </p>
+              <p
+                className="text-meta"
+                style={{ color: "var(--text-muted)", fontSize: "0.65rem" }}
+              >
+                Longest streak
+              </p>
             </div>
           </div>
         </div>
@@ -92,50 +157,109 @@ export function ContributionHeatmap({ heatmap, currentStreak, longestStreak, tot
         <div className="overflow-x-auto pb-2">
           <div style={{ position: "relative", paddingLeft: LEFT }}>
             {/* Weekday labels */}
-            <div style={{ position: "absolute", left: 0, top: 18, display: "flex", flexDirection: "column", gap: GAP }}>
+            <div
+              style={{
+                position: "absolute",
+                left: 0,
+                top: 18,
+                display: "flex",
+                flexDirection: "column",
+                gap: GAP,
+              }}
+            >
               {WEEKDAY_LABELS.map((d, i) =>
-                i % 2 === 1
-                  ? <div key={d} style={{ height: CELL, fontSize: "0.55rem", color: "var(--text-muted)", lineHeight: `${CELL}px` }}>{d}</div>
-                  : <div key={d} style={{ height: CELL }} />
+                i % 2 === 1 ? (
+                  <div
+                    key={d}
+                    style={{
+                      height: CELL,
+                      fontSize: "0.55rem",
+                      color: "var(--text-muted)",
+                      lineHeight: `${CELL}px`,
+                    }}
+                  >
+                    {d}
+                  </div>
+                ) : (
+                  <div key={d} style={{ height: CELL }} />
+                ),
               )}
             </div>
 
             {/* Month row */}
-            <div style={{ display: "flex", marginBottom: 4, fontSize: "0.6rem", color: "var(--text-muted)", height: 14, position: "relative" }}>
+            <div
+              style={{
+                display: "flex",
+                marginBottom: 4,
+                fontSize: "0.6rem",
+                color: "var(--text-muted)",
+                height: 14,
+                position: "relative",
+              }}
+            >
               {monthLabels.map(({ col, month }, i) => (
-                <span key={i} style={{ position: "absolute", left: col * STEP, whiteSpace: "nowrap" }}>{month}</span>
+                <span
+                  key={i}
+                  style={{
+                    position: "absolute",
+                    left: col * STEP,
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {month}
+                </span>
               ))}
             </div>
 
             {/* Grid */}
-            <div style={{ display: "flex", gap: GAP, alignItems: "flex-start" }}>
+            <div
+              style={{ display: "flex", gap: GAP, alignItems: "flex-start" }}
+            >
               {weeks.map((week, wi) => (
-                <div key={wi} style={{ display: "flex", flexDirection: "column", gap: GAP }}>
+                <div
+                  key={wi}
+                  style={{ display: "flex", flexDirection: "column", gap: GAP }}
+                >
                   {Array.from({ length: 7 }).map((_, di) => {
                     const day = week[di] ?? null;
-                    if (!day) return <div key={di} style={{ width: CELL, height: CELL, borderRadius: 2 }} />;
+                    if (!day)
+                      return (
+                        <div
+                          key={di}
+                          style={{ width: CELL, height: CELL, borderRadius: 2 }}
+                        />
+                      );
                     const opacity = LEVEL_OPACITY[day.level];
                     return (
                       <div
                         key={di}
                         className="gh-heatmap-cell"
                         style={{
-                          width: CELL, height: CELL, borderRadius: 2,
-                          background: day.level === 0
-                            ? "var(--bg-card-hover)"
-                            : `color-mix(in srgb, var(--text-accent) ${Math.round(opacity * 100)}%, transparent)`,
+                          width: CELL,
+                          height: CELL,
+                          borderRadius: 2,
+                          background:
+                            day.level === 0
+                              ? "var(--bg-card-hover)"
+                              : `color-mix(in srgb, var(--text-accent) ${Math.round(opacity * 100)}%, transparent)`,
                           border: "1px solid var(--border-primary)",
                           cursor: "default",
                           transition: "transform 0.1s",
-                          animation: visible ? `gh-cell-in 0.3s ease-out ${wi * 4 + di * 2}ms both` : "none",
+                          animation: visible
+                            ? `gh-cell-in 0.3s ease-out ${wi * 4 + di * 2}ms both`
+                            : "none",
                         }}
                         onMouseEnter={(e) => {
-                          (e.currentTarget as HTMLDivElement).style.transform = "scale(1.5)";
-                          const rect = (e.currentTarget as HTMLDivElement).getBoundingClientRect();
+                          (e.currentTarget as HTMLDivElement).style.transform =
+                            "scale(1.5)";
+                          const rect = (
+                            e.currentTarget as HTMLDivElement
+                          ).getBoundingClientRect();
                           setTooltip({ day, x: rect.left, y: rect.top });
                         }}
                         onMouseLeave={(e) => {
-                          (e.currentTarget as HTMLDivElement).style.transform = "";
+                          (e.currentTarget as HTMLDivElement).style.transform =
+                            "";
                           setTooltip(null);
                         }}
                         aria-label={`${day.date}: ${day.count} contributions`}
@@ -150,20 +274,27 @@ export function ContributionHeatmap({ heatmap, currentStreak, longestStreak, tot
 
             {/* Legend */}
             <div className="flex items-center gap-1.5 mt-3">
-              <span style={{ fontSize: "0.6rem", color: "var(--text-muted)" }}>Less</span>
-              {[0,1,2,3,4].map((level) => (
+              <span style={{ fontSize: "0.6rem", color: "var(--text-muted)" }}>
+                Less
+              </span>
+              {[0, 1, 2, 3, 4].map((level) => (
                 <div
                   key={level}
                   style={{
-                    width: CELL, height: CELL, borderRadius: 2,
-                    background: level === 0
-                      ? "var(--bg-card-hover)"
-                      : `color-mix(in srgb, var(--text-accent) ${Math.round(LEVEL_OPACITY[level] * 100)}%, transparent)`,
+                    width: CELL,
+                    height: CELL,
+                    borderRadius: 2,
+                    background:
+                      level === 0
+                        ? "var(--bg-card-hover)"
+                        : `color-mix(in srgb, var(--text-accent) ${Math.round(LEVEL_OPACITY[level] * 100)}%, transparent)`,
                     border: "1px solid var(--border-primary)",
                   }}
                 />
               ))}
-              <span style={{ fontSize: "0.6rem", color: "var(--text-muted)" }}>More</span>
+              <span style={{ fontSize: "0.6rem", color: "var(--text-muted)" }}>
+                More
+              </span>
             </div>
           </div>
         </div>
@@ -176,15 +307,27 @@ export function ContributionHeatmap({ heatmap, currentStreak, longestStreak, tot
               background: "var(--bg-card-hover)",
               border: "1px solid var(--border-primary)",
               boxShadow: "var(--shadow-lg)",
-              left: tooltip.x + 16, top: tooltip.y - 70,
-              color: "var(--text-primary)", minWidth: 140,
+              left: tooltip.x + 16,
+              top: tooltip.y - 70,
+              color: "var(--text-primary)",
+              minWidth: 140,
             }}
           >
             <p className="font-semibold mb-1">
-              {new Date(tooltip.day.date).toLocaleDateString("en-US", { dateStyle: "medium" })}
+              {new Date(tooltip.day.date).toLocaleDateString("en-US", {
+                dateStyle: "medium",
+              })}
             </p>
-            <p style={{ color: tooltip.day.count > 0 ? "var(--text-accent)" : "var(--text-muted)" }}>
-              {tooltip.day.count} contribution{tooltip.day.count !== 1 ? "s" : ""}
+            <p
+              style={{
+                color:
+                  tooltip.day.count > 0
+                    ? "var(--text-accent)"
+                    : "var(--text-muted)",
+              }}
+            >
+              {tooltip.day.count} contribution
+              {tooltip.day.count !== 1 ? "s" : ""}
             </p>
           </div>
         )}

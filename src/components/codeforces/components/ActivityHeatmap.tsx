@@ -26,19 +26,36 @@ interface Props {
 }
 
 const LEVEL_COLORS = [
-  "var(--bg-card-hover)",     // 0 — empty
-  "var(--text-accent)",       // 1 — low
-  "var(--text-accent)",       // 2 — medium
-  "var(--text-accent)",       // 3 — high
-  "var(--text-accent)",       // 4 — very high
+  "var(--bg-card-hover)", // 0 — empty
+  "var(--text-accent)", // 1 — low
+  "var(--text-accent)", // 2 — medium
+  "var(--text-accent)", // 3 — high
+  "var(--text-accent)", // 4 — very high
 ];
 
 const LEVEL_OPACITY = [0.08, 0.25, 0.5, 0.75, 1];
 
-const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const MONTHS = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
 const WEEKDAYS_LABELS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-export function ActivityHeatmap({ heatmap, currentStreak, longestStreak }: Props) {
+export function ActivityHeatmap({
+  heatmap,
+  currentStreak,
+  longestStreak,
+}: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
   const [tooltip, setTooltip] = useState<TooltipState | null>(null);
@@ -46,7 +63,12 @@ export function ActivityHeatmap({ heatmap, currentStreak, longestStreak }: Props
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setVisible(true); }, { threshold: 0.05 });
+    const obs = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) setVisible(true);
+      },
+      { threshold: 0.05 },
+    );
     obs.observe(el);
     return () => obs.disconnect();
   }, []);
@@ -90,25 +112,54 @@ export function ActivityHeatmap({ heatmap, currentStreak, longestStreak }: Props
       <div
         ref={ref}
         className="rounded-2xl p-5 md:p-6"
-        style={{ background: "var(--bg-card)", border: "1px solid var(--border-primary)" }}
+        style={{
+          background: "var(--bg-card)",
+          border: "1px solid var(--border-primary)",
+        }}
       >
         <div className="flex flex-wrap items-start justify-between gap-3 mb-4">
           <div>
-            <h3 className="text-subheading font-semibold text-sm" style={{ color: "var(--text-secondary)" }}>
+            <h3
+              className="text-subheading font-semibold text-sm"
+              style={{ color: "var(--text-secondary)" }}
+            >
               Activity Heatmap
             </h3>
-            <p className="text-meta mt-0.5" style={{ color: "var(--text-muted)", fontSize: "0.7rem" }}>
+            <p
+              className="text-meta mt-0.5"
+              style={{ color: "var(--text-muted)", fontSize: "0.7rem" }}
+            >
               Accepted submissions over the last 52 weeks
             </p>
           </div>
           <div className="flex gap-4">
             <div className="text-center">
-              <p className="text-code font-bold text-lg" style={{ color: "var(--text-accent)" }}>{currentStreak}</p>
-              <p className="text-meta" style={{ color: "var(--text-muted)", fontSize: "0.65rem" }}>Current streak</p>
+              <p
+                className="text-code font-bold text-lg"
+                style={{ color: "var(--text-accent)" }}
+              >
+                {currentStreak}
+              </p>
+              <p
+                className="text-meta"
+                style={{ color: "var(--text-muted)", fontSize: "0.65rem" }}
+              >
+                Current streak
+              </p>
             </div>
             <div className="text-center">
-              <p className="text-code font-bold text-lg" style={{ color: "#f59e0b" }}>{longestStreak}</p>
-              <p className="text-meta" style={{ color: "var(--text-muted)", fontSize: "0.65rem" }}>Longest streak</p>
+              <p
+                className="text-code font-bold text-lg"
+                style={{ color: "#f59e0b" }}
+              >
+                {longestStreak}
+              </p>
+              <p
+                className="text-meta"
+                style={{ color: "var(--text-muted)", fontSize: "0.65rem" }}
+              >
+                Longest streak
+              </p>
             </div>
           </div>
         </div>
@@ -181,7 +232,10 @@ export function ActivityHeatmap({ heatmap, currentStreak, longestStreak }: Props
               }}
             >
               {weeks.map((week, wi) => (
-                <div key={wi} style={{ display: "flex", flexDirection: "column", gap: GAP }}>
+                <div
+                  key={wi}
+                  style={{ display: "flex", flexDirection: "column", gap: GAP }}
+                >
                   {Array.from({ length: 7 }).map((_, di) => {
                     const day = week[di] ?? null;
                     if (!day) {
@@ -193,9 +247,10 @@ export function ActivityHeatmap({ heatmap, currentStreak, longestStreak }: Props
                       );
                     }
                     const opacity = LEVEL_OPACITY[day.level];
-                    const color = day.level === 0
-                      ? "var(--bg-card-hover)"
-                      : `rgba(var(--text-accent-rgb, 52 211 153) / ${opacity})`;
+                    const color =
+                      day.level === 0
+                        ? "var(--bg-card-hover)"
+                        : `rgba(var(--text-accent-rgb, 52 211 153) / ${opacity})`;
 
                     return (
                       <div
@@ -205,21 +260,28 @@ export function ActivityHeatmap({ heatmap, currentStreak, longestStreak }: Props
                           width: CELL,
                           height: CELL,
                           borderRadius: 2,
-                          background: day.level === 0
-                            ? "var(--bg-card-hover)"
-                            : `color-mix(in srgb, var(--text-accent) ${Math.round(opacity * 100)}%, transparent)`,
+                          background:
+                            day.level === 0
+                              ? "var(--bg-card-hover)"
+                              : `color-mix(in srgb, var(--text-accent) ${Math.round(opacity * 100)}%, transparent)`,
                           cursor: "default",
-                          animation: visible ? `cf-cell-in 0.3s ease-out ${wi * 5 + di * 2}ms both` : "none",
+                          animation: visible
+                            ? `cf-cell-in 0.3s ease-out ${wi * 5 + di * 2}ms both`
+                            : "none",
                           border: "1px solid var(--border-primary)",
                           transition: "transform 0.1s",
                         }}
                         onMouseEnter={(e) => {
-                          (e.currentTarget as HTMLDivElement).style.transform = "scale(1.4)";
-                          const rect = (e.currentTarget as HTMLDivElement).getBoundingClientRect();
+                          (e.currentTarget as HTMLDivElement).style.transform =
+                            "scale(1.4)";
+                          const rect = (
+                            e.currentTarget as HTMLDivElement
+                          ).getBoundingClientRect();
                           setTooltip({ day, x: rect.left, y: rect.top });
                         }}
                         onMouseLeave={(e) => {
-                          (e.currentTarget as HTMLDivElement).style.transform = "";
+                          (e.currentTarget as HTMLDivElement).style.transform =
+                            "";
                           setTooltip(null);
                         }}
                         aria-label={`${day.date}: ${day.accepted} accepted, ${day.total} total`}
@@ -234,7 +296,9 @@ export function ActivityHeatmap({ heatmap, currentStreak, longestStreak }: Props
 
             {/* Legend */}
             <div className="flex items-center gap-1.5 mt-3">
-              <span style={{ fontSize: "0.6rem", color: "var(--text-muted)" }}>Less</span>
+              <span style={{ fontSize: "0.6rem", color: "var(--text-muted)" }}>
+                Less
+              </span>
               {[0, 1, 2, 3, 4].map((level) => (
                 <div
                   key={level}
@@ -242,14 +306,17 @@ export function ActivityHeatmap({ heatmap, currentStreak, longestStreak }: Props
                     width: CELL,
                     height: CELL,
                     borderRadius: 2,
-                    background: level === 0
-                      ? "var(--bg-card-hover)"
-                      : `color-mix(in srgb, var(--text-accent) ${Math.round(LEVEL_OPACITY[level] * 100)}%, transparent)`,
+                    background:
+                      level === 0
+                        ? "var(--bg-card-hover)"
+                        : `color-mix(in srgb, var(--text-accent) ${Math.round(LEVEL_OPACITY[level] * 100)}%, transparent)`,
                     border: "1px solid var(--border-primary)",
                   }}
                 />
               ))}
-              <span style={{ fontSize: "0.6rem", color: "var(--text-muted)" }}>More</span>
+              <span style={{ fontSize: "0.6rem", color: "var(--text-muted)" }}>
+                More
+              </span>
             </div>
           </div>
         </div>
@@ -268,9 +335,17 @@ export function ActivityHeatmap({ heatmap, currentStreak, longestStreak }: Props
               minWidth: 140,
             }}
           >
-            <p className="font-semibold mb-1">{new Date(tooltip.day.date).toLocaleDateString("en-US", { dateStyle: "medium" })}</p>
-            <p style={{ color: "var(--text-accent)" }}>{tooltip.day.accepted} accepted</p>
-            <p style={{ color: "var(--text-muted)" }}>{tooltip.day.total} total submissions</p>
+            <p className="font-semibold mb-1">
+              {new Date(tooltip.day.date).toLocaleDateString("en-US", {
+                dateStyle: "medium",
+              })}
+            </p>
+            <p style={{ color: "var(--text-accent)" }}>
+              {tooltip.day.accepted} accepted
+            </p>
+            <p style={{ color: "var(--text-muted)" }}>
+              {tooltip.day.total} total submissions
+            </p>
           </div>
         )}
       </div>
