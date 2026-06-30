@@ -207,7 +207,7 @@ export default function RootLayout({
               url: BASE_URL,
               name: "Yusuf Reza Hasnat - Portfolio",
               description:
-                "Portfolio of Yusuf Reza Hasnat — Algorithmic Systems Engineer, Competitive Programmer, and Biomedical Researcher.",
+                "Portfolio of Yusuf Reza Hasnat — Software Engineer L1, Competitive Programmer and CSE Undergraduate from MIST.",
               publisher: {
                 "@type": "Person",
                 "@id": `${BASE_URL}/#person`,

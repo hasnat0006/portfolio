@@ -47,26 +47,19 @@ export function LanguageDistribution({ languages }: Props) {
           return (
             <div
               key={lang.name}
-              className="flex flex-col items-center gap-1.5 px-3 py-2.5 rounded-xl transition-all duration-200 hover:scale-105"
-              style={{
-                background: "var(--bg-code)",
-                border: "1px solid var(--border-primary)",
-                minWidth: 80,
-              }}
+              className="flex flex-col items-center justify-center gap-2 rounded-xl transition-all duration-200 hover:scale-105"
               title={`${lang.name} — ${lang.percentage}% (${lang.repoCount} repo${lang.repoCount !== 1 ? "s" : ""})`}
             >
               {iconUrl.length != 0 ? (
                 <img
                   src={iconUrl}
                   alt={lang.name}
-                  width={40}
-                  height={40}
-                  className="pointer-events-none select-none"
+                  className="w-14 pointer-events-none select-none"
                   loading="lazy"
                 />
               ) : (
                 <span
-                  className="text-md text-center justify-content leading-tight"
+                  className="text-md w-14 text-center justify-content leading-tight clip-line-1 text-ellipsis overflow-hidden"
                   style={{
                     color: "var(--text-muted)",
                     fontSize: "0.8rem",

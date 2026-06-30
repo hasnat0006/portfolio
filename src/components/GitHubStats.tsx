@@ -44,23 +44,6 @@ export default function GitHubStats() {
 
   return (
     <div className="space-y-6 md:space-y-8">
-      {/* ── Header ─────────────────────────────────────────────── */}
-      <div>
-        <h2
-          className="text-heading text-2xl md:text-3xl"
-          style={{ color: "var(--text-primary)" }}
-        >
-          Open Source &amp; Development
-        </h2>
-        <p
-          className="text-code text-sm mt-1"
-          style={{ color: "var(--text-muted)" }}
-        >
-          Building production software, contributing to open source, and
-          continuously learning through real-world engineering.
-        </p>
-      </div>
-
       {/* ── Hero Card ──────────────────────────────────────────── */}
       <SectionWrapper>
         <GitHubHero userInfo={userInfo} stats={stats} />

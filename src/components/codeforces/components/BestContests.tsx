@@ -105,6 +105,17 @@ export function BestContests({ contests }: Props) {
                   Rank
                 </th>
                 <th
+                  className="px-3 py-2.5 text-right text-meta"
+                  style={{
+                    color: "var(--text-muted)",
+                    fontSize: "0.65rem",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.05em",
+                  }}
+                >
+                  Participants
+                </th>
+                <th
                   className="px-3 py-2.5 text-left text-meta"
                   style={{
                     color: "var(--text-muted)",
@@ -195,7 +206,7 @@ export function BestContests({ contests }: Props) {
                       </a>
                     </td>
 
-                    {/* Rank / total participants */}
+                    {/* Rank */}
                     <td className="px-3 py-3">
                       <span
                         className="text-code text-xs font-bold px-1.5 py-0.5 rounded-md"
@@ -205,8 +216,18 @@ export function BestContests({ contests }: Props) {
                         }}
                       >
                         #{contest.rank.toLocaleString()}
-                        {contest.totalParticipants != null &&
-                          ` / ${contest.totalParticipants.toLocaleString()}`}
+                      </span>
+                    </td>
+
+                    {/* Total participants */}
+                    <td className="px-3 py-3 text-right">
+                      <span
+                        className="text-code text-xs font-medium"
+                        style={{ color: "var(--text-secondary)" }}
+                      >
+                        {contest.totalParticipants != null
+                          ? contest.totalParticipants.toLocaleString()
+                          : "—"}
                       </span>
                     </td>
 

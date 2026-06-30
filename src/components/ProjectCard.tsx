@@ -1,30 +1,9 @@
 "use client";
 
 import AnimatedTooltip from "@/components/ui/AnimatedTooltip";
+import LANGUAGE_ICONS from "@/data/languageIcons";
 import type { Collaborator } from "@/data/projects";
 import { useEffect, useRef, useState } from "react";
-
-const SKILL_SLUGS: Record<string, string> = {
-  "Next.js": "nextjs",
-  "React.js": "react",
-  "Node.js": "nodejs",
-  "Express.js": "express",
-  TailwindCSS: "tailwind",
-  Supabase: "supabase",
-  PostgreSQL: "postgresql",
-  CSS: "css",
-  SQL: "sql",
-  Java: "java",
-  JavaFX: "javafx",
-  MySQL: "mysql",
-  Oracle: "oracle",
-  "Scene Builder": "eclipse",
-  Xampp: "xampp",
-  TypeScript: "typescript",
-  Python: "python",
-  "C++": "cplusplus",
-  HTML: "html",
-};
 
 const LANGUAGE_COLORS: Record<string, string> = {
   JavaScript: "#f7df1e",
@@ -107,8 +86,12 @@ export default function ProjectCard({
 
     setIsLoading(true);
 
+    const cacheBust = Date.now();
+
     Promise.all([
-      fetch(`https://api.github.com/repos/${owner}/${repo}`)
+      fetch(`https://api.github.com/repos/${owner}/${repo}?_=${cacheBust}`, {
+        cache: "no-store",
+      })
         .then((r) => r.json())
         .then((data) => {
           if (data && !data.message) {
@@ -122,7 +105,8 @@ export default function ProjectCard({
         .catch(() => {}),
 
       fetch(
-        `https://api.github.com/repos/${owner}/${repo}/commits?per_page=1`
+        `https://api.github.com/repos/${owner}/${repo}/commits?per_page=1&_=${cacheBust}`,
+        { cache: "no-store" },
       )
         .then(async (r) => {
           const linkHeader = r.headers.get("Link");
@@ -313,7 +297,7 @@ export default function ProjectCard({
 
             {/* Title */}
             <h3
-              className="text-subheading text-base leading-snug"
+              className="text-subheading mt-2 text-base leading-snug"
               style={{
                 color: "var(--text-primary)",
                 transition: "color 0.2s ease",
@@ -334,107 +318,11 @@ export default function ProjectCard({
             </h3>
           </div>
         </div>
-        {githubUrl && (
-          <div className="mb-4">
-            {isLoading ? (
-              /* Shimmer skeleton for stats */
-              <div className="flex gap-3">
-                {[1, 2, 3].map((i) => (
-                  <div
-                    key={i}
-                    className="h-4 rounded animate-pulse"
-                    style={{
-                      width: `${48 + i * 16}px`,
-                      background: "var(--bg-secondary)",
-                    }}
-                  />
-                ))}
-              </div>
-            ) : (
-              (repoData?.language || commitData) && (
-                <div className="flex flex-wrap gap-3">
-                  {repoData?.language && (
-                    <span
-                      className="flex items-center gap-1.5 text-xs font-mono px-2 py-0.5 rounded-md"
-                      style={{
-                        color: "var(--text-secondary)",
-                        background: "var(--bg-secondary)",
-                        border: "1px solid var(--border-primary)",
-                      }}
-                    >
-                      <span
-                        className="w-2 h-2 rounded-full flex-shrink-0"
-                        style={{
-                          backgroundColor:
-                            LANGUAGE_COLORS[repoData.language] ?? "#6e7681",
-                          boxShadow: `0 0 6px ${LANGUAGE_COLORS[repoData.language] ?? "#6e7681"}80`,
-                        }}
-                      />
-                      {repoData.language}
-                    </span>
-                  )}
-                  {commitData && commitData.totalCommits > 0 && (
-                    <span
-                      className="flex items-center gap-1.5 text-xs font-mono px-2 py-0.5 rounded-md"
-                      style={{
-                        color: "var(--text-secondary)",
-                        background: "var(--bg-secondary)",
-                        border: "1px solid var(--border-primary)",
-                      }}
-                    >
-                      <svg
-                        className="w-3 h-3 flex-shrink-0"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        style={{ color: "var(--text-accent)" }}
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
-                        />
-                      </svg>
-                      {commitData.totalCommits} commits
-                    </span>
-                  )}
-                  {commitData?.lastCommitDate && (
-                    <span
-                      className="flex items-center gap-1.5 text-xs font-mono px-2 py-0.5 rounded-md"
-                      style={{
-                        color: "var(--text-secondary)",
-                        background: "var(--bg-secondary)",
-                        border: "1px solid var(--border-primary)",
-                      }}
-                    >
-                      <svg
-                        className="w-3 h-3 flex-shrink-0"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        style={{ color: "var(--text-accent)" }}
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                        />
-                      </svg>
-                      {timeAgo(commitData.lastCommitDate)}
-                    </span>
-                  )}
-                </div>
-              )
-            )}
-          </div>
-        )}
 
         {/* ── Description ── */}
         {description && (
           <p
-            className="text-sm mb-4 leading-relaxed line-clamp-3"
+            className="text-sm mb-4 leading-relaxed"
             style={{ color: "var(--text-secondary)" }}
           >
             {description}
@@ -444,19 +332,13 @@ export default function ProjectCard({
         {/* ── Tech Stack ── */}
         {techStack && techStack.length > 0 && (
           <div className="mb-4">
-            <p
-              className="text-xs font-mono mb-2 uppercase tracking-widest"
-              style={{ color: "var(--text-muted)" }}
-            >
-              Stack
-            </p>
             <AnimatedTooltip
               items={techStack
                 .map((tech, i) => ({
                   id: i,
                   name: tech,
-                  image: SKILL_SLUGS[tech]
-                    ? `https://skillicons.dev/icons?i=${SKILL_SLUGS[tech]}&theme=dark`
+                  image: LANGUAGE_ICONS[tech]
+                    ? `https://skillicons.dev/icons?i=${LANGUAGE_ICONS[tech]}&theme=dark`
                     : "",
                 }))
                 .filter((item) => item.image)}
@@ -466,9 +348,7 @@ export default function ProjectCard({
 
         {/* ── Collaborators ── */}
         {collaborators && collaborators.length > 0 && (
-          <div
-            className="flex items-center gap-3 mb-4 pb-3"
-          >
+          <div className="flex items-center gap-3 mb-4 pb-3">
             <div className="flex items-center gap-1.5">
               <svg
                 className="w-3.5 h-3.5"

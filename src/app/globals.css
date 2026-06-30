@@ -242,7 +242,21 @@ html {
   }
 }
 
-/* ── Utility ─────────────────────────────────────────────────────── */
+/* ── Scroll down bounce ──────────────────────────────────────────── */
+@keyframes scrollBounce {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.9;
+  }
+
+  50% {
+    transform: translateY(6px);
+    opacity: 0.4;
+  }
+}
+
+
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;

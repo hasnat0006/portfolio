@@ -87,7 +87,7 @@ export default function HomePage() {
                 className="text-heading text-2xl md:text-3xl"
                 style={{ color: "var(--text-primary)" }}
               >
-                curl api.github.com/users/hasnat0006
+                curl github.com/hasnat0006
               </h2>
             </div>
             <p

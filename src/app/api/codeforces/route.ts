@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-export const revalidate = 3600;
+export const dynamic = "force-dynamic";
 
 // ── Types matching client-side expectations ───────────────────────────────────
 
@@ -830,30 +830,59 @@ export async function GET() {
       problemsSolved: problemsSolvedPerContest[e.contestId] ?? 0,
     }));
 
-    // Fetch totalParticipants for best contests
+    // Fetch totalParticipants for best contests (sequential to avoid rate-limiting)
     try {
       const topByRank = [...contests]
         .sort((a, b) => a.rank - b.rank)
         .slice(0, 10);
-      const participantResults = await Promise.allSettled(
-        topByRank.map((c: any) =>
-          fetch(
-            `https://codeforces.com/api/contest.standings?contestId=${c.contestId}&from=1&count=1`,
-            { next: { revalidate: 3600 } },
-          )
-            .then((r) => r.json())
-            .then((d: any) => ({
-              contestId: c.contestId,
-              total: d.result?.totalParticipants ?? null,
-            })),
-        ),
-      );
-      for (const r of participantResults) {
-        if (r.status === "fulfilled" && r.value.total != null) {
-          const c = contests.find(
-            (x: any) => x.contestId === r.value.contestId,
+
+      const participantResults: { contestId: number; total: number | null }[] =
+        [];
+
+      for (const c of topByRank) {
+        try {
+          const controller = new AbortController();
+          const timeout = setTimeout(() => controller.abort(), 10000);
+
+          const res = await fetch(
+            `https://codeforces.com/api/contest.standings?contestId=${c.contestId}`,
+            { signal: controller.signal },
           );
-          if (c) c.totalParticipants = r.value.total;
+          clearTimeout(timeout);
+
+          if (!res.ok) {
+            console.warn(
+              `CF standings fetch failed for ${c.contestId}: ${res.status}`,
+            );
+            continue;
+          }
+
+          const text = await res.text();
+          const d = JSON.parse(text);
+          if (d?.status !== "OK") {
+            console.warn(
+              `CF standings non-OK for ${c.contestId}: ${d?.comment}`,
+            );
+            continue;
+          }
+
+          const rows = d.result?.rows;
+          const total =
+            Array.isArray(rows) && rows.length > 0 ? rows.length : null;
+          if (total != null) {
+            participantResults.push({ contestId: c.contestId, total });
+          }
+        } catch (err) {
+          console.warn(`CF standings error for ${c.contestId}:`, err);
+        }
+      }
+
+      for (const r of participantResults) {
+        if (r.total != null) {
+          const contest = contests.find(
+            (x: any) => x.contestId === r.contestId,
+          );
+          if (contest) contest.totalParticipants = r.total;
         }
       }
     } catch {

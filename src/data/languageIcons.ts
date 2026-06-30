@@ -83,6 +83,20 @@ const LANGUAGE_ICONS: Record<string, string> = {
   TSQL: "postgres",
   Procfile: "ruby",
 
+  // ── Tech / Frameworks ────────────────────────────────────────────────────
+  "Next.js": "nextjs",
+  "React.js": "react",
+  "Node.js": "nodejs",
+  "Express.js": "express",
+  TailwindCSS: "tailwind",
+  Supabase: "supabase",
+  PostgreSQL: "postgresql",
+  JavaFX: "javafx",
+  MySQL: "mysql",
+  Oracle: "oracle",
+  "Scene Builder": "eclipse",
+  Xampp: "xampp",
+
   // ── Other ─────────────────────────────────────────────────────────────────
   TeX: "latex",
   LaTeX: "latex",

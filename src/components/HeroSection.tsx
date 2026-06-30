@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 
 const TITLES = [
   "Competitive Programmer",
-  "Software Engineer @ Enosis Solutions",
+  "Software Engineer L1 @ Enosis Solutions",
   "CSE undergraduate at MIST",
 ];
 
@@ -44,6 +44,7 @@ export default function HeroSection() {
   const displayTitle = TITLES[titleIndex].substring(0, charIndex);
 
   return (
+    <div className="relative">
     <GridBackground className="min-h-[80vh] flex items-center justify-center px-4 py-20">
       <section
         id="hero"
@@ -403,5 +404,36 @@ export default function HeroSection() {
         </div>
       </section>
     </GridBackground>
+
+      {/* Scroll down indicator */}
+      <div
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center animate-fadeIn z-20"
+        style={{ animationDelay: "1.5s", opacity: 0, animationFillMode: "forwards" }}
+      >
+        {/* Three stacked chevrons with cascading bounce animation */}
+        {[0, 1, 2].map((i) => (
+          <svg
+            key={i}
+            xmlns="http://www.w3.org/2000/svg"
+            width="28"
+            height="28"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            style={{
+              color: "var(--text-accent)",
+              opacity: 1 - i * 0.28,
+              animation: `scrollBounce 1.6s ease-in-out ${i * 0.18}s infinite`,
+              marginTop: i > 0 ? "-8px" : undefined,
+            }}
+          >
+            <polyline points="4 8 12 16 20 8" />
+          </svg>
+        ))}
+      </div>
+    </div>
   );
 }

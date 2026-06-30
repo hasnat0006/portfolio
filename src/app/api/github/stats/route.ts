@@ -566,6 +566,33 @@ function computeActivityTimeline(events: GHEvent[]) {
   return items;
 }
 
+/**
+ * Fallback: synthesise recent-push timeline items from GraphQL repo data.
+ * Used when the public events API returns too few results (rate-limited or
+ * the account has no public events in the last 90 days).
+ */
+function computeActivityFromRepos(repos: GQLRepo[], limit = 20) {
+  return repos
+    .filter((r) => r.pushedAt)
+    .sort(
+      (a, b) =>
+        new Date(b.pushedAt!).getTime() - new Date(a.pushedAt!).getTime(),
+    )
+    .slice(0, limit)
+    .map((r) => ({
+      type: "push",
+      repo: `${USERNAME}/${r.name}`,
+      repoUrl: r.url,
+      description: r.description
+        ? `Updated: ${r.description.slice(0, 72)}`
+        : "Pushed commits",
+      date: r.pushedAt!,
+      icon: "commit",
+      url: r.url,
+    }));
+}
+
+
 function computeAchievements(params: {
   publicRepos: number;
   totalStars: number;
@@ -1117,8 +1144,18 @@ export async function GET() {
     // Repo analytics
     const repoAnalytics = computeRepoAnalytics(repos);
 
-    // Activity timeline
-    const activityTimeline = computeActivityTimeline(events);
+    // Activity timeline — use public events, fall back to repo push timestamps
+    const eventsTimeline = computeActivityTimeline(events);
+    const activityTimeline =
+      eventsTimeline.length >= 5
+        ? eventsTimeline
+        : [
+            ...eventsTimeline,
+            ...computeActivityFromRepos(repos, 20).filter(
+              (fb) =>
+                !eventsTimeline.some((e) => e.repo === fb.repo),
+            ),
+          ].slice(0, 20);
 
     // All repos (for explorer) — compact shape
     const allRepos = repos.map((r) => ({

@@ -11,17 +11,17 @@ import {
 // ── Command Data ───────────────────────────────────────────────────────
 const ABOUT_TEXT = `
 ┌──────────────────────────────────────────────────────────────────┐
-│  Yusuf Reza Hasnat                                              │
-│  Algorithmic Systems Engineer & Competitive Programmer          │
+│  Yusuf Reza Hasnat                                               │
+│  Software Engineer L1 & Competitive Programmer                   │
 │                                                                  │
-│  ⟩ Education:                                                   │
+│  ⟩ Education:                                                    │
 │    Military Institute of Science and Technology (MIST)           │
 │    B.Sc. in Computer Science & Engineering                       │
 │    CGPA: 3.69 | Spring Semester GPA: 3.71                        │
 │                                                                  │
-│  ⟩ Interests:                                                   │
+│  ⟩ Interests:                                                    │
 │    Algorithm Design · Competitive Programming                    │
-│    Biomedical Research · Systems Engineering                     │
+│    Software Engineering                                          │
 │    High-Performance Computing                                    │
 └──────────────────────────────────────────────────────────────────┘`;
 
@@ -40,21 +40,6 @@ const CP_TEXT = `
 ║                                                                  ║
 ╚══════════════════════════════════════════════════════════════════╝`;
 
-const RESEARCH_TEXT = `
-┌──────────────────────────────────────────────────────────────────┐
-│  SCIENTIFIC PUBLICATIONS                                         │
-├──────────────────────────────────────────────────────────────────┤
-│                                                                  │
-│  ► Co-authored peer-reviewed scientific paper                    │
-│    indexed in PubMed                                             │
-│    Domain: Biomedical/Computational Data Pipelines               │
-│                                                                  │
-│  ► Research Focus:                                               │
-│    Computational biology · Data pipeline optimization            │
-│    Statistical modeling · Biomedical signal processing           │
-│                                                                  │
-│  Status: Published & Indexed                                     │
-└──────────────────────────────────────────────────────────────────┘`;
 
 const PROJECTS_TEXT = `
 ┌──────────────────────────────────────────────────────────────────┐
@@ -136,9 +121,6 @@ Type "help" to see available commands.
           break;
         case "cp":
           output = CP_TEXT;
-          break;
-        case "research":
-          output = RESEARCH_TEXT;
           break;
         case "projects":
           output = PROJECTS_TEXT;

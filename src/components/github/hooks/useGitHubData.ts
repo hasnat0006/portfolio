@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { GitHubApiResponse } from "../types";
 
-const CACHE_KEY = "gh_dashboard_v3";
+const CACHE_KEY = "gh_dashboard_v4";
 const CACHE_TTL_MS = 60 * 60 * 1000; // 1 hour
 
 interface CacheEntry {
