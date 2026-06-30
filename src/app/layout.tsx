@@ -75,7 +75,7 @@ export const metadata: Metadata = {
     emails: ["yusufrezahasnat0006@gmail.com"],
     images: [
       {
-        url: `${BASE_URL}/hasnat.jpeg`,
+        url: `${BASE_URL}/logo.png`,
         width: 512,
         height: 512,
         alt: "Yusuf Reza Hasnat — Portfolio",
@@ -87,8 +87,15 @@ export const metadata: Metadata = {
     title: `Yusuf Reza Hasnat | ${new URL(BASE_URL).hostname}`,
     description:
       "Software Engineer, Competitive Programmer (Specialist @ CF), ICPC Asia Dhaka Regionalist & MIST CSE Undergraduate.",
-    images: [`${BASE_URL}/hasnat.jpeg`],
+    images: [`${BASE_URL}/logo.png`],
     creator: "@hasnat0006",
+  },
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/logo.png", type: "image/png" },
+    ],
+    apple: { url: "/logo.png", sizes: "180x180" },
   },
   robots: {
     index: true,
@@ -121,6 +128,10 @@ export default function RootLayout({
           name="google-site-verification"
           content="AnbzusuoDN1cBbBsp1oWGo-7eHr0aVgLI94uA_289wc"
         />
+        <meta
+          name="google-site-verification"
+          content="Z9UgzpzVhcztBSr8r0ivQk4Xl0QmYDeYXMlXlPQcD64"
+        />
         {/* Prevent flash of wrong theme */}
         <Script
           id="theme-init"
@@ -141,7 +152,7 @@ export default function RootLayout({
               givenName: "Yusuf Reza",
               familyName: "Hasnat",
               url: BASE_URL,
-              image: `${BASE_URL}/hasnat.jpeg`,
+              image: `${BASE_URL}/logo.png`,
               email: "yusufrezahasnat0006@gmail.com",
               jobTitle: [
                 "Software Engineer",
