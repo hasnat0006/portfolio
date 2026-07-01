@@ -58,7 +58,9 @@ export function useGitHubData(): GitHubDataState {
 
     const cached = readCache();
     if (cached) {
-      setState({ loading: false, error: null, data: cached });
+      Promise.resolve().then(() => {
+        setState({ loading: false, error: null, data: cached });
+      });
       return;
     }
 

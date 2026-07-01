@@ -13,28 +13,7 @@ const CSS = `
 }
 `;
 
-interface TooltipState {
-  day: HeatmapDay;
-  x: number;
-  y: number;
-}
-
-interface Props {
-  heatmap: HeatmapDay[];
-  currentStreak: number;
-  longestStreak: number;
-}
-
-const LEVEL_COLORS = [
-  "var(--bg-card-hover)", // 0 — empty
-  "var(--text-accent)", // 1 — low
-  "var(--text-accent)", // 2 — medium
-  "var(--text-accent)", // 3 — high
-  "var(--text-accent)", // 4 — very high
-];
-
 const LEVEL_OPACITY = [0.08, 0.25, 0.5, 0.75, 1];
-
 const MONTHS = [
   "Jan",
   "Feb",
@@ -49,7 +28,23 @@ const MONTHS = [
   "Nov",
   "Dec",
 ];
-const WEEKDAYS_LABELS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const WEEKDAY_LABELS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const CELL = 16;
+const GAP = 3;
+const STEP = CELL + GAP;
+const LEFT_PAD = 30;
+
+interface TooltipState {
+  day: HeatmapDay;
+  x: number;
+  y: number;
+}
+
+interface Props {
+  heatmap: HeatmapDay[];
+  currentStreak: number;
+  longestStreak: number;
+}
 
 export function ActivityHeatmap({
   heatmap,
@@ -61,50 +56,42 @@ export function ActivityHeatmap({
   const [tooltip, setTooltip] = useState<TooltipState | null>(null);
 
   useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([e]) => {
-        if (e.isIntersecting) setVisible(true);
+    const element = ref.current;
+    if (!element) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) setVisible(true);
       },
       { threshold: 0.05 },
     );
-    obs.observe(el);
-    return () => obs.disconnect();
+    observer.observe(element);
+    return () => observer.disconnect();
   }, []);
 
-  // Group days into weeks (columns of 7)
-  const weeks: (HeatmapDay | null)[][] = [];
-  // Find start day of week for first day
   const firstDay = new Date(heatmap[0]?.date ?? new Date());
-  const startPad = firstDay.getDay(); // 0=Sun
   const padded: (HeatmapDay | null)[] = [
-    ...Array.from({ length: startPad }, () => null),
+    ...Array.from({ length: firstDay.getDay() }, () => null),
     ...heatmap,
   ];
-  for (let i = 0; i < padded.length; i += 7) {
-    weeks.push(padded.slice(i, i + 7));
+  const weeks: (HeatmapDay | null)[][] = [];
+  for (let index = 0; index < padded.length; index += 7) {
+    weeks.push(padded.slice(index, index + 7));
   }
 
-  // Month labels — find first day of each month in the weeks grid
   const monthLabels: { col: number; month: string }[] = [];
   let lastMonth = -1;
   weeks.forEach((week, col) => {
     for (const day of week) {
       if (!day) continue;
-      const d = new Date(day.date);
-      if (d.getMonth() !== lastMonth) {
-        lastMonth = d.getMonth();
-        monthLabels.push({ col, month: MONTHS[d.getMonth()] });
+      const date = new Date(day.date);
+      if (date.getMonth() !== lastMonth) {
+        lastMonth = date.getMonth();
+        monthLabels.push({ col, month: MONTHS[date.getMonth()] });
       }
       break;
     }
   });
-
-  const CELL = 16;
-  const GAP = 3;
-  const STEP = CELL + GAP;
-  const LEFT_PAD = 30; // space for weekday labels
 
   return (
     <>
@@ -133,54 +120,27 @@ export function ActivityHeatmap({
             </p>
           </div>
           <div className="flex gap-4">
-            <div className="text-center">
-              <p
-                className="text-code font-bold text-lg"
-                style={{ color: "var(--text-accent)" }}
-              >
-                {currentStreak}
-              </p>
-              <p
-                className="text-meta"
-                style={{ color: "var(--text-muted)", fontSize: "0.65rem" }}
-              >
-                Current streak
-              </p>
-            </div>
-            <div className="text-center">
-              <p
-                className="text-code font-bold text-lg"
-                style={{ color: "#f59e0b" }}
-              >
-                {longestStreak}
-              </p>
-              <p
-                className="text-meta"
-                style={{ color: "var(--text-muted)", fontSize: "0.65rem" }}
-              >
-                Longest streak
-              </p>
-            </div>
+            <Metric value={currentStreak} label="Current streak" />
+            <Metric value={longestStreak} label="Longest streak" color="#f59e0b" />
           </div>
         </div>
 
         <div className="overflow-x-auto pb-2">
           <div style={{ position: "relative", paddingLeft: LEFT_PAD }}>
-            {/* Weekday labels */}
             <div
               style={{
                 position: "absolute",
                 left: 0,
-                top: 16, // offset past month row
+                top: 16,
                 display: "flex",
                 flexDirection: "column",
                 gap: GAP,
               }}
             >
-              {WEEKDAYS_LABELS.map((d, i) =>
-                i % 2 === 1 ? (
+              {WEEKDAY_LABELS.map((day, index) =>
+                index % 2 === 1 ? (
                   <div
-                    key={d}
+                    key={day}
                     style={{
                       height: CELL,
                       fontSize: "0.55rem",
@@ -188,29 +148,27 @@ export function ActivityHeatmap({
                       lineHeight: `${CELL}px`,
                     }}
                   >
-                    {d}
+                    {day}
                   </div>
                 ) : (
-                  <div key={d} style={{ height: CELL }} />
+                  <div key={day} style={{ height: CELL }} />
                 ),
               )}
             </div>
 
-            {/* Month row */}
             <div
               style={{
                 display: "flex",
                 marginBottom: 4,
-                marginLeft: 0,
                 fontSize: "0.6rem",
                 color: "var(--text-muted)",
                 height: 12,
                 position: "relative",
               }}
             >
-              {monthLabels.map(({ col, month }, i) => (
+              {monthLabels.map(({ col, month }) => (
                 <span
-                  key={i}
+                  key={`${month}-${col}`}
                   style={{
                     position: "absolute",
                     left: col * STEP,
@@ -222,7 +180,6 @@ export function ActivityHeatmap({
               ))}
             </div>
 
-            {/* Grid */}
             <div
               style={{
                 display: "flex",
@@ -231,30 +188,27 @@ export function ActivityHeatmap({
                 position: "relative",
               }}
             >
-              {weeks.map((week, wi) => (
+              {weeks.map((week, weekIndex) => (
                 <div
-                  key={wi}
+                  key={weekIndex}
                   style={{ display: "flex", flexDirection: "column", gap: GAP }}
                 >
-                  {Array.from({ length: 7 }).map((_, di) => {
-                    const day = week[di] ?? null;
+                  {Array.from({ length: 7 }).map((_, dayIndex) => {
+                    const day = week[dayIndex] ?? null;
                     if (!day) {
                       return (
                         <div
-                          key={di}
+                          key={dayIndex}
                           style={{ width: CELL, height: CELL, borderRadius: 2 }}
                         />
                       );
                     }
+
                     const opacity = LEVEL_OPACITY[day.level];
-                    const color =
-                      day.level === 0
-                        ? "var(--bg-card-hover)"
-                        : `rgba(var(--text-accent-rgb, 52 211 153) / ${opacity})`;
 
                     return (
                       <div
-                        key={di}
+                        key={dayIndex}
                         className="cf-heatmap-cell"
                         style={{
                           width: CELL,
@@ -263,25 +217,26 @@ export function ActivityHeatmap({
                           background:
                             day.level === 0
                               ? "var(--bg-card-hover)"
-                              : `color-mix(in srgb, var(--text-accent) ${Math.round(opacity * 100)}%, transparent)`,
+                              : `color-mix(in srgb, var(--text-accent) ${Math.round(
+                                  opacity * 100,
+                                )}%, transparent)`,
                           cursor: "default",
                           animation: visible
-                            ? `cf-cell-in 0.3s ease-out ${wi * 5 + di * 2}ms both`
+                            ? `cf-cell-in 0.3s ease-out ${
+                                weekIndex * 5 + dayIndex * 2
+                              }ms both`
                             : "none",
                           border: "1px solid var(--border-primary)",
                           transition: "transform 0.1s",
                         }}
-                        onMouseEnter={(e) => {
-                          (e.currentTarget as HTMLDivElement).style.transform =
-                            "scale(1.4)";
-                          const rect = (
-                            e.currentTarget as HTMLDivElement
-                          ).getBoundingClientRect();
+                        onMouseEnter={(event) => {
+                          event.currentTarget.style.transform = "scale(1.4)";
+                          const rect =
+                            event.currentTarget.getBoundingClientRect();
                           setTooltip({ day, x: rect.left, y: rect.top });
                         }}
-                        onMouseLeave={(e) => {
-                          (e.currentTarget as HTMLDivElement).style.transform =
-                            "";
+                        onMouseLeave={(event) => {
+                          event.currentTarget.style.transform = "";
                           setTooltip(null);
                         }}
                         aria-label={`${day.date}: ${day.accepted} accepted, ${day.total} total`}
@@ -294,7 +249,6 @@ export function ActivityHeatmap({
               ))}
             </div>
 
-            {/* Legend */}
             <div className="flex items-center gap-1.5 mt-3">
               <span style={{ fontSize: "0.6rem", color: "var(--text-muted)" }}>
                 Less
@@ -309,7 +263,9 @@ export function ActivityHeatmap({
                     background:
                       level === 0
                         ? "var(--bg-card-hover)"
-                        : `color-mix(in srgb, var(--text-accent) ${Math.round(LEVEL_OPACITY[level] * 100)}%, transparent)`,
+                        : `color-mix(in srgb, var(--text-accent) ${Math.round(
+                            LEVEL_OPACITY[level] * 100,
+                          )}%, transparent)`,
                     border: "1px solid var(--border-primary)",
                   }}
                 />
@@ -321,7 +277,6 @@ export function ActivityHeatmap({
           </div>
         </div>
 
-        {/* Fixed tooltip */}
         {tooltip && (
           <div
             className="fixed z-50 pointer-events-none rounded-lg px-3 py-2 text-xs"
@@ -350,5 +305,29 @@ export function ActivityHeatmap({
         )}
       </div>
     </>
+  );
+}
+
+function Metric({
+  value,
+  label,
+  color = "var(--text-accent)",
+}: {
+  value: number;
+  label: string;
+  color?: string;
+}) {
+  return (
+    <div className="text-center">
+      <p className="text-code font-bold text-lg" style={{ color }}>
+        {value}
+      </p>
+      <p
+        className="text-meta"
+        style={{ color: "var(--text-muted)", fontSize: "0.65rem" }}
+      >
+        {label}
+      </p>
+    </div>
   );
 }

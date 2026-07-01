@@ -18,24 +18,33 @@ interface Props {
   contests: ContestRow[];
 }
 
+function ratingToRank(rating: number) {
+  if (rating >= 2600) return "grandmaster";
+  if (rating >= 2300) return "master";
+  if (rating >= 1900) return "expert";
+  if (rating >= 1600) return "specialist";
+  if (rating >= 1200) return "pupil";
+  return "newbie";
+}
+
 export function BestContests({ contests }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([e]) => {
-        if (e.isIntersecting) setVisible(true);
+    const element = ref.current;
+    if (!element) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) setVisible(true);
       },
       { threshold: 0.1 },
     );
-    obs.observe(el);
-    return () => obs.disconnect();
+    observer.observe(element);
+    return () => observer.disconnect();
   }, []);
 
-  // Sort by best rank (ascending) and take top 10
   const best = [...contests].sort((a, b) => a.rank - b.rank).slice(0, 10);
 
   return (
@@ -71,100 +80,29 @@ export function BestContests({ contests }: Props) {
           >
             <thead>
               <tr style={{ borderBottom: "1px solid var(--border-primary)" }}>
-                <th
-                  className="px-3 py-2.5 text-center text-meta w-8"
-                  style={{
-                    color: "var(--text-muted)",
-                    fontSize: "0.65rem",
-                    textTransform: "uppercase",
-                    letterSpacing: "0.05em",
-                  }}
-                >
+                <th className="px-3 py-2.5 text-center text-meta w-8" style={headerStyle}>
                   #
                 </th>
-                <th
-                  className="px-3 py-2.5 text-left text-meta"
-                  style={{
-                    color: "var(--text-muted)",
-                    fontSize: "0.65rem",
-                    textTransform: "uppercase",
-                    letterSpacing: "0.05em",
-                  }}
-                >
+                <th className="px-3 py-2.5 text-left text-meta" style={headerStyle}>
                   Contest
                 </th>
-                <th
-                  className="px-3 py-2.5 text-left text-meta"
-                  style={{
-                    color: "var(--text-muted)",
-                    fontSize: "0.65rem",
-                    textTransform: "uppercase",
-                    letterSpacing: "0.05em",
-                  }}
-                >
+                <th className="px-3 py-2.5 text-left text-meta" style={headerStyle}>
                   Rank
                 </th>
-                <th
-                  className="px-3 py-2.5 text-right text-meta"
-                  style={{
-                    color: "var(--text-muted)",
-                    fontSize: "0.65rem",
-                    textTransform: "uppercase",
-                    letterSpacing: "0.05em",
-                  }}
-                >
-                  Participants
-                </th>
-                <th
-                  className="px-3 py-2.5 text-left text-meta"
-                  style={{
-                    color: "var(--text-muted)",
-                    fontSize: "0.65rem",
-                    textTransform: "uppercase",
-                    letterSpacing: "0.05em",
-                  }}
-                >
+                <th className="px-3 py-2.5 text-left text-meta" style={headerStyle}>
                   Rating
                 </th>
-                <th
-                  className="px-3 py-2.5 text-left text-meta"
-                  style={{
-                    color: "var(--text-muted)",
-                    fontSize: "0.65rem",
-                    textTransform: "uppercase",
-                    letterSpacing: "0.05em",
-                  }}
-                >
-                  Δ
+                <th className="px-3 py-2.5 text-left text-meta" style={headerStyle}>
+                  Delta
                 </th>
-                <th
-                  className="px-3 py-2.5 text-center text-meta w-12"
-                  style={{
-                    color: "var(--text-muted)",
-                    fontSize: "0.65rem",
-                    textTransform: "uppercase",
-                    letterSpacing: "0.05em",
-                  }}
-                >
+                <th className="px-3 py-2.5 text-center text-meta w-12" style={headerStyle}>
                   Solved
                 </th>
               </tr>
             </thead>
             <tbody>
-              {best.map((contest, i) => {
-                const rankColor = getRankColor(
-                  contest.newRating >= 2600
-                    ? "grandmaster"
-                    : contest.newRating >= 2300
-                      ? "master"
-                      : contest.newRating >= 1900
-                        ? "expert"
-                        : contest.newRating >= 1600
-                          ? "specialist"
-                          : contest.newRating >= 1200
-                            ? "pupil"
-                            : "newbie",
-                );
+              {best.map((contest, index) => {
+                const rankColor = getRankColor(ratingToRank(contest.newRating));
 
                 return (
                   <tr
@@ -173,21 +111,18 @@ export function BestContests({ contests }: Props) {
                     style={{
                       borderBottom: "1px solid var(--border-primary)",
                       animation: visible
-                        ? `cf-row-in 0.35s ease-out ${i * 50}ms both`
+                        ? `cf-row-in 0.35s ease-out ${index * 50}ms both`
                         : "none",
                     }}
                   >
-                    {/* # */}
                     <td className="px-3 py-3 text-center">
                       <span
                         className="text-meta text-xs font-bold"
                         style={{ color: "var(--text-muted)" }}
                       >
-                        {i + 1}
+                        {index + 1}
                       </span>
                     </td>
-
-                    {/* Contest name */}
                     <td className="px-3 py-3" style={{ maxWidth: "240px" }}>
                       <a
                         href={`https://codeforces.com/contest/${contest.contestId}`}
@@ -195,18 +130,18 @@ export function BestContests({ contests }: Props) {
                         rel="noopener noreferrer"
                         className="text-xs leading-tight line-clamp-2 transition-colors hover:underline"
                         style={{ color: "var(--text-primary)" }}
-                        onMouseEnter={(e) =>
-                          (e.currentTarget.style.color = "var(--text-accent)")
+                        onMouseEnter={(event) =>
+                          (event.currentTarget.style.color =
+                            "var(--text-accent)")
                         }
-                        onMouseLeave={(e) =>
-                          (e.currentTarget.style.color = "var(--text-primary)")
+                        onMouseLeave={(event) =>
+                          (event.currentTarget.style.color =
+                            "var(--text-primary)")
                         }
                       >
                         {contest.contestName}
                       </a>
                     </td>
-
-                    {/* Rank */}
                     <td className="px-3 py-3">
                       <span
                         className="text-code text-xs font-bold px-1.5 py-0.5 rounded-md"
@@ -218,20 +153,6 @@ export function BestContests({ contests }: Props) {
                         #{contest.rank.toLocaleString()}
                       </span>
                     </td>
-
-                    {/* Total participants */}
-                    <td className="px-3 py-3 text-right">
-                      <span
-                        className="text-code text-xs font-medium"
-                        style={{ color: "var(--text-secondary)" }}
-                      >
-                        {contest.totalParticipants != null
-                          ? contest.totalParticipants.toLocaleString()
-                          : "—"}
-                      </span>
-                    </td>
-
-                    {/* New rating */}
                     <td className="px-3 py-3">
                       <span
                         className="text-code text-xs font-semibold"
@@ -240,8 +161,6 @@ export function BestContests({ contests }: Props) {
                         {contest.newRating}
                       </span>
                     </td>
-
-                    {/* Delta */}
                     <td className="px-3 py-3">
                       <span
                         className="text-code text-xs font-bold px-1.5 py-0.5 rounded-md"
@@ -260,8 +179,6 @@ export function BestContests({ contests }: Props) {
                         {contest.delta}
                       </span>
                     </td>
-
-                    {/* Problems solved */}
                     <td className="px-3 py-3 text-center">
                       <span
                         className="text-code text-xs font-medium px-1.5 py-0.5 rounded-md"
@@ -283,3 +200,10 @@ export function BestContests({ contests }: Props) {
     </>
   );
 }
+
+const headerStyle = {
+  color: "var(--text-muted)",
+  fontSize: "0.65rem",
+  textTransform: "uppercase",
+  letterSpacing: "0.05em",
+} as const;

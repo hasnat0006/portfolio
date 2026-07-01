@@ -3,48 +3,7 @@
 import AnimatedTooltip from "@/components/ui/AnimatedTooltip";
 import LANGUAGE_ICONS from "@/data/languageIcons";
 import type { Collaborator } from "@/data/projects";
-import { useEffect, useRef, useState } from "react";
-
-const LANGUAGE_COLORS: Record<string, string> = {
-  JavaScript: "#f7df1e",
-  TypeScript: "#3178c6",
-  Java: "#b07219",
-  Python: "#3572A5",
-  HTML: "#e34c26",
-  CSS: "#563d7c",
-  "C++": "#f34b7d",
-};
-
-type RepoData = {
-  forks: number;
-  language: string | null;
-  description: string | null;
-};
-
-type CommitData = {
-  totalCommits: number;
-  lastCommitDate: string | null;
-};
-
-function timeAgo(dateString: string): string {
-  const now = new Date();
-  const date = new Date(dateString);
-  const diffMs = now.getTime() - date.getTime();
-  const diffMins = Math.floor(diffMs / 60000);
-  const diffHours = Math.floor(diffMins / 60);
-  const diffDays = Math.floor(diffHours / 24);
-  const diffWeeks = Math.floor(diffDays / 7);
-  const diffMonths = Math.floor(diffDays / 30);
-  const diffYears = Math.floor(diffDays / 365);
-
-  if (diffMins < 1) return "just now";
-  if (diffMins < 60) return `${diffMins}m ago`;
-  if (diffHours < 24) return `${diffHours}h ago`;
-  if (diffDays < 7) return `${diffDays}d ago`;
-  if (diffWeeks < 5) return `${diffWeeks}w ago`;
-  if (diffMonths < 12) return `${diffMonths}mo ago`;
-  return `${diffYears}y ago`;
-}
+import { useRef, useState } from "react";
 
 type ProjectCardProps = {
   title: string;
@@ -68,67 +27,11 @@ export default function ProjectCard({
   liveUrl,
   collaborators,
 }: ProjectCardProps) {
-  const [repoData, setRepoData] = useState<RepoData | null>(null);
-  const [commitData, setCommitData] = useState<CommitData | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [imageLoaded, setImageLoaded] = useState(false);
   const cardRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    if (!githubUrl) return;
-    const parts = githubUrl.replace("https://github.com/", "").split("/");
-    if (parts.length < 2) return;
-    const owner = parts[0];
-    const repo = parts[1];
-
-    setIsLoading(true);
-
-    const cacheBust = Date.now();
-
-    Promise.all([
-      fetch(`https://api.github.com/repos/${owner}/${repo}?_=${cacheBust}`, {
-        cache: "no-store",
-      })
-        .then((r) => r.json())
-        .then((data) => {
-          if (data && !data.message) {
-            setRepoData({
-              forks: data.forks_count,
-              language: data.language,
-              description: data.description,
-            });
-          }
-        })
-        .catch(() => {}),
-
-      fetch(
-        `https://api.github.com/repos/${owner}/${repo}/commits?per_page=1&_=${cacheBust}`,
-        { cache: "no-store" },
-      )
-        .then(async (r) => {
-          const linkHeader = r.headers.get("Link");
-          let totalCommits = 0;
-          if (linkHeader) {
-            const match = linkHeader.match(/page=(\d+)>; rel="last"/);
-            if (match) totalCommits = parseInt(match[1], 10);
-          }
-          const data = await r.json();
-          return { data, totalCommits };
-        })
-        .then(({ data, totalCommits }) => {
-          if (data && !data.message && data.length > 0) {
-            setCommitData({
-              totalCommits,
-              lastCommitDate: data[0]?.commit?.committer?.date || null,
-            });
-          }
-        })
-        .catch(() => {}),
-    ]).finally(() => setIsLoading(false));
-  }, [githubUrl]);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
     const card = cardRef.current;

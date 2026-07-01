@@ -29,18 +29,6 @@ interface Props {
   ratingHistory: CFRatingEntry[];
 }
 
-const RANK_BANDS = [
-  { label: "LGM", min: 3000, color: "#ff0000" },
-  { label: "GM", min: 2600, color: "#ff0000" },
-  { label: "IM", min: 2400, color: "#ff8c00" },
-  { label: "Master", min: 2300, color: "#ff8c00" },
-  { label: "CM", min: 2100, color: "#aa00aa" },
-  { label: "Expert", min: 1900, color: "#0000ff" },
-  { label: "Specialist", min: 1600, color: "#03a89e" },
-  { label: "Pupil", min: 1200, color: "#008000" },
-  { label: "Newbie", min: 0, color: "#808080" },
-];
-
 export function RatingChart({ ratingHistory }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);

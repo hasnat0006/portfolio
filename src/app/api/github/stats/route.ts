@@ -3,10 +3,39 @@
 
 import { NextResponse } from "next/server";
 
-export const revalidate = 3600;
+export const dynamic = "force-dynamic";
 
 const USERNAME = "hasnat0006";
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN ?? "";
+
+const CACHE_TTL_MS = 30 * 60 * 1000; // 30 minutes
+const STALE_TTL_MS = 4 * 60 * 60 * 1000; // serve stale up to 4 hours
+
+interface CacheEntry {
+  data: unknown;
+  timestamp: number;
+}
+
+let memoryCache: CacheEntry | null = null;
+
+function getCached(): { data: unknown; stale: boolean } | null {
+  if (!memoryCache) return null;
+  const age = Date.now() - memoryCache.timestamp;
+  if (age < CACHE_TTL_MS) return { data: memoryCache.data, stale: false };
+  if (age < STALE_TTL_MS) return { data: memoryCache.data, stale: true };
+  return null;
+}
+
+function setCache(data: unknown): void {
+  memoryCache = { data, timestamp: Date.now() };
+}
+
+function isRateLimitError(res: Response): boolean {
+  if (res.status === 403 || res.status === 429) {
+    return true;
+  }
+  return false;
+}
 
 const REST_HEADERS: Record<string, string> = {
   Accept: "application/vnd.github.v3+json",
@@ -174,92 +203,6 @@ interface GHEvent {
   public: boolean;
 }
 
-// ── Tech stack mapping ────────────────────────────────────────────────────────
-
-const TOPIC_TO_TECH: Record<string, { display: string; category: string }> = {
-  react: { display: "React", category: "Frontend" },
-  reactjs: { display: "React", category: "Frontend" },
-  "next-js": { display: "Next.js", category: "Frontend" },
-  nextjs: { display: "Next.js", category: "Frontend" },
-  typescript: { display: "TypeScript", category: "Language" },
-  javascript: { display: "JavaScript", category: "Language" },
-  nodejs: { display: "Node.js", category: "Backend" },
-  "node-js": { display: "Node.js", category: "Backend" },
-  node: { display: "Node.js", category: "Backend" },
-  express: { display: "Express", category: "Backend" },
-  expressjs: { display: "Express", category: "Backend" },
-  python: { display: "Python", category: "Language" },
-  fastapi: { display: "FastAPI", category: "Backend" },
-  django: { display: "Django", category: "Backend" },
-  flask: { display: "Flask", category: "Backend" },
-  tailwindcss: { display: "Tailwind CSS", category: "Frontend" },
-  tailwind: { display: "Tailwind CSS", category: "Frontend" },
-  postgresql: { display: "PostgreSQL", category: "Database" },
-  postgres: { display: "PostgreSQL", category: "Database" },
-  mongodb: { display: "MongoDB", category: "Database" },
-  mysql: { display: "MySQL", category: "Database" },
-  redis: { display: "Redis", category: "Database" },
-  docker: { display: "Docker", category: "DevOps" },
-  kubernetes: { display: "Kubernetes", category: "DevOps" },
-  supabase: { display: "Supabase", category: "Backend" },
-  firebase: { display: "Firebase", category: "Backend" },
-  prisma: { display: "Prisma", category: "Database" },
-  graphql: { display: "GraphQL", category: "API" },
-  "rest-api": { display: "REST API", category: "API" },
-  cpp: { display: "C++", category: "Language" },
-  cplusplus: { display: "C++", category: "Language" },
-  "c-plus-plus": { display: "C++", category: "Language" },
-  rust: { display: "Rust", category: "Language" },
-  go: { display: "Go", category: "Language" },
-  golang: { display: "Go", category: "Language" },
-  java: { display: "Java", category: "Language" },
-  "spring-boot": { display: "Spring Boot", category: "Backend" },
-  "machine-learning": { display: "Machine Learning", category: "AI/ML" },
-  "deep-learning": { display: "Deep Learning", category: "AI/ML" },
-  tensorflow: { display: "TensorFlow", category: "AI/ML" },
-  pytorch: { display: "PyTorch", category: "AI/ML" },
-  opencv: { display: "OpenCV", category: "AI/ML" },
-  algorithms: { display: "Algorithms", category: "CS" },
-  "data-structures": { display: "Data Structures", category: "CS" },
-  "competitive-programming": {
-    display: "Competitive Programming",
-    category: "CS",
-  },
-  "three-js": { display: "Three.js", category: "Frontend" },
-  threejs: { display: "Three.js", category: "Frontend" },
-  "framer-motion": { display: "Framer Motion", category: "Frontend" },
-  "github-actions": { display: "GitHub Actions", category: "DevOps" },
-  vercel: { display: "Vercel", category: "DevOps" },
-  aws: { display: "AWS", category: "Cloud" },
-  solidity: { display: "Solidity", category: "Blockchain" },
-  ethereum: { display: "Ethereum", category: "Blockchain" },
-  web3: { display: "Web3", category: "Blockchain" },
-  vue: { display: "Vue.js", category: "Frontend" },
-  vuejs: { display: "Vue.js", category: "Frontend" },
-  svelte: { display: "Svelte", category: "Frontend" },
-  angular: { display: "Angular", category: "Frontend" },
-  "socket-io": { display: "Socket.io", category: "Backend" },
-  websocket: { display: "WebSocket", category: "Backend" },
-  jwt: { display: "JWT", category: "Security" },
-  oauth: { display: "OAuth", category: "Security" },
-};
-
-const LANG_TO_TECH: Record<string, { display: string; category: string }> = {
-  TypeScript: { display: "TypeScript", category: "Language" },
-  JavaScript: { display: "JavaScript", category: "Language" },
-  Python: { display: "Python", category: "Language" },
-  "C++": { display: "C++", category: "Language" },
-  Go: { display: "Go", category: "Language" },
-  Rust: { display: "Rust", category: "Language" },
-  Java: { display: "Java", category: "Language" },
-  "C#": { display: "C#", category: "Language" },
-  Ruby: { display: "Ruby", category: "Language" },
-  PHP: { display: "PHP", category: "Language" },
-  Swift: { display: "Swift", category: "Language" },
-  Kotlin: { display: "Kotlin", category: "Language" },
-  Dart: { display: "Dart", category: "Language" },
-};
-
 // ── Computation helpers ───────────────────────────────────────────────────────
 
 function computeLanguageDistribution(repos: GQLRepo[]) {
@@ -286,112 +229,6 @@ function computeLanguageDistribution(repos: GQLRepo[]) {
       repoCount: v.repoCount,
       percentage: Math.round((v.bytes / total) * 100),
     }));
-}
-
-function computeTechStack(repos: GQLRepo[]) {
-  const techCount: Record<
-    string,
-    { display: string; category: string; count: number }
-  > = {};
-
-  const add = (key: string, info: { display: string; category: string }) => {
-    const d = info.display;
-    if (!techCount[d]) techCount[d] = { ...info, count: 0 };
-    techCount[d].count += 1;
-  };
-
-  for (const repo of repos) {
-    // From topics
-    for (const { topic } of repo.repositoryTopics.nodes) {
-      const info = TOPIC_TO_TECH[topic.name.toLowerCase()];
-      if (info) add(topic.name, info);
-    }
-    // From primary language
-    if (repo.primaryLanguage) {
-      const info = LANG_TO_TECH[repo.primaryLanguage.name];
-      if (info) add(repo.primaryLanguage.name, info);
-    }
-  }
-
-  return Object.values(techCount)
-    .sort((a, b) => b.count - a.count)
-    .slice(0, 24);
-}
-
-function computeFeaturedRepos(repos: GQLRepo[]) {
-  const now = Date.now();
-  return repos
-    .filter((r) => !r.isArchived && r.description)
-    .map((r) => {
-      const daysSinceUpdate =
-        (now - new Date(r.updatedAt).getTime()) / 86400000;
-      const recencyScore = Math.max(0, 365 - daysSinceUpdate) / 365;
-      const score = r.stargazerCount * 3 + r.forkCount * 2 + recencyScore * 10;
-      return { ...r, score };
-    })
-    .sort((a, b) => b.score - a.score)
-    .slice(0, 8)
-    .map((r) => ({
-      name: r.name,
-      description: r.description,
-      url: r.url,
-      homepage: r.homepageUrl,
-      stars: r.stargazerCount,
-      forks: r.forkCount,
-      language: r.primaryLanguage?.name ?? null,
-      languageColor: r.primaryLanguage?.color ?? "#8b949e",
-      topics: r.repositoryTopics.nodes.map((n) => n.topic.name).slice(0, 6),
-      createdAt: r.createdAt,
-      updatedAt: r.updatedAt,
-      sizeKb: r.diskUsage,
-      license: r.licenseInfo?.spdxId ?? null,
-      commitCount: r.defaultBranchRef?.target.history.totalCount ?? 0,
-    }));
-}
-
-function computeRepoAnalytics(repos: GQLRepo[]) {
-  if (repos.length === 0) return null;
-  const active = repos.filter((r) => !r.isArchived);
-
-  const mostStarred = [...active].sort(
-    (a, b) => b.stargazerCount - a.stargazerCount,
-  )[0];
-  const largest = [...repos].sort((a, b) => b.diskUsage - a.diskUsage)[0];
-  const mostForked = [...active].sort((a, b) => b.forkCount - a.forkCount)[0];
-  const mostRecent = [...repos].sort(
-    (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
-  )[0];
-  const oldest = [...repos].sort(
-    (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-  )[0];
-  const mostCommits = [...repos].sort(
-    (a, b) =>
-      (b.defaultBranchRef?.target.history.totalCount ?? 0) -
-      (a.defaultBranchRef?.target.history.totalCount ?? 0),
-  )[0];
-
-  const fmt = (r: GQLRepo) => ({
-    name: r.name,
-    url: r.url,
-    description: r.description,
-    language: r.primaryLanguage?.name ?? null,
-    languageColor: r.primaryLanguage?.color ?? "#8b949e",
-    stars: r.stargazerCount,
-    forks: r.forkCount,
-    sizeKb: r.diskUsage,
-    commitCount: r.defaultBranchRef?.target.history.totalCount ?? 0,
-    updatedAt: r.updatedAt,
-    createdAt: r.createdAt,
-  });
-
-  return {
-    mostStarred: fmt(mostStarred),
-    largest: fmt(largest),
-    mostForked: fmt(mostForked),
-    mostRecentlyUpdated: fmt(mostRecent),
-    oldest: fmt(oldest),
-    mostActive: fmt(mostCommits),
-  };
 }
 
 function computeHeatmap(weeks: { contributionDays: ContribDay[] }[]) {
@@ -592,439 +429,78 @@ function computeActivityFromRepos(repos: GQLRepo[], limit = 20) {
     }));
 }
 
-
-function computeAchievements(params: {
-  publicRepos: number;
-  totalStars: number;
-  totalForks: number;
-  followers: number;
-  totalCommits: number;
-  totalPRs: number;
-  totalIssues: number;
-  longestStreak: number;
-  currentStreak: number;
-  totalContributions: number;
-  accountAgeYears: number;
-  languageCount: number;
-}) {
-  const {
-    publicRepos,
-    totalStars,
-    totalForks,
-    followers,
-    totalCommits,
-    totalPRs,
-    totalIssues,
-    longestStreak,
-    currentStreak,
-    totalContributions,
-    accountAgeYears,
-    languageCount,
-  } = params;
-
-  const b = (
-    id: string,
-    title: string,
-    desc: string,
-    icon: string,
-    cond: boolean,
-    tier: string,
-  ) => ({ id, title, description: desc, icon, unlocked: cond, tier });
-
-  return [
-    b(
-      "repos_10",
-      "Builder",
-      "Created 10+ repositories",
-      "🏗️",
-      publicRepos >= 10,
-      "bronze",
-    ),
-    b(
-      "repos_25",
-      "Prolific Builder",
-      "Created 25+ repositories",
-      "📦",
-      publicRepos >= 25,
-      "silver",
-    ),
-    b(
-      "repos_50",
-      "Repository Master",
-      "Created 50+ repositories",
-      "🗄️",
-      publicRepos >= 50,
-      "gold",
-    ),
-    b(
-      "stars_10",
-      "Star Seeker",
-      "Earned 10+ stars",
-      "⭐",
-      totalStars >= 10,
-      "bronze",
-    ),
-    b(
-      "stars_50",
-      "Star Collector",
-      "Earned 50+ stars",
-      "🌟",
-      totalStars >= 50,
-      "silver",
-    ),
-    b(
-      "stars_100",
-      "Stellar",
-      "Earned 100+ stars",
-      "💫",
-      totalStars >= 100,
-      "gold",
-    ),
-    b(
-      "stars_500",
-      "Star Legend",
-      "Earned 500+ stars",
-      "🌠",
-      totalStars >= 500,
-      "platinum",
-    ),
-    b(
-      "commits_100",
-      "Committer",
-      "Made 100+ commits",
-      "💾",
-      totalCommits >= 100,
-      "bronze",
-    ),
-    b(
-      "commits_500",
-      "Dedicated Dev",
-      "Made 500+ commits",
-      "⚡",
-      totalCommits >= 500,
-      "silver",
-    ),
-    b(
-      "commits_1000",
-      "Commit Master",
-      "Made 1000+ commits",
-      "🏆",
-      totalCommits >= 1000,
-      "gold",
-    ),
-    b(
-      "commits_5000",
-      "Commit Legend",
-      "Made 5000+ commits",
-      "👑",
-      totalCommits >= 5000,
-      "platinum",
-    ),
-    b(
-      "prs_10",
-      "PR Opener",
-      "Opened 10+ pull requests",
-      "🔀",
-      totalPRs >= 10,
-      "bronze",
-    ),
-    b(
-      "prs_50",
-      "PR Veteran",
-      "Opened 50+ pull requests",
-      "🎯",
-      totalPRs >= 50,
-      "silver",
-    ),
-    b(
-      "issues_20",
-      "Issue Tracker",
-      "Opened 20+ issues",
-      "🐛",
-      totalIssues >= 20,
-      "bronze",
-    ),
-    b(
-      "followers_10",
-      "Influencer",
-      "Gained 10+ followers",
-      "👥",
-      followers >= 10,
-      "bronze",
-    ),
-    b(
-      "followers_50",
-      "Community Builder",
-      "Gained 50+ followers",
-      "🤝",
-      followers >= 50,
-      "silver",
-    ),
-    b(
-      "streak_7",
-      "Week Warrior",
-      "7-day contribution streak",
-      "🔥",
-      longestStreak >= 7,
-      "bronze",
-    ),
-    b(
-      "streak_30",
-      "Monthly Grind",
-      "30-day contribution streak",
-      "📅",
-      longestStreak >= 30,
-      "gold",
-    ),
-    b(
-      "streak_active",
-      "Currently Active",
-      "Has a current streak",
-      "⚡",
-      currentStreak > 0,
-      "bronze",
-    ),
-    b(
-      "contribs_500",
-      "Contributor",
-      "500+ total contributions",
-      "📈",
-      totalContributions >= 500,
-      "bronze",
-    ),
-    b(
-      "contribs_1000",
-      "Super Contributor",
-      "1000+ total contributions",
-      "🚀",
-      totalContributions >= 1000,
-      "silver",
-    ),
-    b(
-      "contribs_5000",
-      "Contribution Legend",
-      "5000+ total contributions",
-      "🌋",
-      totalContributions >= 5000,
-      "gold",
-    ),
-    b(
-      "age_1yr",
-      "1-Year Veteran",
-      "On GitHub for 1+ year",
-      "🎂",
-      accountAgeYears >= 1,
-      "bronze",
-    ),
-    b(
-      "age_2yr",
-      "2-Year Veteran",
-      "On GitHub for 2+ years",
-      "🎖️",
-      accountAgeYears >= 2,
-      "silver",
-    ),
-    b(
-      "age_3yr",
-      "3-Year Veteran",
-      "On GitHub for 3+ years",
-      "🏅",
-      accountAgeYears >= 3,
-      "gold",
-    ),
-    b(
-      "polyglot",
-      "Polyglot",
-      "Uses 5+ programming languages",
-      "🌐",
-      languageCount >= 5,
-      "silver",
-    ),
-    b(
-      "forks_10",
-      "Fork Magnet",
-      "Repos forked 10+ times total",
-      "🍴",
-      totalForks >= 10,
-      "bronze",
-    ),
-  ].sort((a, b) => {
-    if (a.unlocked !== b.unlocked) return a.unlocked ? -1 : 1;
-    const t: Record<string, number> = {
-      platinum: 0,
-      gold: 1,
-      silver: 2,
-      bronze: 3,
-    };
-    return (t[a.tier] ?? 3) - (t[b.tier] ?? 3);
-  });
-}
-
-function computeInsights(
-  repos: GQLRepo[],
-  heatmap: { date: string; count: number; level: number }[],
-  stats: {
-    totalStars: number;
-    totalForks: number;
-    totalCommits: number;
-    languages: { name: string; percentage: number; repoCount: number }[];
-    techStack: { display: string; category: string; count: number }[];
-  },
-) {
-  // Most productive month
-  const monthMap: Record<string, number> = {};
-  for (const day of heatmap) {
-    if (day.count === 0) continue;
-    const d = new Date(day.date);
-    const key = d.toLocaleString("en-US", { month: "long", year: "numeric" });
-    monthMap[key] = (monthMap[key] ?? 0) + day.count;
-  }
-  const bestMonth = Object.entries(monthMap).sort(([, a], [, b]) => b - a)[0];
-
-  // Most productive year
-  const yearMap: Record<string, number> = {};
-  for (const day of heatmap) {
-    if (day.count === 0) continue;
-    const yr = day.date.slice(0, 4);
-    yearMap[yr] = (yearMap[yr] ?? 0) + day.count;
-  }
-  const bestYear = Object.entries(yearMap).sort(([, a], [, b]) => b - a)[0];
-
-  // Average repo size
-  const avgSizeKb =
-    repos.length > 0
-      ? Math.round(repos.reduce((s, r) => s + r.diskUsage, 0) / repos.length)
-      : 0;
-
-  // Oldest repo
-  const oldestRepo =
-    repos.length > 0
-      ? [...repos].sort(
-          (a, b) =>
-            new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-        )[0]
-      : null;
-
-  // Newest repo
-  const newestRepo =
-    repos.length > 0
-      ? [...repos].sort(
-          (a, b) =>
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-        )[0]
-      : null;
-
-  // Most maintained (most commits)
-  const mostMaintained =
-    repos.length > 0
-      ? [...repos].sort(
-          (a, b) =>
-            (b.defaultBranchRef?.target.history.totalCount ?? 0) -
-            (a.defaultBranchRef?.target.history.totalCount ?? 0),
-        )[0]
-      : null;
-
-  // Total code bytes
-  const totalBytes = repos.reduce(
-    (s, r) => s + r.languages.edges.reduce((ss, e) => ss + e.size, 0),
-    0,
-  );
-  const totalMb = (totalBytes / 1_000_000).toFixed(1);
-
-  const favLang = stats.languages[0];
-  const favTech = stats.techStack[0];
-
-  // Active days
-  const activeDays = heatmap.filter((d) => d.count > 0).length;
-
-  return [
-    {
-      label: "Favorite Language",
-      value: favLang?.name ?? "—",
-      sub: favLang ? `${favLang.percentage}% of code` : "",
-      icon: "💻",
-    },
-    {
-      label: "Favorite Technology",
-      value: favTech?.display ?? "—",
-      sub: favTech ? `${favTech.count} repos` : "",
-      icon: "🔧",
-    },
-    {
-      label: "Most Productive Month",
-      value: bestMonth ? bestMonth[0] : "—",
-      sub: bestMonth ? `${bestMonth[1]} contributions` : "",
-      icon: "📆",
-    },
-    {
-      label: "Most Active Year",
-      value: bestYear ? bestYear[0] : "—",
-      sub: bestYear ? `${bestYear[1]} contributions` : "",
-      icon: "🗓️",
-    },
-    {
-      label: "Avg Repository Size",
-      value: `${avgSizeKb.toLocaleString()} KB`,
-      sub: `across ${repos.length} repos`,
-      icon: "📊",
-    },
-    {
-      label: "Total Code Written",
-      value: `${totalMb} MB`,
-      sub: "across all repositories",
-      icon: "📝",
-    },
-    {
-      label: "Most Maintained",
-      value: mostMaintained?.name ?? "—",
-      sub: mostMaintained
-        ? `${mostMaintained.defaultBranchRef?.target.history.totalCount ?? 0} commits`
-        : "",
-      icon: "🔄",
-    },
-    {
-      label: "Oldest Repository",
-      value: oldestRepo?.name ?? "—",
-      sub: oldestRepo
-        ? new Date(oldestRepo.createdAt).toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "short",
-          })
-        : "",
-      icon: "🏛️",
-    },
-    {
-      label: "Newest Repository",
-      value: newestRepo?.name ?? "—",
-      sub: newestRepo
-        ? new Date(newestRepo.createdAt).toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "short",
-          })
-        : "",
-      icon: "🆕",
-    },
-    {
-      label: "Active Coding Days",
-      value: `${activeDays} days`,
-      sub: "days with contributions (52 weeks)",
-      icon: "⚡",
-    },
-  ];
-}
-
 // ── GET handler ───────────────────────────────────────────────────────────────
 
 export async function GET() {
+  // ── Check cache first ───────────────────────────────────────────
+  const cached = getCached();
+  if (cached && !cached.stale) {
+    return NextResponse.json(cached.data, {
+      headers: { "X-Cache": "HIT" },
+    });
+  }
+
+  // ── Token check ─────────────────────────────────────────────────
+  if (!GITHUB_TOKEN) {
+    if (cached) {
+      return NextResponse.json(cached.data, {
+        headers: {
+          "X-Cache": "STALE",
+          "X-Cache-Warning": "Token missing, serving stale data",
+        },
+      });
+    }
+    return NextResponse.json(
+      { error: "GitHub token is not configured" },
+      { status: 503 },
+    );
+  }
+
   try {
-    // Fetch REST in parallel
-    const [userRes, eventsRes] = await Promise.all([
-      fetch(`https://api.github.com/users/${USERNAME}`, {
-        headers: REST_HEADERS,
+    let gqlUser: GQLUser | null = null;
+    let gqlLimited = false;
+    try {
+      const gqlRes = await fetch("https://api.github.com/graphql", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${GITHUB_TOKEN}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          query: GQL_QUERY,
+          variables: { login: USERNAME },
+        }),
         next: { revalidate: 3600 },
-      }),
+      });
+      if (gqlRes.ok) {
+        const gqlData = await gqlRes.json();
+        gqlUser = gqlData?.data?.user ?? null;
+      } else if (isRateLimitError(gqlRes)) {
+        gqlLimited = true;
+      }
+    } catch {
+      // GraphQL failed gracefully; REST fallback below still uses the token.
+    }
+
+    // If GraphQL was rate limited and we have stale cache, serve it
+    if (gqlLimited && cached) {
+      return NextResponse.json(cached.data, {
+        headers: {
+          "X-Cache": "STALE",
+          "X-Cache-Warning": "GitHub API rate limited",
+        },
+      });
+    }
+
+    const [userRes, eventsRes] = await Promise.all([
+      gqlUser
+        ? Promise.resolve(null)
+        : fetch(`https://api.github.com/users/${USERNAME}`, {
+            headers: REST_HEADERS,
+            next: { revalidate: 3600 },
+          }),
       fetch(
-        `https://api.github.com/users/${USERNAME}/events/public?per_page=100`,
+        `https://api.github.com/users/${USERNAME}/events/public?per_page=30`,
         {
           headers: REST_HEADERS,
           next: { revalidate: 3600 },
@@ -1032,33 +508,19 @@ export async function GET() {
       ),
     ]);
 
-    // Fetch GraphQL (requires token)
-    let gqlUser: GQLUser | null = null;
-    if (GITHUB_TOKEN) {
-      try {
-        const gqlRes = await fetch("https://api.github.com/graphql", {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${GITHUB_TOKEN}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            query: GQL_QUERY,
-            variables: { login: USERNAME },
-          }),
-          next: { revalidate: 3600 },
-        });
-        if (gqlRes.ok) {
-          const gqlData = await gqlRes.json();
-          gqlUser = gqlData?.data?.user ?? null;
-        }
-      } catch {
-        // GraphQL failed gracefully
-      }
+    // If core requests are rate limited, serve stale cache
+    const userRateLimited = userRes && isRateLimitError(userRes);
+    const eventsRateLimited = isRateLimitError(eventsRes);
+    if (cached && (userRateLimited || eventsRateLimited)) {
+      return NextResponse.json(cached.data, {
+        headers: {
+          "X-Cache": "STALE",
+          "X-Cache-Warning": "GitHub API rate limited",
+        },
+      });
     }
 
-    // Parse REST data
-    const restUser = userRes.ok ? await userRes.json() : null;
+    const restUser = userRes?.ok ? await userRes.json() : null;
     const events: GHEvent[] = eventsRes.ok ? await eventsRes.json() : [];
 
     // Fetch profile view count from komarev badge service
@@ -1135,15 +597,6 @@ export async function GET() {
     // Languages
     const languages = computeLanguageDistribution(repos);
 
-    // Tech stack
-    const techStack = computeTechStack(repos);
-
-    // Featured repos
-    const featuredRepos = computeFeaturedRepos(repos);
-
-    // Repo analytics
-    const repoAnalytics = computeRepoAnalytics(repos);
-
     // Activity timeline — use public events, fall back to repo push timestamps
     const eventsTimeline = computeActivityTimeline(events);
     const activityTimeline =
@@ -1152,73 +605,20 @@ export async function GET() {
         : [
             ...eventsTimeline,
             ...computeActivityFromRepos(repos, 20).filter(
-              (fb) =>
-                !eventsTimeline.some((e) => e.repo === fb.repo),
+              (fb) => !eventsTimeline.some((e) => e.repo === fb.repo),
             ),
           ].slice(0, 20);
 
-    // All repos (for explorer) — compact shape
-    const allRepos = repos.map((r) => ({
-      name: r.name,
-      description: r.description,
-      url: r.url,
-      homepage: r.homepageUrl,
-      language: r.primaryLanguage?.name ?? null,
-      languageColor: r.primaryLanguage?.color ?? "#8b949e",
-      stars: r.stargazerCount,
-      forks: r.forkCount,
-      topics: r.repositoryTopics.nodes.map((n) => n.topic.name),
-      sizeKb: r.diskUsage,
-      createdAt: r.createdAt,
-      updatedAt: r.updatedAt,
-      isArchived: r.isArchived,
-      license: r.licenseInfo?.spdxId ?? null,
-      commitCount: r.defaultBranchRef?.target.history.totalCount ?? 0,
-    }));
-
-    // Total commits across all repos
-    const totalCommits = repos.reduce(
-      (s, r) => s + (r.defaultBranchRef?.target.history.totalCount ?? 0),
-      0,
-    );
-
-    // Account age
-    const accountAgeYears =
-      (Date.now() - new Date(userInfo.createdAt).getTime()) /
-      (365.25 * 24 * 60 * 60 * 1000);
-
-    // Achievements
-    const achievements = computeAchievements({
-      publicRepos: userInfo.publicRepos,
-      totalStars,
-      totalForks,
-      followers: userInfo.followers,
-      totalCommits,
-      totalPRs,
-      totalIssues,
-      longestStreak,
-      currentStreak,
-      totalContributions,
-      accountAgeYears,
-      languageCount: languages.length,
-    });
-
-    // Insights
-    const insights = computeInsights(repos, heatmap, {
-      totalStars,
-      totalForks,
-      totalCommits,
-      languages,
-      techStack,
-    });
-
-    return NextResponse.json({
+    const responseBody = {
       userInfo,
       stats: {
         totalStars,
         totalForks,
         totalCommitsThisYear,
-        totalCommits,
+        totalCommits: repos.reduce(
+          (s, r) => s + (r.defaultBranchRef?.target.history.totalCount ?? 0),
+          0,
+        ),
         totalPRs,
         totalIssues,
         totalCodeReviews,
@@ -1229,17 +629,33 @@ export async function GET() {
         isCurrentlyActive,
       },
       languages,
-      techStack,
-      featuredRepos,
-      repoAnalytics,
       heatmap,
       activityTimeline,
-      allRepos,
-      achievements,
-      insights,
+    };
+
+    // Store in memory cache
+    setCache(responseBody);
+
+    return NextResponse.json(responseBody, {
+      headers: {
+        "Cache-Control":
+          "public, max-age=1800, s-maxage=3600, stale-while-revalidate=14400",
+        "X-Cache": "MISS",
+      },
     });
   } catch (err) {
     console.error("GitHub dashboard error:", err);
+
+    // Serve stale cache on unexpected errors
+    if (cached) {
+      return NextResponse.json(cached.data, {
+        headers: {
+          "X-Cache": "STALE",
+          "X-Cache-Warning": "Server error, serving stale data",
+        },
+      });
+    }
+
     return NextResponse.json({ error: "GitHub API error" }, { status: 500 });
   }
 }

@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { CFApiResponse } from "../types";
 
-const CACHE_KEY = "cf_dashboard_v4";
+const CACHE_KEY = "cf_dashboard_v5";
 const CACHE_TTL_MS = 60 * 60 * 1000; // 1 hour
 
 interface CacheEntry {
@@ -59,7 +59,9 @@ export function useCodeforcesData(): CodeforcesDataState {
     // Try localStorage cache first
     const cached = readCache();
     if (cached) {
-      setState({ loading: false, error: null, data: cached });
+      Promise.resolve().then(() => {
+        setState({ loading: false, error: null, data: cached });
+      });
       return;
     }
 
