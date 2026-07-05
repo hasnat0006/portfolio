@@ -15,7 +15,15 @@ interface TooltipItem {
   image: string;
 }
 
-export default function AnimatedTooltip({ items }: { items: TooltipItem[] }) {
+export default function AnimatedTooltip({
+  items,
+  iconSize = 32,
+  borderless = false,
+}: {
+  items: TooltipItem[];
+  iconSize?: number;
+  borderless?: boolean;
+}) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const springConfig = { stiffness: 100, damping: 5 };
   const x = useMotionValue(0);
@@ -68,15 +76,22 @@ export default function AnimatedTooltip({ items }: { items: TooltipItem[] }) {
               </motion.div>
             )}
           </AnimatePresence>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             onMouseMove={handleMouseMove}
             src={item.image}
             alt={item.name}
-            className="relative h-8 w-8 rounded-md object-contain !p-0 transition duration-300 hover:scale-110"
+            width={iconSize}
+            height={iconSize}
+            loading="lazy"
+            suppressHydrationWarning
+            className="relative rounded-md object-contain !p-0 transition duration-300 hover:scale-110"
             style={{
-              background: "var(--bg-badge)",
-              border: "1px solid var(--border-accent)",
-              padding: "2px",
+              background: borderless ? "transparent" : "var(--bg-badge)",
+              border: borderless ? "none" : "1px solid var(--border-accent)",
+              padding: borderless ? "4px" : "2px",
+              width: `${iconSize}px`,
+              height: `${iconSize}px`,
             }}
           />
         </div>

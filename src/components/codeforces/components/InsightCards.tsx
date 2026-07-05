@@ -276,7 +276,7 @@ export function InsightCards({ insights }: Props) {
             <div
               key={insight.label}
               role="listitem"
-              className="cf-insight-card rounded-xl p-4 flex flex-col gap-1.5 transition-all duration-200"
+              className="cf-insight-card rounded-md p-4 flex flex-col gap-1.5 transition-all duration-200"
               style={{
                 background: "var(--bg-card)",
                 border: "1px solid var(--border-primary)",

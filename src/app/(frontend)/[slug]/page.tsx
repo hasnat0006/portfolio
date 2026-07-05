@@ -2,6 +2,9 @@ import { getAllSlugs, getPageBySlug } from "@/data/pages";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+// ISR: revalidate every 24 hours
+export const revalidate = 86400;
+
 export async function generateStaticParams() {
   return getAllSlugs().map((slug) => ({ slug }));
 }

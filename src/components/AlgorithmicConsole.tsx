@@ -192,7 +192,7 @@ Type "help" to see available commands.
       aria-label="Interactive Terminal Console"
     >
       <div
-        className={`rounded-xl border ${accentBorder} ${accentBg} ${accentGlow} overflow-hidden backdrop-blur-sm`}
+        className={`rounded-md border ${accentBorder} ${accentBg} ${accentGlow} overflow-hidden backdrop-blur-sm`}
       >
         {/* Terminal Title Bar */}
         <div
@@ -200,9 +200,9 @@ Type "help" to see available commands.
           style={{ background: "var(--bg-code)" }}
         >
           <div className="flex gap-2">
-            <div className="w-3 h-3 rounded-full bg-red-500/80" />
-            <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
-            <div className="w-3 h-3 rounded-full bg-green-500/80" />
+            <div className="w-3 h-3 rounded-md bg-red-500/80" />
+            <div className="w-3 h-3 rounded-md bg-yellow-500/80" />
+            <div className="w-3 h-3 rounded-md bg-green-500/80" />
           </div>
           <span
             className="ml-3 text-sm font-mono"

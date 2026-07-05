@@ -1,6 +1,27 @@
 import { NextResponse } from "next/server";
 
-export const dynamic = "force-dynamic";
+// ── In-memory cache ────────────────────────────────────────────────────────────
+const CACHE_TTL_MS = 30 * 60 * 1000; // 30 minutes
+const STALE_TTL_MS = 4 * 60 * 60 * 1000; // serve stale up to 4 hours
+
+interface CacheEntry {
+  data: unknown;
+  timestamp: number;
+}
+
+let memoryCache: CacheEntry | null = null;
+
+function getCached(): { data: unknown; stale: boolean } | null {
+  if (!memoryCache) return null;
+  const age = Date.now() - memoryCache.timestamp;
+  if (age < CACHE_TTL_MS) return { data: memoryCache.data, stale: false };
+  if (age < STALE_TTL_MS) return { data: memoryCache.data, stale: true };
+  return null;
+}
+
+function setCache(data: unknown): void {
+  memoryCache = { data, timestamp: Date.now() };
+}
 
 interface CFRatingEntry {
   contestId: number;
@@ -171,7 +192,9 @@ function computeAverageSolvedRating(submissions: CFSubmission[]) {
   }
 
   return ratings.length > 0
-    ? Math.round(ratings.reduce((total, rating) => total + rating, 0) / ratings.length)
+    ? Math.round(
+        ratings.reduce((total, rating) => total + rating, 0) / ratings.length,
+      )
     : 0;
 }
 
@@ -233,9 +256,15 @@ function computeInsights(
     yearMap[year] = (yearMap[year] ?? 0) + 1;
   }
 
-  const favoriteMonth = Object.entries(monthMap).sort(([, a], [, b]) => b - a)[0];
-  const favoriteWeekday = Object.entries(weekdayMap).sort(([, a], [, b]) => b - a)[0];
-  const mostActiveYear = Object.entries(yearMap).sort(([, a], [, b]) => b - a)[0];
+  const favoriteMonth = Object.entries(monthMap).sort(
+    ([, a], [, b]) => b - a,
+  )[0];
+  const favoriteWeekday = Object.entries(weekdayMap).sort(
+    ([, a], [, b]) => b - a,
+  )[0];
+  const mostActiveYear = Object.entries(yearMap).sort(
+    ([, a], [, b]) => b - a,
+  )[0];
   const avgContestRank =
     ratingHistory.length > 0
       ? Math.round(
@@ -260,7 +289,8 @@ function computeInsights(
       .filter((submission) => submission.verdict === "OK")
       .map((submission) => toDateStr(submission.creationTimeSeconds)),
   ).size;
-  const avgDailySolves = codingDays > 0 ? (solved.size / codingDays).toFixed(2) : "0";
+  const avgDailySolves =
+    codingDays > 0 ? (solved.size / codingDays).toFixed(2) : "0";
 
   return [
     {
@@ -327,6 +357,14 @@ function computeInsights(
 }
 
 export async function GET() {
+  // ── Check cache first ───────────────────────────────────────────
+  const cached = getCached();
+  if (cached && !cached.stale) {
+    return NextResponse.json(cached.data, {
+      headers: { "X-Cache": "HIT" },
+    });
+  }
+
   try {
     const [infoRes, ratingRes, statusRes] = await Promise.all([
       fetch("https://codeforces.com/api/user.info?handles=Hasnat0006", {
@@ -341,7 +379,16 @@ export async function GET() {
       ),
     ]);
 
+    // On API error, serve stale cache if available
     if (!infoRes.ok || !ratingRes.ok || !statusRes.ok) {
+      if (cached) {
+        return NextResponse.json(cached.data, {
+          headers: {
+            "X-Cache": "STALE",
+            "X-Cache-Warning": "Codeforces API error, serving stale data",
+          },
+        });
+      }
       return NextResponse.json(
         { error: "Codeforces API error" },
         { status: 502 },
@@ -440,7 +487,7 @@ export async function GET() {
       problemsSolved: problemsSolvedPerContest[entry.contestId] ?? 0,
     }));
 
-    return NextResponse.json({
+    const responseBody = {
       userInfo,
       ratingHistory,
       stats: {
@@ -456,8 +503,30 @@ export async function GET() {
         isCurrentlyActive,
         insights: computeInsights(userInfo, submissions, ratingHistory),
       },
+    };
+
+    // Store in memory cache
+    setCache(responseBody);
+
+    return NextResponse.json(responseBody, {
+      headers: {
+        "Cache-Control":
+          "public, max-age=1800, s-maxage=3600, stale-while-revalidate=14400",
+        "X-Cache": "MISS",
+      },
     });
   } catch {
+    // Serve stale cache on unexpected errors
+    const stale = getCached();
+    if (stale) {
+      return NextResponse.json(stale.data, {
+        headers: {
+          "X-Cache": "STALE",
+          "X-Cache-Warning": "Server error, serving stale data",
+        },
+      });
+    }
+
     return NextResponse.json(
       { error: "Codeforces API error" },
       { status: 500 },

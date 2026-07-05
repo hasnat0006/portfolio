@@ -126,6 +126,14 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
+        {/* Preload hero image for faster LCP */}
+        <link
+          rel="preload"
+          href="/hasnat.jpeg"
+          as="image"
+          type="image/jpeg"
+          fetchPriority="high"
+        />
         <meta
           name="google-site-verification"
           content="AnbzusuoDN1cBbBsp1oWGo-7eHr0aVgLI94uA_289wc"
@@ -227,7 +235,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-full flex flex-col transition-colors duration-300">
+      <body className="min-h-full flex flex-col transition-colors duration-300" suppressHydrationWarning>
         <ThemeProvider>{children}</ThemeProvider>
         <Analytics />
         <SpeedInsights />

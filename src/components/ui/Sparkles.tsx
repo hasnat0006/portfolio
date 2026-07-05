@@ -23,12 +23,10 @@ export default function Sparkles({
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [particles, setParticles] = useState<Particle[]>([]);
-  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
   useEffect(() => {
     if (!containerRef.current) return;
     const { width, height } = containerRef.current.getBoundingClientRect();
-    setDimensions({ width, height });
 
     const generated: Particle[] = Array.from(
       { length: particleCount },
@@ -51,7 +49,7 @@ export default function Sparkles({
       {particles.map((p) => (
         <div
           key={p.id}
-          className="absolute rounded-full pointer-events-none"
+          className="absolute rounded-md pointer-events-none"
           style={{
             left: p.x,
             top: p.y,

@@ -7,29 +7,26 @@ import { GHLoadingSkeleton } from "@/components/github/components/GHLoadingSkele
 import { GitHubHero } from "@/components/github/components/GitHubHero";
 import { LanguageDistribution } from "@/components/github/components/LanguageDistribution";
 import { useGitHubData } from "@/components/github/hooks/useGitHubData";
-import { motion } from "framer-motion";
 
-// ── Section wrapper with fade-up animation ───────────────────────────────────
+// ── CSS fade-up animation (replaces framer-motion) ────────────────────────────
 
-function SectionWrapper({
-  children,
-  className = "",
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) {
-  return (
-    <motion.div
-      className={className}
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.5, ease: "easeOut" }}
-    >
-      {children}
-    </motion.div>
-  );
+const SECTION_FADE_CSS = `
+@keyframes gh-fade-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
+.gh-section {
+  opacity: 0;
+  animation: gh-fade-up 0.5s ease-out forwards;
+}
+.gh-section:nth-child(1) { animation-delay: 0ms; }
+.gh-section:nth-child(2) { animation-delay: 100ms; }
+.gh-section:nth-child(3) { animation-delay: 200ms; }
+.gh-section:nth-child(4) { animation-delay: 300ms; }
+@media (prefers-reduced-motion: reduce) {
+  .gh-section { opacity: 1; animation: none; }
+}
+`;
 
 // ── Main component ────────────────────────────────────────────────────────────
 
@@ -43,31 +40,34 @@ export default function GitHubStats() {
   const { userInfo, stats, languages, heatmap, activityTimeline } = data;
 
   return (
-    <div className="space-y-6 md:space-y-8">
-      {/* ── Hero Card ──────────────────────────────────────────── */}
-      <SectionWrapper>
-        <GitHubHero userInfo={userInfo} stats={stats} />
-      </SectionWrapper>
+    <>
+      <style>{SECTION_FADE_CSS}</style>
+      <div className="space-y-6 md:space-y-8">
+        {/* ── Hero Card ──────────────────────────────────────────── */}
+        <div className="gh-section">
+          <GitHubHero userInfo={userInfo} stats={stats} />
+        </div>
 
-      {/* ── Contribution Heatmap (full width) ──────────────────── */}
-      <SectionWrapper>
-        <ContributionHeatmap
-          heatmap={heatmap}
-          currentStreak={stats.currentStreak}
-          longestStreak={stats.longestStreak}
-          totalContributions={stats.totalContributions}
-        />
-      </SectionWrapper>
+        {/* ── Contribution Heatmap (full width) ──────────────────── */}
+        <div className="gh-section">
+          <ContributionHeatmap
+            heatmap={heatmap}
+            currentStreak={stats.currentStreak}
+            longestStreak={stats.longestStreak}
+            totalContributions={stats.totalContributions}
+          />
+        </div>
 
-      {/* ── Languages + Recent Activity (side by side on lg) ────── */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <SectionWrapper>
-          <LanguageDistribution languages={languages} />
-        </SectionWrapper>
-        <SectionWrapper>
-          <ContributionTimeline items={activityTimeline} maxItems={5} />
-        </SectionWrapper>
+        {/* ── Languages + Recent Activity (side by side on lg) ────── */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="gh-section">
+            <LanguageDistribution languages={languages} />
+          </div>
+          <div className="gh-section">
+            <ContributionTimeline items={activityTimeline} maxItems={5} />
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

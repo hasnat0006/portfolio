@@ -7,7 +7,7 @@ interface Props {
 export function ErrorState({ message = "Failed to load Codeforces data" }: Props) {
   return (
     <div
-      className="rounded-2xl p-8 flex flex-col items-center gap-4 text-center"
+      className="rounded-md p-8 flex flex-col items-center gap-4 text-center"
       style={{
         background: "var(--bg-card)",
         border: "1px solid var(--border-primary)",

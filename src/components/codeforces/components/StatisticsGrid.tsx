@@ -59,7 +59,7 @@ function StatCard({
 
   return (
     <div
-      className="cf-stat-card relative rounded-xl p-4 flex flex-col gap-2 transition-all duration-300"
+      className="cf-stat-card relative rounded-md p-4 flex flex-col gap-2 transition-all duration-300"
       style={{
         background: hovered ? "var(--bg-card-hover)" : "var(--bg-card)",
         border: `1px solid ${hovered ? "var(--border-hover)" : "var(--border-primary)"}`,
@@ -72,7 +72,7 @@ function StatCard({
       onMouseLeave={() => setHovered(false)}
     >
       <div
-        className="w-8 h-8 rounded-lg flex items-center justify-center"
+        className="w-8 h-8 rounded-md flex items-center justify-center"
         style={{ background: `${color ?? "var(--text-accent)"}18` }}
         aria-hidden="true"
       >

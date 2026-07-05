@@ -15,7 +15,7 @@ export default function PublicationCard({
 }: PublicationCardProps) {
   return (
     <article
-      className="group relative rounded-xl border p-6 transition-all duration-300"
+      className="group relative rounded-md border p-6 transition-all duration-300"
       style={{
         borderColor: "var(--border-accent)",
         background: "var(--bg-card)",

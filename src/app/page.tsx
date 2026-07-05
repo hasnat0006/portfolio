@@ -1,11 +1,20 @@
-import AchievementsSection from "@/components/AchievementsSection";
-import CodeforcesStats from "@/components/CodeforcesStats";
-import ExperienceSection from "@/components/ExperienceSection";
-import GitHubStats from "@/components/GitHubStats";
 import HeroSection from "@/components/HeroSection";
 import NavigationBar from "@/components/NavigationBar";
-import ProjectCard from "@/components/ProjectCard";
-import { PROJECTS } from "@/data/projects";
+import ProjectsSection from "@/components/ProjectsSection";
+import SkillsSection from "@/components/SkillsSection";
+import dynamic from "next/dynamic";
+
+// Lazy-load below-fold sections — code-split to reduce initial bundle
+const AchievementsSection = dynamic(
+  () => import("@/components/AchievementsSection"),
+);
+const ExperienceSection = dynamic(
+  () => import("@/components/ExperienceSection"),
+);
+const GitHubStats = dynamic(() => import("@/components/DynamicGitHubStats"));
+const CodeforcesStats = dynamic(
+  () => import("@/components/DynamicCodeforcesStats"),
+);
 
 export default function HomePage() {
   return (
@@ -16,52 +25,11 @@ export default function HomePage() {
         {/* ── Hero Section ───────────────────────────────────────── */}
         <HeroSection />
 
-        {/* ── Projects Section ───────────────────────────────────── */}
-        <section
-          id="projects"
-          className="px-4 py-16 md:py-24"
-          style={{ scrollMarginTop: "5rem" }}
-        >
-          <div className="max-w-6xl mx-auto">
-            <div className="flex items-center gap-3 mb-2">
-              <span
-                className="text-code text-sm"
-                style={{ color: "var(--text-accent)" }}
-              >
-                $
-              </span>
-              <h2
-                className="text-heading text-2xl md:text-3xl"
-                style={{ color: "var(--text-primary)" }}
-              >
-                ls ./projects
-              </h2>
-            </div>
-            <p
-              className="text-code text-sm ml-6 mb-10"
-              style={{ color: "var(--text-muted)" }}
-            >
-              Engineering projects &amp; algorithmic solutions
-            </p>
+        {/* ── Skills Section ──────────────────────────────────────── */}
+        <SkillsSection />
 
-            <div className="columns-1 md:columns-2 gap-6 space-y-0">
-              {PROJECTS.map((project) => (
-                <div key={project.title} className="break-inside-avoid mb-6">
-                  <ProjectCard
-                    title={project.title}
-                    description={project.short_description}
-                    techStack={project.techStack}
-                    githubUrl={project.githubUrl}
-                    duration={project.duration}
-                    photoUrl={project.photoUrl}
-                    liveUrl={project.liveUrl}
-                    collaborators={project.collaborators}
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+        {/* ── Projects Section ───────────────────────────────────── */}
+        <ProjectsSection />
 
         {/* ── Achievements Section ───────────────────────────────── */}
         <AchievementsSection />

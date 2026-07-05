@@ -142,7 +142,7 @@ function GlassPanel({
         backdropFilter: "blur(20px)",
         WebkitBackdropFilter: "blur(20px)",
         border: "1px solid rgba(52,211,153,0.13)",
-        borderRadius: "16px",
+        borderRadius: "12px",
         ...style,
       }}
     >
@@ -171,7 +171,7 @@ function SectionDivider({ label }: { label: string }) {
         }}
       />
       <span
-        className="text-xs font-mono uppercase tracking-[0.2em] px-3 py-1 rounded-full flex-shrink-0"
+        className="text-xs font-mono uppercase tracking-[0.2em] px-3 py-1 rounded-md flex-shrink-0"
         style={{
           color: "var(--text-accent)",
           border: "1px solid rgba(52,211,153,0.25)",
@@ -223,7 +223,7 @@ function StatCard({
         backdropFilter: "blur(20px)",
         WebkitBackdropFilter: "blur(20px)",
         border: "1px solid rgba(52,211,153,0.13)",
-        borderRadius: "14px",
+        borderRadius: "12px",
         padding: "1rem",
         textAlign: "center",
         opacity: inView ? 1 : 0,
@@ -291,7 +291,7 @@ function IcpcFeaturedCard({
     >
       <div
         ref={tiltRef as React.RefObject<HTMLDivElement>}
-        className="ach-shimmer-hover relative rounded-2xl p-5"
+        className="ach-shimmer-hover relative rounded-md p-5"
         style={{
           background: "var(--bg-card)",
           backdropFilter: "blur(20px)",
@@ -314,7 +314,7 @@ function IcpcFeaturedCard({
       >
         {/* Gradient overlay on hover */}
         <div
-          className="absolute inset-0 rounded-2xl pointer-events-none"
+          className="absolute inset-0 rounded-md pointer-events-none"
           style={{
             background: hovered
               ? "linear-gradient(135deg, rgba(52,211,153,0.08) 0%, transparent 50%, rgba(34,211,238,0.04) 100%)"
@@ -343,7 +343,7 @@ function IcpcFeaturedCard({
         {/* Header row — right-aligned badges */}
         <div className="flex items-center justify-end gap-2 mb-4 relative z-10">
           <span
-            className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full uppercase tracking-widest"
+            className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-md uppercase tracking-widest"
             style={{
               color: "var(--text-accent)",
               background: "rgba(52,211,153,0.1)",
@@ -353,7 +353,7 @@ function IcpcFeaturedCard({
             {ach.contest_type}
           </span>
           <span
-            className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full"
+            className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-md"
             style={{
               color: "var(--text-accent)",
               background: "rgba(52,211,153,0.1)",
@@ -363,7 +363,7 @@ function IcpcFeaturedCard({
             top {100 - pct}%
           </span>
           <span
-            className="text-[10px] font-mono px-2.5 py-1 rounded-full"
+            className="text-[10px] font-mono px-2.5 py-1 rounded-md"
             style={{
               color: "var(--text-muted)",
               background: "rgba(52,211,153,0.06)",
@@ -461,7 +461,7 @@ function IcpcFeaturedCard({
                   href={ach.standings_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 text-xs font-mono px-3 py-1.5 rounded-lg"
+                  className="flex items-center gap-1.5 text-xs font-mono px-3 py-1.5 rounded-md"
                   style={{
                     color: "var(--text-accent)",
                     background: "rgba(52,211,153,0.08)",
@@ -495,7 +495,7 @@ function IcpcFeaturedCard({
                 href={url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1.5 text-xs font-mono px-3 py-1.5 rounded-lg"
+                className="flex items-center gap-1.5 text-xs font-mono px-3 py-1.5 rounded-md"
                 style={{
                   color: "var(--text-accent)",
                   background: "rgba(52,211,153,0.08)",
@@ -659,23 +659,26 @@ function ContestRow({
               href={url}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1 text-[10px] font-mono px-1.5 py-1 rounded-md"
+              className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-[10px] font-mono font-bold uppercase tracking-[0.2em] transition-all duration-200 hover:-translate-y-0.5"
               style={{
                 color: "var(--text-accent)",
-                background: "rgba(52,211,153,0.08)",
-                border: "1px solid rgba(52,211,153,0.18)",
-                transition: "all 0.2s ease",
+                background: "rgba(52,211,153,0.1)",
+                border: "1px solid rgba(52,211,153,0.3)",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = "rgba(52,211,153,0.18)";
+                e.currentTarget.style.background = "var(--text-accent)";
+                e.currentTarget.style.color = "#0a0f1a";
+                e.currentTarget.style.transform = "translateY(-1px)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.background = "rgba(52,211,153,0.08)";
+                e.currentTarget.style.background = "rgba(52,211,153,0.1)";
+                e.currentTarget.style.color = "var(--text-accent)";
+                e.currentTarget.style.transform = "none";
               }}
             >
               Blog_{i + 1}{" "}
               <svg
-                className="inline-block w-2.5 h-2.5"
+                className="inline-block h-2.5 w-2.5"
                 viewBox="0 0 512 512"
                 fill="currentColor"
               >
@@ -719,7 +722,7 @@ function OtherCard({
     >
       <div
         ref={tiltRef as React.RefObject<HTMLDivElement>}
-        className="ach-shimmer-hover relative overflow-hidden rounded-2xl p-5"
+        className="ach-shimmer-hover relative overflow-hidden rounded-md p-5"
         style={{
           background: "var(--bg-card)",
           backdropFilter: "blur(20px)",
@@ -742,7 +745,7 @@ function OtherCard({
       >
         {/* Top accent bar */}
         <div
-          className="absolute top-0 left-0 right-0 h-[2px] rounded-t-2xl pointer-events-none"
+          className="absolute top-0 left-0 right-0 h-[2px] rounded-md pointer-events-none"
           style={{
             background: hovered
               ? "linear-gradient(90deg, rgba(52,211,153,0.7), rgba(34,211,238,0.5), transparent)"
@@ -753,7 +756,7 @@ function OtherCard({
 
         {/* Gradient overlay on hover */}
         <div
-          className="absolute inset-0 rounded-2xl pointer-events-none"
+          className="absolute inset-0 rounded-md pointer-events-none"
           style={{
             background: hovered
               ? "linear-gradient(135deg, rgba(52,211,153,0.08) 0%, transparent 50%, rgba(34,211,238,0.04) 100%)"
@@ -783,7 +786,7 @@ function OtherCard({
         <div className="flex items-center justify-between gap-2 mb-4 relative z-10">
           {/* Glowing icon bubble */}
           <div
-            className="flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-xl text-xl"
+            className="flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-md text-xl"
             style={{
               background: hovered
                 ? "rgba(52,211,153,0.15)"
@@ -801,7 +804,7 @@ function OtherCard({
           {/* Badge pills */}
           <div className="flex items-center gap-2">
             <span
-              className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full uppercase tracking-widest"
+              className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-md uppercase tracking-widest"
               style={{
                 color: "var(--text-accent)",
                 background: "rgba(52,211,153,0.1)",
@@ -857,7 +860,7 @@ function OtherCard({
                 href={url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1.5 text-xs font-mono px-3 py-1.5 rounded-lg"
+                className="flex items-center gap-1.5 text-xs font-mono px-3 py-1.5 rounded-md"
                 style={{
                   color: "var(--text-accent)",
                   background: "rgba(52,211,153,0.08)",
@@ -912,7 +915,7 @@ export default function AchievementsSection() {
       {/* Inject animations */}
       <style>{STYLES}</style>
 
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         {/* Section heading */}
         <div className="flex items-center gap-3 mb-2">
           <span
@@ -978,7 +981,10 @@ export default function AchievementsSection() {
 
         {/* IUPC Glass Table */}
         <SectionDivider label="All ICPC & IUPC Contests" />
-        <div ref={tableRef} className="overflow-x-auto md:overflow-visible">
+        <div
+          ref={tableRef}
+          className="overflow-x-auto md:overflow-visible mb-8 md:mb-10"
+        >
           <GlassPanel className="min-w-[650px] md:min-w-full">
             <table className="w-full border-collapse">
               <thead>

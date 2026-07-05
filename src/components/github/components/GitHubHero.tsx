@@ -45,7 +45,7 @@ interface ChipProps {
 function InfoChip({ label, value, icon }: ChipProps) {
   return (
     <div
-      className="flex flex-col items-center gap-0.5 px-3 py-2.5 rounded-xl"
+      className="flex flex-col items-center gap-0.5 px-3 py-2.5 rounded-md"
       style={{
         background: "var(--bg-code)",
         border: "1px solid var(--border-primary)",
@@ -119,7 +119,7 @@ export function GitHubHero({ userInfo, stats }: Props) {
       <style>{CSS}</style>
       <div
         ref={ref}
-        className="gh-hero-card relative overflow-hidden rounded-2xl p-6 md:p-8"
+        className="gh-hero-card relative overflow-hidden rounded-md p-6 md:p-8"
         style={{
           background: "var(--bg-card)",
           border: "1px solid var(--border-primary)",
@@ -163,7 +163,7 @@ export function GitHubHero({ userInfo, stats }: Props) {
                   src={userInfo.avatarUrl}
                   alt={`${userInfo.login} avatar`}
                   fill
-                  className="object-cover"
+                  className="object-cover rounded-full"
                   unoptimized
                 />
               ) : (
@@ -178,7 +178,7 @@ export function GitHubHero({ userInfo, stats }: Props) {
             {/* Active badge */}
             {stats.isCurrentlyActive && (
               <div
-                className="absolute -bottom-1 -right-1 flex items-center gap-1 px-2 py-0.5 rounded-full"
+                className="absolute -bottom-1 -right-1 flex items-center gap-1 px-2 py-0.5 rounded-md"
                 style={{
                   background: "var(--bg-primary)",
                   border: "1.5px solid var(--text-accent)",
@@ -188,7 +188,7 @@ export function GitHubHero({ userInfo, stats }: Props) {
                 title="Active in the last 30 days"
               >
                 <span
-                  className="gh-blink w-1.5 h-1.5 rounded-full"
+                  className="gh-blink w-1.5 h-1.5 rounded-md"
                   style={{
                     background: "var(--text-accent)",
                     animation: "gh-badge-blink 1.4s ease-in-out infinite",
@@ -311,7 +311,7 @@ export function GitHubHero({ userInfo, stats }: Props) {
               href={userInfo.htmlUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-2 -mt-2 rounded-xl text-sm font-medium transition-all duration-300 hover:scale-105"
+              className="inline-flex items-center gap-2 px-4 py-2 -mt-2 rounded-md text-sm font-medium transition-all duration-300 hover:scale-105"
               style={{
                 background: "var(--bg-code)",
                 color: "var(--text-accent)",

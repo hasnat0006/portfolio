@@ -52,7 +52,7 @@ export function BestContests({ contests }: Props) {
       <style>{CSS}</style>
       <div
         ref={ref}
-        className="rounded-2xl overflow-hidden"
+        className="rounded-md overflow-hidden"
         style={{
           background: "var(--bg-card)",
           border: "1px solid var(--border-primary)",

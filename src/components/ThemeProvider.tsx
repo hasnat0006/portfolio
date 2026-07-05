@@ -1,6 +1,13 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState, useCallback, type ReactNode } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+  type ReactNode,
+} from "react";
 
 type Theme = "light" | "dark";
 
@@ -19,21 +26,22 @@ export function useTheme() {
 }
 
 export default function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setTheme] = useState<Theme>("dark");
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    const stored = localStorage.getItem("portfolio-theme") as Theme | null;
-    if (stored) {
-      setTheme(stored);
-    } else if (window.matchMedia("(prefers-color-scheme: light)").matches) {
-      setTheme("light");
+  // Initialize from localStorage (if available) or the class set by beforeInteractive script
+  const [theme, setTheme] = useState<Theme>(() => {
+    if (typeof document !== "undefined") {
+      try {
+        const stored = localStorage.getItem("portfolio-theme") as Theme | null;
+        if (stored === "light" || stored === "dark") return stored;
+      } catch {
+        // localStorage unavailable
+      }
+      return document.documentElement.classList.contains("dark")
+        ? "dark"
+        : "light";
     }
-    setMounted(true);
-  }, []);
-
+    return "dark";
+  });
   useEffect(() => {
-    if (!mounted) return;
     const root = document.documentElement;
     if (theme === "dark") {
       root.classList.add("dark");
@@ -41,23 +49,15 @@ export default function ThemeProvider({ children }: { children: ReactNode }) {
       root.classList.remove("dark");
     }
     localStorage.setItem("portfolio-theme", theme);
-  }, [theme, mounted]);
+  }, [theme]);
 
   const toggleTheme = useCallback(() => {
     setTheme((prev) => (prev === "dark" ? "light" : "dark"));
   }, []);
 
-  // Prevent flash of wrong theme
-  if (!mounted) {
-    return (
-      <div style={{ visibility: "hidden" }}>
-        {children}
-      </div>
-    );
-  }
-
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
+      {/* Always render children immediately — no visibility:hidden flash */}
       {children}
     </ThemeContext.Provider>
   );

@@ -99,7 +99,7 @@ export default function NavigationBar() {
           {/* Theme toggle */}
           <button
             onClick={toggleTheme}
-            className="ml-2 p-2 rounded-lg transition-colors"
+            className="ml-2 p-2 rounded-md transition-colors"
             style={{
               color: "var(--text-secondary)",
               background: "var(--bg-card)",
@@ -143,7 +143,7 @@ export default function NavigationBar() {
         <div className="flex md:hidden items-center gap-2">
           <button
             onClick={toggleTheme}
-            className="p-2 rounded-lg"
+            className="p-2 rounded-md"
             style={{ color: "var(--text-secondary)" }}
             aria-label="Toggle theme"
           >
@@ -179,7 +179,7 @@ export default function NavigationBar() {
           </button>
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="p-2 rounded-lg"
+            className="p-2 rounded-md"
             style={{ color: "var(--text-secondary)" }}
             aria-label="Toggle menu"
           >

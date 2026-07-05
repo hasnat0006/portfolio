@@ -116,26 +116,6 @@ function IconVolunteer({ size = 14 }: { size?: number }) {
   );
 }
 
-function IconExternal({ size = 10 }: { size?: number }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-      <polyline points="15 3 21 3 21 9" />
-      <line x1="10" y1="14" x2="21" y2="3" />
-    </svg>
-  );
-}
-
 function IconMapPin({ size = 10 }: { size?: number }) {
   return (
     <svg
@@ -204,7 +184,7 @@ function SectionDivider({ label }: { label: string }) {
         }}
       />
       <span
-        className="text-sm font-mono uppercase tracking-[0.2em] px-4 py-1.5 rounded-full flex-shrink-0"
+        className="text-sm font-mono uppercase tracking-[0.2em] px-4 py-1.5 rounded-md flex-shrink-0"
         style={{
           color: "var(--text-accent)",
           border: "1px solid rgba(52,211,153,0.25)",
@@ -245,7 +225,7 @@ function TimelineNode({
 
   return (
     <div
-      className="flex-shrink-0 flex items-center justify-center rounded-full relative"
+      className="flex-shrink-0 flex items-center justify-center rounded-md relative"
       style={{
         width: isCurrent ? 36 : 32,
         height: isCurrent ? 36 : 32,
@@ -290,7 +270,7 @@ function ResponsibilityList({
         {visible.map((item, i) => (
           <li key={i} className="flex items-start gap-2">
             <span
-              className="mt-1.5 flex-shrink-0 w-1 h-1  rounded-full"
+              className="mt-1.5 flex-shrink-0 w-1 h-1  rounded-md"
               style={{ background: "var(--text-accent)", marginTop: "0.45rem" }}
               aria-hidden="true"
             />
@@ -318,7 +298,7 @@ function ResponsibilityList({
               {hidden.map((item, i) => (
                 <li key={i} className="flex items-start gap-2">
                   <span
-                    className="flex-shrink-0 w-1 h-1 rounded-full"
+                    className="flex-shrink-0 w-1 h-1 rounded-md"
                     style={{
                       background: "var(--text-accent)",
                       marginTop: "0.45rem",
@@ -368,13 +348,11 @@ function MetaPills({
   website,
   cgpa,
   isCurrent,
-  currentLabel = "Current",
 }: {
   location?: string;
   website?: string;
   cgpa?: string;
   isCurrent?: boolean;
-  currentLabel?: string;
 }) {
   const hasPills = isCurrent || cgpa || location || website;
   if (!hasPills) return null;
@@ -383,7 +361,7 @@ function MetaPills({
     <div className="flex flex-wrap items-center gap-1.5 mt-2">
       {cgpa && (
         <span
-          className="text-xs font-mono px-3 py-1 rounded-full"
+          className="text-xs font-mono px-3 py-1 rounded-md"
           style={{
             color: "var(--text-accent)",
             background: "rgba(52,211,153,0.06)",
@@ -404,7 +382,7 @@ function MetaPills({
 
       {location && (
         <span
-          className="inline-flex items-center gap-1 text-xs font-mono px-3 py-1 rounded-full"
+          className="inline-flex items-center gap-1 text-xs font-mono px-3 py-1 rounded-md"
           style={{
             color: "var(--text-muted)",
             background: "var(--bg-code)",
@@ -446,7 +424,7 @@ function EducationCard({ item, index }: { item: Education; index: number }) {
 
       {/* Card */}
       <div
-        className="flex-1 min-w-0 rounded-2xl p-4 mb-4"
+        className="flex-1 min-w-0 rounded-md p-4 mb-4"
         style={{
           background: "var(--bg-card)",
           border: "1px solid var(--border-accent)",
@@ -488,7 +466,6 @@ function EducationCard({ item, index }: { item: Education; index: number }) {
           website={item.institution_website}
           cgpa={item.cgpa}
           isCurrent={isCurrent}
-          currentLabel="Ongoing"
         />
       </div>
     </article>
@@ -519,7 +496,7 @@ function WorkCard({ item, index }: { item: WorkExperience; index: number }) {
 
       {/* Card */}
       <div
-        className="flex-1 min-w-0 rounded-2xl p-4 mb-4"
+        className="flex-1 min-w-0 rounded-md p-4 mb-4"
         style={{
           background: "var(--bg-card)",
           border: "1px solid var(--border-accent)",
@@ -553,7 +530,6 @@ function WorkCard({ item, index }: { item: WorkExperience; index: number }) {
           location={item.company_location}
           website={item.company_website}
           isCurrent={item.is_currently_working}
-          currentLabel="Present"
         />
 
         {item.description && (
@@ -603,7 +579,7 @@ function VolunteerCard({
 
       {/* Card */}
       <div
-        className="flex-1 min-w-0 rounded-2xl p-4 mb-4"
+        className="flex-1 min-w-0 rounded-md p-4 mb-4"
         style={{
           background: "var(--bg-card)",
           border: "1px solid var(--border-accent)",
@@ -637,7 +613,6 @@ function VolunteerCard({
           location={item.organization_location}
           website={item.organization_website}
           isCurrent={item.is_currently_volunteering}
-          currentLabel="Current"
         />
 
         {item.description && (
@@ -706,7 +681,7 @@ export default function ExperienceSection() {
     >
       <style>{STYLES}</style>
 
-      <div className="max-w-3xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         {/* Section heading — same pattern as AchievementsSection */}
         <div className="flex items-center gap-3 mb-2">
           <span

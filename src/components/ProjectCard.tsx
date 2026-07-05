@@ -1,8 +1,8 @@
 "use client";
 
 import AnimatedTooltip from "@/components/ui/AnimatedTooltip";
-import LANGUAGE_ICONS from "@/data/languageIcons";
 import type { Collaborator } from "@/data/projects";
+import { skillIconUrl } from "@/data/skills";
 import { useRef, useState } from "react";
 
 type ProjectCardProps = {
@@ -30,7 +30,6 @@ export default function ProjectCard({
   const [isHovered, setIsHovered] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
-  const [imageLoaded, setImageLoaded] = useState(false);
   const cardRef = useRef<HTMLElement>(null);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
@@ -62,7 +61,7 @@ export default function ProjectCard({
   return (
     <article
       ref={cardRef}
-      className="group relative rounded-2xl overflow-hidden flex flex-col h-full cursor-pointer"
+      className="group relative rounded-md overflow-hidden flex flex-col h-full cursor-pointer"
       style={{
         background: "var(--bg-card)",
         border: "1px solid var(--border-accent)",
@@ -81,7 +80,7 @@ export default function ProjectCard({
     >
       {/* ── Animated gradient spotlight overlay ── */}
       <div
-        className="absolute inset-0 pointer-events-none z-10 rounded-2xl transition-opacity duration-300"
+        className="absolute inset-0 pointer-events-none z-10 rounded-md transition-opacity duration-300"
         style={{
           ...gradientStyle,
           opacity: isHovered ? 1 : 0,
@@ -90,7 +89,7 @@ export default function ProjectCard({
 
       {/* ── Animated border glow on hover ── */}
       <div
-        className="absolute inset-0 rounded-2xl pointer-events-none z-0"
+        className="absolute inset-0 rounded-md pointer-events-none z-0"
         style={{
           background: isHovered
             ? "linear-gradient(135deg, rgba(52,211,153,0.15) 0%, transparent 50%, rgba(34,211,238,0.08) 100%)"
@@ -102,34 +101,37 @@ export default function ProjectCard({
       {/* ── Preview Image ── */}
       {photoUrl && photoUrl.length > 0 && (
         <div className="relative w-full h-64 overflow-hidden flex-shrink-0">
-          {/* Skeleton shimmer while loading */}
-          {!imageLoaded && (
+          {/* Skeleton shimmer — always rendered; img covers it once loaded */}
+          <div
+            className="absolute inset-0 animate-pulse"
+            style={{ background: "var(--bg-secondary)" }}
+          >
             <div
-              className="absolute inset-0 animate-pulse"
-              style={{ background: "var(--bg-secondary)" }}
-            >
-              <div
-                className="absolute inset-0"
-                style={{
-                  background:
-                    "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.05) 50%, transparent 100%)",
-                  animation: "shimmer 1.5s infinite",
-                }}
-              />
-            </div>
-          )}
+              className="absolute inset-0"
+              style={{
+                background:
+                  "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.05) 50%, transparent 100%)",
+                animation: "shimmer 1.5s infinite",
+              }}
+            />
+          </div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={`/${photoUrl[0]}`}
             alt={`${title} preview`}
-            className="w-full h-full object-cover"
+            className="object-cover"
             loading="lazy"
-            onLoad={() => setImageLoaded(true)}
+            suppressHydrationWarning
             style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
               transition:
-                "transform 0.6s cubic-bezier(0.23,1,0.32,1), filter 0.4s ease, opacity 0.4s ease",
+                "transform 0.6s cubic-bezier(0.23,1,0.32,1), filter 0.4s ease",
               transform: isHovered ? "scale(1.08)" : "scale(1)",
               filter: isHovered ? "brightness(1.05)" : "brightness(0.95)",
-              opacity: imageLoaded ? 1 : 0,
             }}
           />
           {/* Image overlay gradient */}
@@ -146,7 +148,7 @@ export default function ProjectCard({
           {liveUrl && (
             <div className="absolute top-3 right-3 z-20">
               <span
-                className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold backdrop-blur-sm"
+                className="flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold backdrop-blur-sm"
                 style={{
                   background: "rgba(52,211,153,0.15)",
                   border: "1px solid rgba(52,211,153,0.3)",
@@ -154,7 +156,7 @@ export default function ProjectCard({
                 }}
               >
                 <span
-                  className="w-1.5 h-1.5 rounded-full"
+                  className="w-1.5 h-1.5 rounded-md"
                   style={{
                     background: "var(--text-accent)",
                     animation: "pulse-dot 2s ease-in-out infinite",
@@ -240,9 +242,7 @@ export default function ProjectCard({
                 .map((tech, i) => ({
                   id: i,
                   name: tech,
-                  image: LANGUAGE_ICONS[tech]
-                    ? `https://skillicons.dev/icons?i=${LANGUAGE_ICONS[tech]}&theme=dark`
-                    : "",
+                  image: skillIconUrl(tech, "dark"),
                 }))
                 .filter((item) => item.image)}
             />
@@ -343,7 +343,7 @@ function ActionLink({
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="flex items-center gap-1.5 text-xs font-mono px-3 py-1.5 rounded-lg"
+      className="flex items-center gap-1.5 text-xs font-mono px-3 py-1.5 rounded-md"
       style={{
         color: hovered ? "var(--bg-primary)" : "var(--text-accent)",
         background: hovered ? "var(--text-accent)" : "transparent",

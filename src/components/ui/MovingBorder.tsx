@@ -16,7 +16,7 @@ export default function MovingBorder({
 } & Record<string, unknown>) {
   return (
     <Component
-      className={`relative inline-flex overflow-hidden rounded-lg p-[1px] ${className}`}
+      className={`relative inline-flex overflow-hidden rounded-md p-[1px] ${className}`}
       {...props}
     >
       {/* Rotating border */}
@@ -29,7 +29,7 @@ export default function MovingBorder({
       />
       {/* Content */}
       <span
-        className="relative inline-flex items-center justify-center rounded-[7px] px-5 py-2 text-sm font-medium backdrop-blur-xl"
+        className="relative inline-flex items-center justify-center rounded-md px-5 py-2 text-sm font-medium backdrop-blur-xl"
         style={{
           background: "var(--bg-card)",
           color: "var(--text-primary)",

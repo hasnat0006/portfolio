@@ -15,6 +15,8 @@ export default function TextGenerateEffect({
   const wordArray = words.split(" ");
 
   useEffect(() => {
+    // Reset displayed words — this is intentional for animation sequencing
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setDisplayedWords([]);
     const timers: ReturnType<typeof setTimeout>[] = [];
 

@@ -203,7 +203,7 @@ export function ContributionTimeline({ items, maxItems = 20 }: Props) {
   if (!displayed.length) {
     return (
       <div
-        className="rounded-2xl p-6 text-center"
+        className="rounded-md p-6 text-center"
         style={{
           background: "var(--bg-card)",
           border: "1px solid var(--border-primary)",
@@ -219,7 +219,7 @@ export function ContributionTimeline({ items, maxItems = 20 }: Props) {
   return (
     <div
       ref={ref}
-      className="rounded-2xl p-5 md:p-6"
+      className="rounded-md p-5 md:p-6"
       style={{
         background: "var(--bg-card)",
         border: "1px solid var(--border-primary)",
@@ -263,7 +263,7 @@ export function ContributionTimeline({ items, maxItems = 20 }: Props) {
               >
                 {/* Dot */}
                 <div
-                  className="relative z-10 mt-0.5 w-[26px] h-[26px] rounded-full flex items-center justify-center shrink-0"
+                  className="relative z-10 mt-0.5 w-[26px] h-[26px] rounded-md flex items-center justify-center shrink-0"
                   style={{ background: `${color}18`, color }}
                   aria-hidden="true"
                 >

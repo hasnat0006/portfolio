@@ -27,7 +27,7 @@ export default function CardHoverEffect({
         >
           {/* Animated highlight background */}
           <div
-            className="absolute inset-0 rounded-xl transition-all duration-300"
+            className="absolute inset-0 rounded-md transition-all duration-300"
             style={{
               background: hoveredIndex === idx ? "var(--border-accent)" : "transparent",
               opacity: hoveredIndex === idx ? 1 : 0,
@@ -36,7 +36,7 @@ export default function CardHoverEffect({
           />
           {/* Card content */}
           <div
-            className="relative rounded-xl border p-5 h-full transition-all duration-300"
+            className="relative rounded-md border p-5 h-full transition-all duration-300"
             style={{
               background: "var(--bg-card)",
               borderColor: hoveredIndex === idx ? "var(--border-hover)" : "var(--border-primary)",

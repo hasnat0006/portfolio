@@ -98,7 +98,7 @@ export function ActivityHeatmap({
       <style>{CSS}</style>
       <div
         ref={ref}
-        className="rounded-2xl p-5 md:p-6"
+        className="rounded-md p-5 md:p-6"
         style={{
           background: "var(--bg-card)",
           border: "1px solid var(--border-primary)",
@@ -279,7 +279,7 @@ export function ActivityHeatmap({
 
         {tooltip && (
           <div
-            className="fixed z-50 pointer-events-none rounded-lg px-3 py-2 text-xs"
+            className="fixed z-50 pointer-events-none rounded-md px-3 py-2 text-xs"
             style={{
               background: "var(--bg-card-hover)",
               border: "1px solid var(--border-primary)",

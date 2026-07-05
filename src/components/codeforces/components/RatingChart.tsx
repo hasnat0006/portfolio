@@ -55,7 +55,7 @@ export function RatingChart({ ratingHistory }: Props) {
   if (ratingHistory.length < 2) {
     return (
       <div
-        className="rounded-2xl p-6 text-center"
+        className="rounded-md p-6 text-center"
         style={{ background: "var(--bg-card)", border: "1px solid var(--border-primary)" }}
       >
         <p style={{ color: "var(--text-muted)" }}>Not enough contest data for chart</p>
@@ -130,7 +130,7 @@ export function RatingChart({ ratingHistory }: Props) {
       <style>{CHART_CSS}</style>
       <div
         ref={containerRef}
-        className="rounded-2xl p-5 md:p-6"
+        className="rounded-md p-5 md:p-6"
         style={{ background: "var(--bg-card)", border: "1px solid var(--border-primary)" }}
       >
         <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
@@ -139,15 +139,15 @@ export function RatingChart({ ratingHistory }: Props) {
           </h3>
           <div className="flex items-center gap-4 text-meta" style={{ fontSize: "0.7rem", color: "var(--text-muted)" }}>
             <span className="flex items-center gap-1">
-              <span className="w-2 h-2 rounded-full bg-yellow-400 inline-block" />
+              <span className="w-2 h-2 rounded-md bg-yellow-400 inline-block" />
               Peak
             </span>
             <span className="flex items-center gap-1">
-              <span className="w-2 h-2 rounded-full bg-green-400 inline-block" />
+              <span className="w-2 h-2 rounded-md bg-green-400 inline-block" />
               Best gain
             </span>
             <span className="flex items-center gap-1">
-              <span className="w-2 h-2 rounded-full bg-red-400 inline-block" />
+              <span className="w-2 h-2 rounded-md bg-red-400 inline-block" />
               Worst loss
             </span>
           </div>
@@ -272,7 +272,7 @@ export function RatingChart({ ratingHistory }: Props) {
           {/* Tooltip box */}
           {tooltip && (
             <div
-              className="absolute pointer-events-none rounded-xl px-3 py-2 text-sm z-20"
+              className="absolute pointer-events-none rounded-md px-3 py-2 text-sm z-20"
               style={{
                 background: "var(--bg-card-hover)",
                 border: "1px solid var(--border-primary)",
