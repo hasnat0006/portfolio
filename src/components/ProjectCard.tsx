@@ -236,7 +236,7 @@ export default function ProjectCard({
 
         {/* ── Tech Stack ── */}
         {techStack && techStack.length > 0 && (
-          <div className="mb-4">
+          <div className="mb-4 w-fit">
             <AnimatedTooltip
               items={techStack
                 .map((tech, i) => ({

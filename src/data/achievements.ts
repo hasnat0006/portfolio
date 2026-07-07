@@ -40,16 +40,6 @@ export const KEY_CONTEST_ACHIEVEMENTS: ContestAchievement[] = [
     contest_type: "INTRA MIST",
   },
   {
-    rank: 3557,
-    contest_name: "Meta Hacker Cup 2023",
-    team_name: "Yusuf Reza Hasnat",
-    hosted_by: "Meta",
-    contest_type: "META HACKER CUP",
-    total_teams: 20324,
-    standings_url:
-      "https://www.facebook.com/codingcompetitions/hacker-cup/2023/round-2/scoreboard",
-  },
-  {
     rank: 2,
     contest_name: "BUP Inter Army University Programming Contest 2025",
     team_name: "MIST_Untitled",
@@ -61,9 +51,18 @@ export const KEY_CONTEST_ACHIEVEMENTS: ContestAchievement[] = [
     post_url: [
       "https://computerclub.mist.ac.bd/achievements/6ad25242-db30-49f1-9f78-e947336e15d7",
       "https://www.facebook.com/share/1BPSxkqoT9/",
-      "https://bup.edu.bd/news/details/768#:~:text=1st%20Runner%2Dup%20Yusuf%20Reza%20(MIST)",
     ],
     contest_type: "ARMY IUPC",
+  },
+  {
+    rank: 3557,
+    contest_name: "Meta Hacker Cup 2023",
+    team_name: "Yusuf Reza Hasnat",
+    hosted_by: "Meta",
+    contest_type: "META HACKER CUP",
+    total_teams: 20324,
+    standings_url:
+      "https://www.facebook.com/codingcompetitions/hacker-cup/2023/round-2/scoreboard",
   },
   {
     rank: 77,
@@ -202,6 +201,14 @@ export const CONTEST_ACHIEVEMENTS: ContestAchievement[] = [
     ],
   },
   {
+    rank: 15,
+    contest_name: "MIST Independence Day Programming Contest 2023",
+    team_name: "MIST_CG0_nai_CP0_nai",
+    problem_solved: 3,
+    total_teams: 60,
+    hosted_by: "MIST Computer Club (MCC)",
+  },
+  {
     rank: 112,
     contest_name: "SUST Inter University Programming Contest 2024",
     team_name: "MIST_Genesis",
@@ -284,14 +291,8 @@ export const OTHER_ACHIEVEMENTS: OtherAchievement[] = [
     type:"First Solver"
   },
   {
-    title: "15th — MIST Independence Day Programming Contest 2023",
-    detail: "MIST_CG0naiCP0nai",
-    hosted_by: "MIST Computer Club (MCC)",
-    type:"Rank"
-  },
-  {
     title: "Promising Team — Independence Day Programming Contest 2023",
-    detail: "Special recognition for being a promising team in the contest",
+    detail: "Special recognition in the contest",
     hosted_by: "MIST Computer Club (MCC)",
     type:"Recognition"
   },
