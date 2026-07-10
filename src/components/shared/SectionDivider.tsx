@@ -31,7 +31,7 @@ export function SectionDivider({ label }: SectionDividerProps) {
         }}
       />
       <span
-        className="text-sm font-mono uppercase tracking-[0.2em] px-4 py-1.5 rounded-md flex-shrink-0"
+        className="text-xs font-mono uppercase tracking-[0.15em] px-2 py-1 rounded-md flex-shrink-0"
         style={{
           color: "var(--text-accent)",
           border: "1px solid rgba(52,211,153,0.25)",

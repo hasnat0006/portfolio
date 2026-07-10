@@ -16,6 +16,7 @@ interface TimelineCardProps {
 /**
  * Shared timeline entry layout: node dot + animated card container.
  * Handles scroll-into-view animation for every timeline item.
+ * Includes subtle hover lift for a premium feel.
  */
 export function TimelineCard({
   type,
@@ -29,7 +30,7 @@ export function TimelineCard({
   return (
     <article
       ref={ref}
-      className="exp-item flex items-start gap-4"
+      className="exp-item flex items-start gap-4 group"
       style={{
         opacity: inView ? 1 : 0,
         transform: inView ? "none" : "translateY(16px)",
@@ -45,8 +46,21 @@ export function TimelineCard({
       />
 
       <div
-        className="flex-1 min-w-0 rounded-md p-4 mb-4"
-        style={TIMELINE_CARD_STYLE}
+        className="flex-1 min-w-0 rounded-md p-4 mb-4 transition-all duration-300"
+        style={{
+          ...TIMELINE_CARD_STYLE,
+          transform: "translateY(0)",
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = "translateY(-2px)";
+          e.currentTarget.style.boxShadow = "var(--shadow-md)";
+          e.currentTarget.style.borderColor = "var(--text-accent)";
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = "translateY(0)";
+          e.currentTarget.style.boxShadow = "var(--shadow-sm)";
+          e.currentTarget.style.borderColor = "var(--border-accent)";
+        }}
       >
         {children}
       </div>

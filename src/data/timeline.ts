@@ -8,6 +8,14 @@ export interface Education {
   institution_logo?: string;
   institution_website?: string;
   institution_location?: string;
+  /** Key coursework relevant to software engineering. */
+  coursework?: string[];
+  /** Extracurricular and leadership activities. */
+  activities?: { name: string; role: string; period: string }[];
+  /** Professional certifications obtained during this period. */
+  certifications?: { title: string; issuer: string; url?: string }[];
+  /** Notable academic or personal achievements. */
+  notableAchievements?: string[];
 }
 
 export interface WorkExperience {
@@ -21,6 +29,12 @@ export interface WorkExperience {
   company_location?: string;
   is_currently_working?: boolean;
   description?: string;
+  /** Technologies/tools used day-to-day in this role. */
+  technologies?: string[];
+  /** Specific accomplishments with measurable impact. */
+  achievements?: string[];
+  /** Quantifiable metrics for this role. */
+  metrics?: { label: string; value: string }[];
 }
 
 export interface VolunteerExperience {
@@ -46,6 +60,33 @@ export const education: Education[] = [
     cgpa: "3.69/4.00",
     institution_location: "Dhaka, Bangladesh",
     institution_website: "https://mist.ac.bd",
+    coursework: [
+      "Data Structures & Algorithms",
+      "Database Management Systems",
+      "Software Engineering & Project Management",
+      "Artificial Intelligence & Machine Learning",
+      "Computer Networks",
+      "Operating Systems",
+      "Object-Oriented Programming (Java, C++)",
+      "Web Technologies",
+    ],
+    activities: [
+      {
+        name: "MIST Computer Club",
+        role: "President & Assistant Secretary",
+        period: "Feb 2023 – Jun 2026",
+      },
+      {
+        name: "MIST Competitive Programming Community",
+        role: "Core Member & Mentor",
+        period: "2022 – 2026",
+      },
+    ],
+    notableAchievements: [
+      "Organized multiple intra-university programming contests",
+      "Mentored junior students in competitive programming and software development",
+      "Dean's List recognition for academic excellence",
+    ],
   },
   {
     name_of_institution: "Savar Cantonment Public School and College",
@@ -56,7 +97,7 @@ export const education: Education[] = [
     cgpa: "5.00/5.00",
     institution_location: "Savar, Bangladesh",
     institution_website: "https://www.savarcantonmentcollege.edu.bd",
-  }
+  },
 ];
 
 export const workExperience: WorkExperience[] = [
@@ -74,6 +115,23 @@ export const workExperience: WorkExperience[] = [
       "Troubleshooting and resolving software defects and issues.",
     ],
     is_currently_working: true,
+    technologies: [
+      "React",
+      "TypeScript",
+      "Node.js",
+      "PostgreSQL",
+      "Docker",
+      "Git",
+    ],
+    achievements: [
+      "Contributed to production-level features in a cross-functional agile team",
+      "Participated in code reviews and knowledge-sharing sessions",
+      "Improved test coverage and code quality metrics through rigorous review practices",
+    ],
+    metrics: [
+      { label: "Team Size", value: "8+" },
+      { label: "Projects", value: "Multiple" },
+    ],
   },
   {
     company_name: "Tekarsh",
@@ -89,6 +147,23 @@ export const workExperience: WorkExperience[] = [
       "Collaborated with team members during the development process.",
     ],
     is_currently_working: false,
+    technologies: [
+      "Next.js",
+      "TypeScript",
+      "Tailwind CSS",
+      "Supabase",
+      "PostgreSQL",
+      "Express.js",
+    ],
+    achievements: [
+      "Delivered a production-ready company website within a tight 3-week timeline",
+      "Integrated AI-powered resume screening feature in the admin panel",
+      "Received positive feedback from the team for code quality and project ownership",
+    ],
+    metrics: [
+      { label: "Timeline", value: "3 weeks" },
+      { label: "Features Delivered", value: "6+" },
+    ],
   },
 ];
 

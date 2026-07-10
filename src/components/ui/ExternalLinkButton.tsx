@@ -41,30 +41,30 @@ export function ExternalLinkButton({
   icon,
 }: ExternalLinkButtonProps) {
   const [hovered, setHovered] = useState(false);
-  const isSmall = size === "sm";
-  const defaultIcon = isSmall ? DEFAULT_SM_ICON : DEFAULT_MD_ICON;
 
   return (
     <a
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className={`inline-flex items-center gap-1.5 transition-all duration-200 ${
-        isSmall ? "p-1 -m-1" : ""
-      }`}
+      className="inline-flex items-center gap-1 font-mono rounded-md whitespace-nowrap"
       style={{
-        color: hovered ? "var(--text-accent)" : "var(--text-muted)",
+        color: hovered ? "var(--bg-primary)" : "var(--text-accent)",
+        background: hovered ? "var(--text-accent)" : "transparent",
+        border: "1px solid var(--border-accent)",
+        transition: "all 0.2s cubic-bezier(0.23,1,0.32,1)",
+        transform: hovered ? "translateY(-1px)" : "translateY(0)",
+        boxShadow: hovered ? "0 4px 12px rgba(52,211,153,0.25)" : "none",
+        fontSize: size === "sm" ? "9px" : "10px",
+        padding: size === "sm" ? "1px 6px" : "2px 8px",
+        lineHeight: "20px",
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       aria-label={label ?? href}
     >
-      {icon ?? defaultIcon}
-      {label && (
-        <span className="text-[10px] font-mono font-bold uppercase tracking-widest">
-          {label}
-        </span>
-      )}
+      {icon ?? (size === "sm" ? DEFAULT_SM_ICON : DEFAULT_MD_ICON)}
+      {label && <span>{label}</span>}
     </a>
   );
 }

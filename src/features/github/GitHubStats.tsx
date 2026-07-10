@@ -5,7 +5,6 @@ import { ContributionTimeline } from "@/features/github/components/ContributionT
 import { GHErrorState } from "@/features/github/components/GHErrorState";
 import { GHLoadingSkeleton } from "@/features/github/components/GHLoadingSkeleton";
 import { GitHubHero } from "@/features/github/components/GitHubHero";
-import { LanguageDistribution } from "@/features/github/components/LanguageDistribution";
 import { useGitHubData } from "@/hooks/useGitHubData";
 
 // ── CSS fade-up animation (replaces framer-motion) ────────────────────────────
@@ -37,7 +36,7 @@ export default function GitHubStats() {
   if (error || !data)
     return <GHErrorState message={error ?? "No data available"} />;
 
-  const { userInfo, stats, languages, heatmap, activityTimeline } = data;
+  const { userInfo, stats, heatmap, activityTimeline } = data;
 
   return (
     <>
@@ -58,14 +57,9 @@ export default function GitHubStats() {
           />
         </div>
 
-        {/* ── Languages + Recent Activity (side by side on lg) ────── */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="gh-section">
-            <LanguageDistribution languages={languages} />
-          </div>
-          <div className="gh-section">
-            <ContributionTimeline items={activityTimeline} maxItems={5} />
-          </div>
+        {/* ── Recent Activity ──────────────────────────────────────── */}
+        <div className="gh-section">
+          <ContributionTimeline items={activityTimeline} maxItems={5} />
         </div>
       </div>
     </>

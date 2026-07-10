@@ -21,20 +21,9 @@ export default function ProjectsSection() {
       <div className="max-w-6xl mx-auto">
         <ProjectsHeader />
 
-        <div className="columns-1 md:columns-2 gap-6 space-y-0">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {visibleProjects.map((project) => (
-            <div key={project.title} className="break-inside-avoid mb-6">
-              <ProjectCard
-                title={project.title}
-                description={project.short_description}
-                techStack={project.techStack}
-                githubUrl={project.githubUrl}
-                duration={project.duration}
-                photoUrl={project.photoUrl}
-                liveUrl={project.liveUrl}
-                collaborators={project.collaborators}
-              />
-            </div>
+            <ProjectCard key={project.title} project={project} />
           ))}
         </div>
 

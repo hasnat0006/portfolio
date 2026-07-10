@@ -1,6 +1,6 @@
 "use client";
 
-import type { CFUserInfo, DashboardStats } from "@/types/codeforces";
+import type { CFInsight, CFUserInfo, DashboardStats } from "@/types/codeforces";
 import { getRankColor } from "@/types/codeforces";
 import { useEffect, useRef, useState } from "react";
 
@@ -9,8 +9,33 @@ const STATS_CSS = `
   from { opacity: 0; transform: translateY(16px); }
   to { opacity: 1; transform: translateY(0); }
 }
+@keyframes cf-shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+.cf-stat-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  background: linear-gradient(
+    135deg,
+    transparent 40%,
+    rgba(52, 211, 153, 0.04) 50%,
+    transparent 60%
+  );
+  background-size: 200% 100%;
+  pointer-events: none;
+}
+.cf-stat-card:hover::before {
+  opacity: 1;
+  animation: cf-shimmer 2.5s ease-in-out infinite;
+}
 @media (prefers-reduced-motion: reduce) {
   .cf-stat-card { animation: none !important; }
+  .cf-stat-card::before { display: none; }
 }
 `;
 
@@ -31,7 +56,6 @@ function useCounter(target: number, duration = 1400, active = false) {
 }
 
 interface StatCardProps {
-  icon: React.ReactNode;
   value: number | string;
   label: string;
   description: string;
@@ -42,7 +66,6 @@ interface StatCardProps {
 }
 
 function StatCard({
-  icon,
   value,
   label,
   description,
@@ -52,6 +75,8 @@ function StatCard({
   isText = false,
 }: StatCardProps) {
   const [hovered, setHovered] = useState(false);
+  const [spotlight, setSpotlight] = useState({ x: 0, y: 0 });
+  const ref = useRef<HTMLDivElement>(null);
   const numericTarget = typeof value === "number" ? value : 0;
   const animated = useCounter(numericTarget, 1400, visible && !isText);
 
@@ -61,230 +86,105 @@ function StatCard({
       ? animated
       : value;
 
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!ref.current) return;
+    const rect = ref.current.getBoundingClientRect();
+    setSpotlight({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+  };
+
+  const accentColor = color ?? "var(--text-accent)";
+
   return (
     <div
-      className="cf-stat-card relative rounded-md p-4 flex flex-col gap-2 transition-all duration-300"
+      ref={ref}
+      className="cf-stat-card relative rounded-lg overflow-hidden transition-all duration-300"
       style={{
-        background: hovered ? "var(--bg-card-hover)" : "var(--bg-card)",
-        border: `1px solid ${hovered ? "var(--border-hover)" : "var(--border-primary)"}`,
-        boxShadow: hovered ? "var(--shadow-md)" : "var(--shadow-sm)",
+        background: hovered
+          ? "color-mix(in srgb, var(--bg-card-hover) 80%, transparent)"
+          : "color-mix(in srgb, var(--bg-card) 65%, transparent)",
+        backdropFilter: "blur(16px)",
+        WebkitBackdropFilter: "blur(16px)",
+        border: hovered
+          ? `1px solid color-mix(in srgb, ${accentColor} 40%, transparent)`
+          : "1px solid var(--border-primary)",
+        boxShadow: hovered
+          ? `0 8px 32px rgba(0,0,0,0.12), 0 0 0 1px color-mix(in srgb, ${accentColor} 15%, transparent)`
+          : "var(--shadow-sm)",
         animation: visible
           ? `cf-stat-in 0.5s ease-out ${delay}ms both`
           : "none",
-        transform: hovered ? "translateY(-2px)" : "none",
         cursor: "default",
       }}
       onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      onMouseLeave={() => {
+        setHovered(false);
+        setSpotlight({ x: 0, y: 0 });
+      }}
+      onMouseMove={handleMouseMove}
     >
+      {/* Accent top strip */}
       <div
-        className="w-8 h-8 rounded-md flex items-center justify-center"
-        style={{ background: `${color ?? "var(--text-accent)"}18` }}
-        aria-hidden="true"
-      >
-        <span style={{ color: color ?? "var(--text-accent)" }}>{icon}</span>
-      </div>
-      <div>
-        <p
-          className="text-code font-bold text-xl leading-tight"
-          style={{ color: color ?? "var(--text-accent)" }}
-          aria-label={`${label}: ${value}`}
-        >
-          {displayValue}
-        </p>
-        <p
-          className="text-subheading text-xs font-medium mt-0.5"
-          style={{ color: "var(--text-secondary)" }}
-        >
-          {label}
-        </p>
-        <p
-          className="text-meta mt-1 leading-tight"
-          style={{ color: "var(--text-muted)", fontSize: "0.65rem" }}
-        >
-          {description}
-        </p>
+        className="absolute top-0 left-0 right-0 h-[2px] rounded-t-lg"
+        style={{
+          background: `linear-gradient(90deg, ${accentColor}, color-mix(in srgb, ${accentColor} 20%, transparent))`,
+          opacity: hovered ? 0.9 : 0.5,
+          transition: "opacity 0.3s ease",
+        }}
+      />
+
+      {/* Spotlight overlay */}
+      <div
+        className="absolute inset-0 pointer-events-none rounded-lg"
+        style={{
+          opacity: hovered ? 1 : 0,
+          transition: "opacity 0.3s ease",
+          background: hovered
+            ? `radial-gradient(180px circle at ${spotlight.x}px ${spotlight.y}px, color-mix(in srgb, ${accentColor} 8%, transparent) 0%, transparent 70%)`
+            : "transparent",
+        }}
+      />
+
+      {/* Content */}
+      <div className="relative z-10 p-3 flex flex-col items-center justify-center gap-1.5">
+        <div className="flex flex-col items-center justify-center">
+          <p
+            className="font-bold text-base leading-tight"
+            style={{
+              color: accentColor,
+              transition: "color 0.3s ease",
+            }}
+            aria-label={`${label}: ${value}`}
+          >
+            {displayValue}
+          </p>
+          <p
+            className="text-sm text-[0.65rem] font-medium mt-0.5"
+            style={{
+              color: "var(--text-secondary)",
+              transition: "color 0.3s ease",
+            }}
+          >
+            {label}
+          </p>
+          <p
+            className="text-meta leading-tight mt-0.5"
+            style={{ color: "var(--text-muted)", fontSize: "0.6rem" }}
+          >
+            {description}
+          </p>
+        </div>
       </div>
     </div>
   );
 }
 
-// ── Inline SVG icons ──────────────────────────────────────────────────────────
-const IconRating = () => (
-  <svg
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-  >
-    <polyline points="22 7 13.5 15.5 8.5 10.5 2 17" />
-    <polyline points="16 7 22 7 22 13" />
-  </svg>
-);
-const IconTrophy = () => (
-  <svg
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-  >
-    <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
-    <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
-    <path d="M4 22h16" />
-    <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" />
-    <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" />
-    <path d="M18 2H6v7a6 6 0 0 0 12 0V2z" />
-  </svg>
-);
-const IconCheck = () => (
-  <svg
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-  >
-    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-    <polyline points="22 4 12 14.01 9 11.01" />
-  </svg>
-);
-const IconList = () => (
-  <svg
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-  >
-    <line x1="8" y1="6" x2="21" y2="6" />
-    <line x1="8" y1="12" x2="21" y2="12" />
-    <line x1="8" y1="18" x2="21" y2="18" />
-    <line x1="3" y1="6" x2="3.01" y2="6" />
-    <line x1="3" y1="12" x2="3.01" y2="12" />
-    <line x1="3" y1="18" x2="3.01" y2="18" />
-  </svg>
-);
-const IconTarget = () => (
-  <svg
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-  >
-    <circle cx="12" cy="12" r="10" />
-    <circle cx="12" cy="12" r="6" />
-    <circle cx="12" cy="12" r="2" />
-  </svg>
-);
-const IconFlame = () => (
-  <svg
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-  >
-    <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" />
-  </svg>
-);
-const IconStar = () => (
-  <svg
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-  >
-    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-  </svg>
-);
-const IconChevronUp = () => (
-  <svg
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-  >
-    <polyline points="18 15 12 9 6 15" />
-  </svg>
-);
-const IconPercent = () => (
-  <svg
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-  >
-    <line x1="19" y1="5" x2="5" y2="19" />
-    <circle cx="6.5" cy="6.5" r="2.5" />
-    <circle cx="17.5" cy="17.5" r="2.5" />
-  </svg>
-);
-const IconBarChart = () => (
-  <svg
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-  >
-    <line x1="18" y1="20" x2="18" y2="10" />
-    <line x1="12" y1="20" x2="12" y2="4" />
-    <line x1="6" y1="20" x2="6" y2="14" />
-  </svg>
-);
-
 interface Props {
   userInfo: CFUserInfo;
   stats: DashboardStats;
+  insights?: CFInsight[];
 }
 
-export function StatisticsGrid({ userInfo, stats }: Props) {
+export function StatisticsGrid({ userInfo, stats, insights }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
   const rankColor = getRankColor(userInfo.rank);
@@ -304,7 +204,6 @@ export function StatisticsGrid({ userInfo, stats }: Props) {
 
   const cards: StatCardProps[] = [
     {
-      icon: <IconRating />,
       value: userInfo.rating,
       label: "Current Rating",
       description: `${userInfo.rank} tier`,
@@ -313,7 +212,6 @@ export function StatisticsGrid({ userInfo, stats }: Props) {
       delay: 0,
     },
     {
-      icon: <IconTrophy />,
       value: userInfo.maxRating,
       label: "Highest Rating",
       description: `Peak: ${userInfo.maxRank}`,
@@ -322,7 +220,6 @@ export function StatisticsGrid({ userInfo, stats }: Props) {
       delay: 50,
     },
     {
-      icon: <IconBarChart />,
       value: stats.contests.length,
       label: "Total Contests",
       description: "Rated rounds participated",
@@ -330,7 +227,6 @@ export function StatisticsGrid({ userInfo, stats }: Props) {
       delay: 100,
     },
     {
-      icon: <IconCheck />,
       value: stats.solved.count,
       label: "Problems Solved",
       description: "Unique accepted problems",
@@ -338,7 +234,6 @@ export function StatisticsGrid({ userInfo, stats }: Props) {
       delay: 150,
     },
     {
-      icon: <IconList />,
       value: stats.totalSubmissions,
       label: "Total Submissions",
       description: "All attempts ever made",
@@ -346,7 +241,6 @@ export function StatisticsGrid({ userInfo, stats }: Props) {
       delay: 200,
     },
     {
-      icon: <IconPercent />,
       value: stats.acceptanceRate,
       label: "Acceptance Rate",
       description: "% of submissions accepted",
@@ -356,7 +250,6 @@ export function StatisticsGrid({ userInfo, stats }: Props) {
       delay: 250,
     },
     {
-      icon: <IconFlame />,
       value: stats.currentStreak,
       label: "Current Streak",
       description: "Consecutive solving days",
@@ -365,7 +258,6 @@ export function StatisticsGrid({ userInfo, stats }: Props) {
       delay: 300,
     },
     {
-      icon: <IconStar />,
       value: stats.longestStreak,
       label: "Longest Streak",
       description: "Best consecutive days ever",
@@ -374,7 +266,6 @@ export function StatisticsGrid({ userInfo, stats }: Props) {
       delay: 350,
     },
     {
-      icon: <IconTarget />,
       value: stats.averageSolvedRating,
       label: "Avg Solved Rating",
       description: "Mean rating of solved problems",
@@ -382,7 +273,6 @@ export function StatisticsGrid({ userInfo, stats }: Props) {
       delay: 400,
     },
     {
-      icon: <IconChevronUp />,
       value: stats.hardestSolved?.rating ?? 0,
       label: "Hardest Solved",
       description: stats.hardestSolved?.name
@@ -408,20 +298,32 @@ export function StatisticsGrid({ userInfo, stats }: Props) {
     },
   ];
 
+  const insightCards: StatCardProps[] = (insights ?? []).map((insight, i) => ({
+    value: insight.value,
+    label: insight.label,
+    description: insight.sub ?? "",
+    visible,
+    delay: 500 + i * 40,
+    isText: true,
+  }));
+
+  const allCards = [...cards, ...insightCards];
+
   return (
     <>
       <style>{STATS_CSS}</style>
-      <div
-        ref={ref}
-        className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4"
-        role="list"
-        aria-label="Codeforces statistics"
-      >
-        {cards.map((card, i) => (
-          <div key={i} role="listitem">
-            <StatCard {...card} />
-          </div>
-        ))}
+      <div ref={ref}>
+        <div
+          className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 md:gap-3"
+          role="list"
+          aria-label="Codeforces statistics"
+        >
+          {allCards.map((card, i) => (
+            <div key={i} role="listitem">
+              <StatCard {...card} />
+            </div>
+          ))}
+        </div>
       </div>
     </>
   );

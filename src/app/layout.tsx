@@ -126,6 +126,12 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
+        {/* Preconnect to critical external origins */}
+        <link rel="preconnect" href="https://skillicons.dev" />
+        <link rel="preconnect" href="https://raw.githubusercontent.com" />
+        <link rel="dns-prefetch" href="https://github.com" />
+        <link rel="dns-prefetch" href="https://codeforces.com" />
+
         {/* Preload hero image for faster LCP */}
         <link
           rel="preload"
@@ -235,7 +241,10 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-full flex flex-col transition-colors duration-300" suppressHydrationWarning>
+      <body
+        className="min-h-full flex flex-col transition-colors duration-300"
+        suppressHydrationWarning
+      >
         <ThemeProvider>{children}</ThemeProvider>
         <Analytics />
         <SpeedInsights />

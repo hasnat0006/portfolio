@@ -140,7 +140,7 @@ export function FeaturedContestCard({
                   <ExternalLinkButton
                     key={i}
                     href={url}
-                    label={`Post_${i + 1}`}
+                    label={`post_${i + 1}`}
                   />
                 ))}
               </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import type { LanguageStat } from "@/types/github";
+import Image from "next/image";
 
 // Inline icon lookup to avoid cross-boundary import issues with Turbopack
 // when this component is loaded via next/dynamic with ssr: false.
@@ -106,12 +107,13 @@ export function LanguageDistribution({ languages }: Props) {
               title={`${lang.name} — ${lang.percentage}% (${lang.repoCount} repo${lang.repoCount !== 1 ? "s" : ""})`}
             >
               {iconUrl.length != 0 ? (
-                <img
+                <Image
                   src={iconUrl}
                   alt={lang.name}
                   width={56}
                   height={56}
                   className="pointer-events-none select-none"
+                  unoptimized
                 />
               ) : (
                 <span

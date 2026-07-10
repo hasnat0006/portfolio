@@ -97,6 +97,26 @@ export function RatingChart({ ratingHistory }: Props) {
     .join(" ");
   const areaPath = `${linePath} L ${xScale(n - 1).toFixed(1)} ${(PAD.top + chartH).toFixed(1)} L ${xScale(0).toFixed(1)} ${(PAD.top + chartH).toFixed(1)} Z`;
 
+  // ── Rank boundary bands (Codeforces rating tiers) ──────────────────
+  const RANK_BANDS: {
+    min: number;
+    max: number;
+    label: string;
+    color: string;
+  }[] = [
+    { min: 0, max: 1199, label: "Newbie", color: "#808080" },
+    { min: 1200, max: 1399, label: "Pupil", color: "#008000" },
+    { min: 1400, max: 1599, label: "Specialist", color: "#03a89e" },
+    { min: 1600, max: 1899, label: "Expert", color: "#0000ff" },
+    { min: 1900, max: 2099, label: "Candidate Master", color: "#aa00aa" },
+    { min: 2100, max: 2299, label: "Master", color: "#ff8c00" },
+    { min: 2300, max: 2399, label: "Intl. Master", color: "#ff8c00" },
+    { min: 2400, max: 2599, label: "Grandmaster", color: "#ff0000" },
+    { min: 2600, max: 9999, label: "Legendary", color: "#ff0000" },
+  ];
+
+  const visibleBands = RANK_BANDS.filter((b) => b.min < maxR && b.max > minR);
+
   // Y axis ticks
   const step = Math.ceil((maxR - minR) / 5 / 100) * 100;
   const yTicks: number[] = [];
@@ -205,6 +225,44 @@ export function RatingChart({ ratingHistory }: Props) {
                 <stop offset="100%" stopColor={rankColor} stopOpacity="0.02" />
               </linearGradient>
             </defs>
+
+            {/* Rank boundary bands */}
+            {visibleBands.map((band) => {
+              const bandBottom = Math.max(minR, band.min);
+              const bandTop = Math.min(maxR, band.max);
+              if (bandBottom >= bandTop) return null;
+              return (
+                <rect
+                  key={band.label}
+                  x={PAD.left}
+                  y={yScale(bandTop)}
+                  width={chartW}
+                  height={yScale(bandBottom) - yScale(bandTop)}
+                  fill={band.color}
+                  opacity="0.04"
+                />
+              );
+            })}
+
+            {/* Rank boundary labels (right side) */}
+            {visibleBands.map((band) => {
+              const bandBottom = Math.max(minR, band.min);
+              if (bandBottom < minR || bandBottom > maxR) return null;
+              return (
+                <text
+                  key={`label-${band.label}`}
+                  x={W - PAD.right + 4}
+                  y={yScale(bandBottom)}
+                  dy="3"
+                  fontSize="7"
+                  fill={band.color}
+                  opacity="0.5"
+                  fontFamily="var(--font-jetbrains-mono), monospace"
+                >
+                  {band.label}
+                </text>
+              );
+            })}
 
             {/* Grid lines */}
             {yTicks.map((v) => (

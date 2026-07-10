@@ -42,25 +42,17 @@ export default function HomePage() {
         <section
           id="github"
           className="px-4 py-16 md:py-24"
-          style={{ background: "var(--bg-secondary)", scrollMarginTop: "5rem" }}
+          style={{ scrollMarginTop: "5rem" }}
         >
           <div className="max-w-6xl mx-auto">
-            <div className="flex items-center gap-3 mb-2">
-              <span
-                className="text-code text-sm"
-                style={{ color: "var(--text-accent)" }}
-              >
-                $
-              </span>
-              <h2
-                className="text-heading text-2xl md:text-3xl"
-                style={{ color: "var(--text-primary)" }}
-              >
-                curl github.com/hasnat0006
-              </h2>
-            </div>
+            <h2
+              className="text-heading text-2xl md:text-3xl mb-2"
+              style={{ color: "var(--text-primary)" }}
+            >
+              GitHub
+            </h2>
             <p
-              className="text-code text-sm ml-6 mb-10"
+              className="text-body text-sm mb-10"
               style={{ color: "var(--text-muted)" }}
             >
               Open Source &amp; Development Analytics
@@ -76,22 +68,14 @@ export default function HomePage() {
           style={{ scrollMarginTop: "5rem" }}
         >
           <div className="max-w-6xl mx-auto">
-            <div className="flex items-center gap-3 mb-2">
-              <span
-                className="text-code text-sm"
-                style={{ color: "var(--text-accent)" }}
-              >
-                $
-              </span>
-              <h2
-                className="text-heading text-2xl md:text-3xl"
-                style={{ color: "var(--text-primary)" }}
-              >
-                Competitive Programming
-              </h2>
-            </div>
+            <h2
+              className="text-heading text-2xl md:text-3xl mb-2"
+              style={{ color: "var(--text-primary)" }}
+            >
+              Competitive Programming
+            </h2>
             <p
-              className="text-code text-sm ml-6 mb-10"
+              className="text-body text-sm mb-10"
               style={{ color: "var(--text-muted)" }}
             >
               Solving algorithmic problems, participating in contests, and

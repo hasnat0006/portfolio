@@ -1,6 +1,6 @@
 "use client";
 
-import { IconMapPin } from "@/components/icons/experience";
+import { IconLink, IconMapPin } from "@/components/icons/experience";
 
 interface MetaPillsProps {
   location?: string;
@@ -10,7 +10,7 @@ interface MetaPillsProps {
 }
 
 /**
- * Optional metadata pills row — CGPA badge and location chip.
+ * Optional metadata pills row — CGPA badge, location chip, and website link.
  */
 export function MetaPills({
   location,
@@ -23,6 +23,21 @@ export function MetaPills({
 
   return (
     <div className="flex flex-wrap items-center gap-1.5 mt-2">
+      {isCurrent && (
+        <span
+          className="text-xs font-mono px-3 py-1 rounded-md"
+          style={{
+            color: "var(--text-accent)",
+            background:
+              "color-mix(in srgb, var(--text-accent) 8%, transparent)",
+            border:
+              "1px solid color-mix(in srgb, var(--text-accent) 20%, transparent)",
+          }}
+        >
+          Present
+        </span>
+      )}
+
       {cgpa && (
         <span
           className="text-xs font-mono px-3 py-1 rounded-md"
@@ -56,6 +71,35 @@ export function MetaPills({
           <IconMapPin size={10} />
           {location}
         </span>
+      )}
+
+      {website && (
+        <a
+          href={website}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1 text-xs font-mono px-3 py-1 rounded-md transition-all duration-200"
+          style={{
+            color: "var(--text-muted)",
+            background: "var(--bg-code)",
+            border: "1px solid var(--border-primary)",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.color = "var(--text-accent)";
+            e.currentTarget.style.borderColor = "var(--text-accent)";
+            e.currentTarget.style.background =
+              "color-mix(in srgb, var(--text-accent) 6%, transparent)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.color = "var(--text-muted)";
+            e.currentTarget.style.borderColor = "var(--border-primary)";
+            e.currentTarget.style.background = "var(--bg-code)";
+          }}
+          aria-label="Visit website"
+        >
+          <IconLink size={10} />
+          Website
+        </a>
       )}
     </div>
   );

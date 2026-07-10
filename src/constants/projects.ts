@@ -3,11 +3,7 @@
  */
 export const INITIAL_COUNT = 4;
 
-/**
- * Terminal-style header text for the Projects section.
- */
 export const PROJECTS_HEADER = {
-  prompt: "$",
-  command: "ls ./projects",
+  title: "Projects",
   description: "Engineering projects &amp; algorithmic solutions",
 } as const;

@@ -268,7 +268,7 @@ export function InsightCards({ insights }: Props) {
         </div>
 
         <div
-          className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3"
+          className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-2"
           role="list"
           aria-label="Personal insights"
         >
@@ -276,7 +276,7 @@ export function InsightCards({ insights }: Props) {
             <div
               key={insight.label}
               role="listitem"
-              className="cf-insight-card rounded-md p-4 flex flex-col gap-1.5 transition-all duration-200"
+              className="cf-insight-card rounded-md p-2.5 flex flex-col gap-1 transition-all duration-200"
               style={{
                 background: "var(--bg-card)",
                 border: "1px solid var(--border-primary)",
@@ -297,20 +297,20 @@ export function InsightCards({ insights }: Props) {
             >
               <svg
                 aria-hidden="true"
-                className="h-5 w-5"
+                className="h-3.5 w-3.5 shrink-0"
                 viewBox="0 0 24 24"
                 style={{ color: "var(--text-accent)" }}
               >
                 <InsightIcon name={insight.icon} />
               </svg>
               <p
-                className="text-code font-bold text-sm leading-tight"
+                className="text-code font-bold text-xs leading-tight"
                 style={{ color: "var(--text-accent)" }}
               >
                 {insight.value}
               </p>
               <p
-                className="text-xs font-medium"
+                className="text-[0.6rem] font-medium leading-tight"
                 style={{ color: "var(--text-primary)" }}
               >
                 {insight.label}
@@ -318,7 +318,11 @@ export function InsightCards({ insights }: Props) {
               {insight.sub && (
                 <p
                   className="text-meta"
-                  style={{ color: "var(--text-muted)", fontSize: "0.62rem" }}
+                  style={{
+                    color: "var(--text-muted)",
+                    fontSize: "0.55rem",
+                    lineHeight: 1.2,
+                  }}
                 >
                   {insight.sub}
                 </p>

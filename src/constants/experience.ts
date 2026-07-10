@@ -12,8 +12,13 @@ export const EXP_STYLES = `
   70%  { transform: scale(1.15); }
   100% { transform: scale(1); opacity: 1; }
 }
+@keyframes timeline-pulse {
+  0%, 100% { opacity: 0.6; }
+  50%      { opacity: 1; }
+}
 @media (prefers-reduced-motion: reduce) {
   .exp-item { transition: none !important; animation: none !important; }
+  .timeline-pulse { animation: none !important; }
 }
 .exp-show-more-content {
   overflow: hidden;

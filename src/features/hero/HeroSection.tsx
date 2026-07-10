@@ -2,6 +2,7 @@
 
 import { SocialLinks } from "@/components/shared/SocialLinks";
 import GridBackground from "@/components/ui/GridBackground";
+import ScrollDownIndicator from "@/components/ui/ScrollDownIndicator";
 import Sparkles from "@/components/ui/Sparkles";
 import TextGenerateEffect from "@/components/ui/TextGenerateEffect";
 import Image from "next/image";
@@ -76,12 +77,6 @@ export default function HeroSection() {
             {/* Text content */}
             <div className="text-center md:text-left animate-fadeIn">
               <Sparkles particleCount={5} />
-              <div
-                className="text-meta mb-3"
-                style={{ color: "var(--text-muted)" }}
-              >
-                <span style={{ color: "var(--text-accent)" }}>$</span> whoami
-              </div>
 
               <h1
                 className="text-hero text-4xl sm:text-5xl md:text-6xl mb-4"
@@ -217,6 +212,9 @@ export default function HeroSection() {
           </div>
         </section>
       </GridBackground>
+
+      {/* Scroll-down indicator */}
+      <ScrollDownIndicator />
     </div>
   );
 }
