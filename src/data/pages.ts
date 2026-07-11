@@ -38,7 +38,3 @@ export function getPageBySlug(slug: string): PageData | undefined {
 export function getAllSlugs(): string[] {
   return PAGES.map((page) => page.slug);
 }
-
-export function getAllPages(): PageData[] {
-  return [...PAGES];
-}

@@ -2,6 +2,7 @@
 
 import { useTheme } from "@/components/ThemeProvider";
 import { AnimatePresence, motion } from "framer-motion";
+import { ExternalLink, Menu, Moon, Sun, X } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -124,20 +125,7 @@ export default function NavigationBar() {
                 }}
               >
                 {label}
-                <svg
-                  className="inline-block ml-1 -mt-0.5"
-                  width="10"
-                  height="10"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M7 7h10v10" />
-                  <path d="M7 17 21 3" />
-                </svg>
+                <ExternalLink size={10} className="inline-block ml-1 -mt-0.5" />
               </a>
             ) : (
               <Link
@@ -173,35 +161,7 @@ export default function NavigationBar() {
             }}
             aria-label="Toggle theme"
           >
-            {theme === "dark" ? (
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <circle cx="12" cy="12" r="5" strokeWidth="2" />
-                <path
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"
-                />
-              </svg>
-            ) : (
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"
-                />
-              </svg>
-            )}
+            {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
           </button>
         </div>
 
@@ -213,35 +173,7 @@ export default function NavigationBar() {
             style={{ color: "var(--text-secondary)" }}
             aria-label="Toggle theme"
           >
-            {theme === "dark" ? (
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <circle cx="12" cy="12" r="5" strokeWidth="2" />
-                <path
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"
-                />
-              </svg>
-            ) : (
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"
-                />
-              </svg>
-            )}
+            {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
           </button>
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
@@ -249,26 +181,7 @@ export default function NavigationBar() {
             style={{ color: "var(--text-secondary)" }}
             aria-label="Toggle menu"
           >
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              {mobileOpen ? (
-                <path
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              ) : (
-                <path
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  d="M3 6h18M3 12h18M3 18h18"
-                />
-              )}
-            </svg>
+            {mobileOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
       </div>
@@ -303,20 +216,10 @@ export default function NavigationBar() {
                     }}
                   >
                     {label}
-                    <svg
+                    <ExternalLink
+                      size={10}
                       className="inline-block ml-1 -mt-0.5"
-                      width="10"
-                      height="10"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M7 7h10v10" />
-                      <path d="M7 17 21 3" />
-                    </svg>
+                    />
                   </a>
                 ) : (
                   <Link

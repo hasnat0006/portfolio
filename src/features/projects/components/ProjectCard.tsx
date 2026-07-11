@@ -4,6 +4,7 @@ import { TechIconsRow, Tooltip } from "@/components/icons/tech";
 import { ActionButton } from "@/components/ui/ActionButton";
 import { slugify, type Project } from "@/data/projects";
 import { useTilt } from "@/hooks/useTilt";
+import { Calendar } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -142,18 +143,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
                 border: "1px solid var(--border-primary)",
               }}
             >
-              <svg
-                width="10"
-                height="10"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                aria-hidden="true"
-              >
-                <rect x="3" y="4" width="18" height="18" rx="2" />
-                <path d="M16 2v4M8 2v4M3 10h18" />
-              </svg>
+              <Calendar size={10} aria-hidden="true" />
               {duration}
             </span>
           )}

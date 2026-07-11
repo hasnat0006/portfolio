@@ -1,12 +1,5 @@
-export { ProjectArchitectureTimeline } from "./ProjectArchitectureTimeline";
 export { ProjectBottomCTA } from "./ProjectBottomCTA";
-export { ProjectChallengeSolutionImpact } from "./ProjectChallengeSolutionImpact";
-export { ProjectFeatureShowcase } from "./ProjectFeatureShowcase";
 export { ProjectHero } from "./ProjectHero";
-export { ProjectLessonsLearned } from "./ProjectLessonsLearned";
-export { ProjectMetrics } from "./ProjectMetrics";
 export { ProjectOverview } from "./ProjectOverview";
-export { ProjectScreenshotGallery } from "./ProjectScreenshotGallery";
 export { ProjectSectionHeader } from "./ProjectSectionHeader";
-export { ProjectTechnicalHighlights } from "./ProjectTechnicalHighlights";
 export { ProjectTechStack } from "./ProjectTechStack";

@@ -1,23 +1,10 @@
 export {
   ANIMATION,
-  EXTERNAL_LINK_PATH,
-  EYE_ICON_PATH,
   GLASS_BASE,
-  GLASS_CARD_BASE,
-  GLASS_STAT_BASE,
-  RANK_MID_THRESHOLD,
-  RANK_TOP_THRESHOLD,
   TABLE_HEADER_WIDTHS,
   TABLE_HEADERS,
 } from "./achievements";
 export { CACHE_TTL_MS, LOCAL_CACHE_TTL_MS, STALE_TTL_MS } from "./cache";
 export { EXP_ANIMATION, EXP_STYLES, TIMELINE_CARD_STYLE } from "./experience";
-export { ACTIVE_SECTION_THRESHOLD, NAV_LINKS } from "./navigation";
+export { NAV_LINKS } from "./navigation";
 export { INITIAL_COUNT, PROJECTS_HEADER } from "./projects";
-export {
-  CODEFORCES_HANDLE,
-  GITHUB_USERNAME,
-  HERO_TITLES,
-  PROJECTS_INITIAL_COUNT,
-  SECTION_SCROLL_MARGIN,
-} from "./site";

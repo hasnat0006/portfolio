@@ -1,6 +1,6 @@
 "use client";
 
-import { EXTERNAL_LINK_PATH } from "@/constants/achievements";
+import { ActionButton } from "@/components/ui/ActionButton";
 import { type ContestAchievement } from "@/data/achievements";
 import { getRankColor } from "@/utils/achievements";
 import { useState } from "react";
@@ -127,48 +127,7 @@ export function ContestRow({ achievement, index, inView }: ContestRowProps) {
       <td className="py-3 px-3 pr-4">
         <div className="flex flex-wrap items-center gap-1.5">
           {achievement.post_url?.map((url, i) => (
-            <a
-              key={i}
-              href={url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="post-link inline-flex items-center gap-1 font-mono rounded-md whitespace-nowrap"
-              style={{
-                color: "var(--text-accent)",
-                background: "transparent",
-                border: "1px solid var(--border-accent)",
-                transition: "all 0.2s cubic-bezier(0.23,1,0.32,1)",
-                fontSize: "10px",
-                padding: "2px 8px",
-                lineHeight: "20px",
-              }}
-              onMouseEnter={(e) => {
-                const el = e.currentTarget;
-                el.style.color = "var(--bg-primary)";
-                el.style.background = "var(--text-accent)";
-                el.style.transform = "translateY(-1px)";
-                el.style.boxShadow = "0 4px 12px rgba(52,211,153,0.25)";
-              }}
-              onMouseLeave={(e) => {
-                const el = e.currentTarget;
-                el.style.color = "var(--text-accent)";
-                el.style.background = "transparent";
-                el.style.transform = "translateY(0)";
-                el.style.boxShadow = "none";
-              }}
-              aria-label={`Post ${i + 1}`}
-            >
-              <svg
-                width="10"
-                height="10"
-                viewBox="0 0 512 512"
-                fill="currentColor"
-                aria-hidden="true"
-              >
-                <path d={EXTERNAL_LINK_PATH} />
-              </svg>
-              post_{i + 1}
-            </a>
+            <ActionButton key={i} href={url} label={`post_${i + 1}`} />
           ))}
         </div>
       </td>

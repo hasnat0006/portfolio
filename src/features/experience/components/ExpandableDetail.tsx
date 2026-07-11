@@ -1,6 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
+import { ChevronDown } from "lucide-react";
 import type { ReactNode } from "react";
 
 interface ExpandableDetailProps {
@@ -61,24 +62,14 @@ export function ExpandableDetail({
             {count}
           </span>
         )}
-        <motion.svg
-          width="12"
-          height="12"
-          viewBox="0 0 12 12"
-          fill="none"
+        <motion.div
           className="flex-shrink-0"
           style={{ color: "var(--text-muted)" }}
           animate={{ rotate: defaultOpen ? 180 : 0 }}
           transition={{ duration: 0.2 }}
         >
-          <path
-            d="M3 5L6 8L9 5"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </motion.svg>
+          <ChevronDown size={12} />
+        </motion.div>
       </summary>
 
       <AnimatePresence initial={false}>

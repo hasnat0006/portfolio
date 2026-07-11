@@ -1,35 +1,11 @@
 "use client";
 
+import { useTheme } from "@/components/ThemeProvider";
+import { skillIconUrl } from "@/data/skills";
 import { useInView } from "@/hooks/useInView";
-import Image from "next/image";
+import { AnimatePresence, motion } from "framer-motion";
+import { useState } from "react";
 import { ProjectSectionHeader } from "./ProjectSectionHeader";
-
-/** Map technology names to skillicons.dev icon slugs */
-function skillIconId(name: string): string {
-  const map: Record<string, string> = {
-    "Next.js": "nextjs",
-    "React.js": "react",
-    TailwindCSS: "tailwindcss",
-    "Node.js": "nodejs",
-    "Express.js": "express",
-    Supabase: "supabase",
-    PostgreSQL: "postgresql",
-    Bun: "bun",
-    Python: "python",
-    Java: "java",
-    JavaFX: "javafx",
-    Flutter: "flutter",
-    Dart: "dart",
-    CSS: "css",
-    SQL: "sqlite",
-    Oracle: "oracle",
-    MySQL: "mysql",
-    Xampp: "xampp",
-    Vercel: "vercel",
-    "Framer Motion": "react",
-  };
-  return map[name] || name.toLowerCase().replace(/[^a-z0-9]/g, "");
-}
 
 interface TechStackItem {
   name: string;
@@ -46,9 +22,6 @@ interface ProjectTechStackProps {
   techStackDetails?: TechStackCategory[];
 }
 
-/**
- * Generates rich tech stack details from a flat string array with smart defaults.
- */
 function generateTechDetails(techs: string[]): TechStackCategory[] {
   const frontend = [
     "React.js",
@@ -136,6 +109,64 @@ function getDefaultDescription(tech: string): string {
   return descriptions[tech] || `${tech} — Core technology used in this project`;
 }
 
+/* ── Icon with hover tooltip (matches Skills section aesthetic) ── */
+function TechIcon({
+  name,
+  theme,
+  size,
+}: {
+  name: string;
+  theme: string;
+  size: number;
+}) {
+  const [hovered, setHovered] = useState(false);
+
+  const iconSrc =
+    skillIconUrl(name, theme as "light" | "dark") ||
+    `https://skillicons.dev/icons?i=${name.toLowerCase().replace(/[^a-z0-9]/g, "")}&theme=${theme}`;
+
+  return (
+    <div
+      className="relative"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      <AnimatePresence mode="popLayout">
+        {hovered && (
+          <motion.div
+            initial={{ opacity: 0, y: 20, scale: 0.6 }}
+            animate={{
+              opacity: 1,
+              y: 0,
+              scale: 1,
+              transition: { type: "spring", stiffness: 260, damping: 10 },
+            }}
+            exit={{ opacity: 0, y: 20, scale: 0.6 }}
+            className="absolute -top-12 left-1/2 z-50 flex -translate-x-1/2 flex-col items-center justify-center rounded-md bg-black px-3 py-1.5 text-xs shadow-xl pointer-events-none"
+            style={{ whiteSpace: "nowrap" }}
+          >
+            <div className="absolute inset-x-8 -bottom-px z-30 h-px w-[20%] bg-gradient-to-r from-transparent via-emerald-500 to-transparent" />
+            <div className="absolute -bottom-px left-8 z-30 h-px w-[40%] bg-gradient-to-r from-transparent via-sky-500 to-transparent" />
+            <div className="relative z-30 font-semibold text-white font-mono">
+              {name}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={iconSrc}
+        alt={name}
+        width={size}
+        height={size}
+        loading="lazy"
+        className="object-contain transition-transform duration-300 hover:scale-110"
+      />
+    </div>
+  );
+}
+
 /**
  * Tech stack section with categorized technology cards.
  * Each card shows icon, name, and short description.
@@ -145,6 +176,7 @@ export function ProjectTechStack({
   techStackDetails,
 }: ProjectTechStackProps) {
   const { ref, inView } = useInView(0.1);
+  const { theme } = useTheme();
 
   if (!techStack || techStack.length === 0) return null;
 
@@ -153,11 +185,7 @@ export function ProjectTechStack({
   return (
     <section className="py-16 md:py-20">
       <div className="max-w-5xl mx-auto px-4">
-        <ProjectSectionHeader
-          label="Tech Stack"
-          title="Technologies used"
-          description="The tools and technologies that power this project."
-        />
+        <ProjectSectionHeader label="Tech Stack" title="Technologies used" />
 
         <div ref={ref} className="space-y-8">
           {categories.map((cat, catIndex) => (
@@ -189,41 +217,36 @@ export function ProjectTechStack({
               </div>
 
               {/* Tech items */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 {cat.items.map((item) => (
                   <div
                     key={item.name}
-                    className="rounded-xl p-4 transition-all duration-200 hover:-translate-y-0.5"
+                    className="rounded-md py-2 px-4 flex gap-4 transition-all duration-200 hover:-translate-y-0.5"
                     style={{
                       background: "var(--bg-card)",
                       border: "1px solid var(--border-primary)",
                       boxShadow: "var(--shadow-sm)",
                     }}
                   >
-                    {/* Tech icon from skillicons.dev */}
-                    <div className="w-8 h-8 rounded-lg flex items-center justify-center mb-2.5 overflow-hidden">
-                      <Image
-                        src={`https://skillicons.dev/icons?i=${skillIconId(item.name)}`}
-                        alt={item.name}
-                        width={32}
-                        height={32}
-                        className="w-6 h-6 object-contain"
-                        loading="lazy"
-                      />
+                    {/* Tech icon with tooltip */}
+                    <div className="mb-3">
+                      <TechIcon name={item.name} theme={theme} size={48} />
                     </div>
 
-                    <h4
-                      className="text-sm font-semibold mb-1"
-                      style={{ color: "var(--text-primary)" }}
-                    >
-                      {item.name}
-                    </h4>
-                    <p
-                      className="text-[11px] leading-relaxed"
-                      style={{ color: "var(--text-muted)" }}
-                    >
-                      {item.description}
-                    </p>
+                    <div className="flex-1 flex flex-col justify-center">
+                      <h4
+                        className="text-sm font-semibold mb-1"
+                        style={{ color: "var(--text-primary)" }}
+                      >
+                        {item.name}
+                      </h4>
+                      <p
+                        className="text-[11px] leading-relaxed"
+                        style={{ color: "var(--text-muted)" }}
+                      >
+                        {item.description}
+                      </p>{" "}
+                    </div>
                   </div>
                 ))}
               </div>

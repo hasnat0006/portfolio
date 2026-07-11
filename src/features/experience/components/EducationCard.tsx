@@ -2,6 +2,7 @@
 
 import type { Education } from "@/data/timeline";
 import { isCurrentEntry } from "@/utils/experience";
+import { Info } from "lucide-react";
 import { AchievementHighlight } from "./AchievementHighlight";
 import { ExpandableDetail } from "./ExpandableDetail";
 import { MetaPills } from "./MetaPills";
@@ -68,35 +69,7 @@ export function EducationCard({ item, index }: EducationCardProps) {
       {hasDetail && (
         <ExpandableDetail
           title="Details &amp; Achievements"
-          icon={
-            <svg
-              width="12"
-              height="12"
-              viewBox="0 0 12 12"
-              fill="none"
-              aria-hidden="true"
-            >
-              <circle
-                cx="6"
-                cy="6"
-                r="5"
-                stroke="currentColor"
-                strokeWidth="1"
-              />
-              <path
-                d="M6 3.5V6.5"
-                stroke="currentColor"
-                strokeWidth="1"
-                strokeLinecap="round"
-              />
-              <path
-                d="M6 8.5V8.505"
-                stroke="currentColor"
-                strokeWidth="1"
-                strokeLinecap="round"
-              />
-            </svg>
-          }
+          icon={<Info size={12} aria-hidden="true" />}
           count={
             (item.activities?.length ?? 0) +
             (item.notableAchievements?.length ?? 0) +

@@ -1,18 +1,11 @@
-import NavigationBar from "@/components/NavigationBar";
 import { Footer } from "@/components/layout/Footer";
+import NavigationBar from "@/components/layout/NavigationBar";
 import { getAllProjectSlugs, getProjectBySlug } from "@/data/projects";
 import {
-  ProjectArchitectureTimeline,
   ProjectBottomCTA,
-  ProjectChallengeSolutionImpact,
-  ProjectFeatureShowcase,
   ProjectHero,
-  ProjectLessonsLearned,
-  ProjectMetrics,
   ProjectOverview,
-  ProjectScreenshotGallery,
   ProjectTechStack,
-  ProjectTechnicalHighlights,
 } from "@/features/projects/detail";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -65,22 +58,9 @@ export default async function ProjectDetailPage({
     techStack,
     githubUrl,
     liveUrl,
-    photoUrl,
     collaborators,
-    problem,
-    solution,
-    challenges,
-    impact,
-    metrics,
-    architecture,
-    technicalHighlights,
-    lessons,
-    architectureSteps,
-    features,
     techStackDetails,
   } = project;
-
-  const hasMedia = photoUrl && photoUrl.length > 0;
 
   return (
     <>
@@ -104,61 +84,6 @@ export default async function ProjectDetailPage({
           collaborators={collaborators}
         />
 
-        {/* Metrics */}
-        {metrics && metrics.length > 0 && (
-          <>
-            <div
-              className="h-px w-full"
-              style={{ background: "var(--border-primary)" }}
-            />
-            <ProjectMetrics metrics={metrics} />
-          </>
-        )}
-
-        {/* Challenge → Solution → Impact */}
-        {(problem || solution || impact) && (
-          <>
-            <div
-              className="h-px w-full"
-              style={{ background: "var(--border-primary)" }}
-            />
-            <ProjectChallengeSolutionImpact
-              problem={problem}
-              solution={solution}
-              challenges={challenges}
-              impact={impact}
-            />
-          </>
-        )}
-
-        {/* Architecture / Development Process */}
-        <ProjectArchitectureTimeline
-          architecture={architecture}
-          architectureSteps={architectureSteps}
-        />
-
-        {/* Feature Showcase */}
-        {features && features.length > 0 && (
-          <>
-            <div
-              className="h-px w-full"
-              style={{ background: "var(--border-primary)" }}
-            />
-            <ProjectFeatureShowcase features={features} />
-          </>
-        )}
-
-        {/* Screenshot Gallery */}
-        {hasMedia && (
-          <>
-            <div
-              className="h-px w-full"
-              style={{ background: "var(--border-primary)" }}
-            />
-            <ProjectScreenshotGallery images={photoUrl} title={title} />
-          </>
-        )}
-
         {/* Tech Stack */}
         {techStack && techStack.length > 0 && (
           <>
@@ -170,20 +95,6 @@ export default async function ProjectDetailPage({
               techStack={techStack}
               techStackDetails={techStackDetails}
             />
-          </>
-        )}
-
-        {/* Technical Highlights */}
-        <ProjectTechnicalHighlights highlights={technicalHighlights} />
-
-        {/* Lessons Learned */}
-        {lessons && lessons.length > 0 && (
-          <>
-            <div
-              className="h-px w-full"
-              style={{ background: "var(--border-primary)" }}
-            />
-            <ProjectLessonsLearned lessons={lessons} />
           </>
         )}
 

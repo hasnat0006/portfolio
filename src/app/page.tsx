@@ -1,11 +1,10 @@
-import NavigationBar from "@/components/NavigationBar";
 import { Footer } from "@/components/layout/Footer";
+import NavigationBar from "@/components/layout/NavigationBar";
 import HeroSection from "@/features/hero/HeroSection";
 import ProjectsSection from "@/features/projects/ProjectsSection";
 import SkillsSection from "@/features/skills/SkillsSection";
 import dynamic from "next/dynamic";
 
-// Lazy-load below-fold sections — code-split to reduce initial bundle
 const AchievementsSection = dynamic(
   () => import("@/features/achievements/AchievementsSection"),
 );
@@ -23,22 +22,11 @@ export default function HomePage() {
       <NavigationBar />
 
       <main className="flex-1">
-        {/* ── Hero Section ───────────────────────────────────────── */}
         <HeroSection />
-
-        {/* ── Skills Section ──────────────────────────────────────── */}
         <SkillsSection />
-
-        {/* ── Projects Section ───────────────────────────────────── */}
         <ProjectsSection />
-
-        {/* ── Achievements Section ───────────────────────────────── */}
         <AchievementsSection />
-
-        {/* ── Experience Section ────────────────────────────────── */}
         <ExperienceSection />
-
-        {/* ── GitHub Stats Section ─────────────────────────────────── */}
         <section
           id="github"
           className="px-4 py-16 md:py-24"
@@ -61,7 +49,6 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ── Codeforces Stats Section ─────────────────────────────── */}
         <section
           id="codeforces"
           className="px-4 py-16 md:py-24"
@@ -85,8 +72,6 @@ export default function HomePage() {
           </div>
         </section>
       </main>
-
-      {/* ── Footer ─────────────────────────────────────────────── */}
       <Footer />
     </>
   );

@@ -1,6 +1,7 @@
 "use client";
 
 import type { WorkExperience } from "@/data/timeline";
+import { Star } from "lucide-react";
 import { AchievementHighlight } from "./AchievementHighlight";
 import { ExpandableDetail } from "./ExpandableDetail";
 import { MetaPills } from "./MetaPills";
@@ -80,21 +81,7 @@ export function WorkCard({ item, index }: WorkCardProps) {
       {hasDetail && (
         <ExpandableDetail
           title="Key Achievements"
-          icon={
-            <svg
-              width="12"
-              height="12"
-              viewBox="0 0 12 12"
-              fill="none"
-              aria-hidden="true"
-            >
-              <path
-                d="M6 1L7.5 4L11 4.5L8.5 7L9 10.5L6 8.5L3 10.5L3.5 7L1 4.5L4.5 4L6 1Z"
-                fill="currentColor"
-                opacity="0.3"
-              />
-            </svg>
-          }
+          icon={<Star size={12} aria-hidden="true" />}
           count={item.achievements?.length}
         >
           {item.achievements && item.achievements.length > 0 && (

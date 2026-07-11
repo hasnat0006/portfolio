@@ -1,7 +1,7 @@
 "use client";
 
+import { ActionButton } from "@/components/ui/ActionButton";
 import { Badge } from "@/components/ui/Badge";
-import { ExternalLinkButton } from "@/components/ui/ExternalLinkButton";
 import { GlowIcon } from "@/components/ui/GlowIcon";
 import { HoverCard } from "@/components/ui/HoverCard";
 import { ANIMATION } from "@/constants/achievements";
@@ -86,11 +86,7 @@ export function OtherAchievementCard({
                 style={{ borderTop: "1px solid rgba(52,211,153,0.1)" }}
               >
                 {achievement.post_url!.map((url, i) => (
-                  <ExternalLinkButton
-                    key={i}
-                    href={url}
-                    label={`post_${i + 1}`}
-                  />
+                  <ActionButton key={i} href={url} label={`post_${i + 1}`} />
                 ))}
               </div>
             )}

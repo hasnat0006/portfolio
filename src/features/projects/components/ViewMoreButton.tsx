@@ -2,6 +2,7 @@
 
 import { INITIAL_COUNT } from "@/constants/projects";
 import { PROJECTS } from "@/data/projects";
+import { ChevronDown } from "lucide-react";
 
 interface ViewMoreButtonProps {
   showAll: boolean;
@@ -41,23 +42,14 @@ export function ViewMoreButton({ showAll, onToggle }: ViewMoreButtonProps) {
         }}
       >
         {showAll ? "Show Less" : `View More (${remaining} more)`}
-        <svg
-          className="w-3.5 h-3.5 transition-transform duration-200"
+        <ChevronDown
+          size={14}
+          className="transition-transform duration-200"
           style={{
             transform: showAll ? "rotate(180deg)" : "rotate(0deg)",
           }}
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
           aria-hidden="true"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M19 9l-7 7-7-7"
-          />
-        </svg>
+        />
       </button>
     </div>
   );

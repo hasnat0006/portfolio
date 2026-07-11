@@ -1,27 +1,18 @@
 "use client";
 
+import { ActionButton } from "@/components/ui/ActionButton";
 import { Badge } from "@/components/ui/Badge";
-import { ExternalLinkButton } from "@/components/ui/ExternalLinkButton";
 import { HoverCard } from "@/components/ui/HoverCard";
-import { ANIMATION, EYE_ICON_PATH } from "@/constants/achievements";
+import { ANIMATION } from "@/constants/achievements";
 import { type ContestAchievement } from "@/data/achievements";
 import { useInView } from "@/hooks/useInView";
 import { extractYear, percentile } from "@/utils/achievements";
+import { Eye } from "lucide-react";
 
 interface FeaturedContestCardProps {
   achievement: ContestAchievement;
   index: number;
 }
-
-const EYE_ICON = (
-  <svg
-    className="inline-block w-3 h-3"
-    viewBox="0 0 576 512"
-    fill="currentColor"
-  >
-    <path d={EYE_ICON_PATH} />
-  </svg>
-);
 
 /**
  * Featured contest card (for key achievements like ICPC regionals, top ranks).
@@ -130,18 +121,14 @@ export function FeaturedContestCard({
                 style={{ borderTop: "1px solid rgba(52,211,153,0.1)" }}
               >
                 {hasStandings && (
-                  <ExternalLinkButton
+                  <ActionButton
                     href={achievement.standings_url!}
                     label="Standings"
-                    icon={EYE_ICON}
+                    customIcon={<Eye size={10} aria-hidden="true" />}
                   />
                 )}
                 {achievement.post_url?.map((url, i) => (
-                  <ExternalLinkButton
-                    key={i}
-                    href={url}
-                    label={`post_${i + 1}`}
-                  />
+                  <ActionButton key={i} href={url} label={`post_${i + 1}`} />
                 ))}
               </div>
             )}
