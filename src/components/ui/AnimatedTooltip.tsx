@@ -89,7 +89,7 @@ export default function AnimatedTooltip({
             style={{
               background: borderless ? "transparent" : "var(--bg-badge)",
               border: borderless ? "none" : "1px solid var(--border-accent)",
-              padding: borderless ? "4px" : "2px",
+              padding: borderless ? "6px" : "2px",
               width: `${iconSize}px`,
               height: `${iconSize}px`,
             }}

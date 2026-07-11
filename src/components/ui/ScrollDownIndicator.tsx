@@ -12,7 +12,6 @@ const chevron = (
     strokeWidth="2.5"
     strokeLinecap="round"
     strokeLinejoin="round"
-    // className="md:w-[32px] md:h-[32px] block"
     aria-hidden="true"
   >
     <path d="M6 9l6 6 6-6" />
@@ -22,7 +21,7 @@ const chevron = (
 export default function ScrollDownIndicator() {
   return (
     <motion.div
-      className="absolute bottom-16  left-1/2 -translate-x-1/2 z-10"
+      className="absolute bottom-8  left-1/2 -translate-x-1/2 z-10"
       style={{ color: "var(--text-accent)" }}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}

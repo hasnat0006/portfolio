@@ -22,8 +22,6 @@ export function WorkCard({ item, index }: WorkCardProps) {
 
   return (
     <TimelineCard
-      type="work"
-      isCurrent={!!item.is_currently_working}
       index={index}
       ariaLabel={`${item.position} at ${item.company_name}`}
     >

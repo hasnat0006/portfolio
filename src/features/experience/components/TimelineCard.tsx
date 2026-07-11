@@ -3,24 +3,18 @@
 import { EXP_ANIMATION, TIMELINE_CARD_STYLE } from "@/constants/experience";
 import { useInView } from "@/hooks/useInView";
 import type { ReactNode } from "react";
-import { TimelineNode } from "./TimelineNode";
 
 interface TimelineCardProps {
-  type: "education" | "work" | "volunteer";
-  isCurrent: boolean;
   index: number;
   ariaLabel: string;
   children: ReactNode;
 }
 
 /**
- * Shared timeline entry layout: node dot + animated card container.
- * Handles scroll-into-view animation for every timeline item.
- * Includes subtle hover lift for a premium feel.
+ * Shared card container for timeline entries.
+ * Handles scroll-into-view animation and hover lift.
  */
 export function TimelineCard({
-  type,
-  isCurrent,
   index,
   ariaLabel,
   children,
@@ -30,7 +24,7 @@ export function TimelineCard({
   return (
     <article
       ref={ref}
-      className="exp-item flex items-start gap-4 group"
+      className="exp-item group"
       style={{
         opacity: inView ? 1 : 0,
         transform: inView ? "none" : "translateY(16px)",
@@ -38,15 +32,8 @@ export function TimelineCard({
       }}
       aria-label={ariaLabel}
     >
-      <TimelineNode
-        type={type}
-        isCurrent={isCurrent}
-        inView={inView}
-        delay={index * EXP_ANIMATION.staggerDelay + EXP_ANIMATION.nodeBaseDelay}
-      />
-
       <div
-        className="flex-1 min-w-0 rounded-md p-4 mb-4 transition-all duration-300"
+        className="rounded-md p-4 transition-all duration-300 relative"
         style={{
           ...TIMELINE_CARD_STYLE,
           transform: "translateY(0)",

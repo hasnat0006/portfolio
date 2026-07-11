@@ -2,6 +2,7 @@
 
 import { useTheme } from "@/components/ThemeProvider";
 import { AnimatePresence, motion } from "framer-motion";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 interface NavLink {
@@ -88,8 +89,8 @@ export default function NavigationBar() {
       />
       <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
         {/* Logo */}
-        <a
-          href="#hero"
+        <Link
+          href="/#hero"
           className="text-code text-sm flex items-center gap-1.5 transition-colors"
           style={{ color: "var(--text-accent)" }}
         >
@@ -97,32 +98,32 @@ export default function NavigationBar() {
           <span className="font-bold">
             {new URL(process.env.NEXT_PUBLIC_BASE_URL!).hostname}
           </span>
-        </a>
+        </Link>
 
         {/* Desktop nav */}
         <div className="hidden md:flex items-center gap-1">
-          {NAV_LINKS.map(({ label, href, external }) => (
-            <a
-              key={label}
-              href={href}
-              target={external ? "_blank" : undefined}
-              rel={external ? "noopener noreferrer" : undefined}
-              className="text-small text-xs px-3 py-1.5 rounded transition-all duration-200"
-              style={{
-                color:
-                  activeSection === label
-                    ? "var(--text-accent)"
-                    : "var(--text-muted)",
-                background:
-                  activeSection === label ? "var(--bg-badge)" : "transparent",
-                border:
-                  activeSection === label
-                    ? "1px solid var(--border-accent)"
-                    : "1px solid transparent",
-              }}
-            >
-              {label}
-              {external && (
+          {NAV_LINKS.map(({ label, href, external }) =>
+            external ? (
+              <a
+                key={label}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-small text-xs px-3 py-1.5 rounded transition-all duration-200"
+                style={{
+                  color:
+                    activeSection === label
+                      ? "var(--text-accent)"
+                      : "var(--text-muted)",
+                  background:
+                    activeSection === label ? "var(--bg-badge)" : "transparent",
+                  border:
+                    activeSection === label
+                      ? "1px solid var(--border-accent)"
+                      : "1px solid transparent",
+                }}
+              >
+                {label}
                 <svg
                   className="inline-block ml-1 -mt-0.5"
                   width="10"
@@ -137,9 +138,29 @@ export default function NavigationBar() {
                   <path d="M7 7h10v10" />
                   <path d="M7 17 21 3" />
                 </svg>
-              )}
-            </a>
-          ))}
+              </a>
+            ) : (
+              <Link
+                key={label}
+                href={`/${href}`}
+                className="text-small text-xs px-3 py-1.5 rounded transition-all duration-200"
+                style={{
+                  color:
+                    activeSection === label
+                      ? "var(--text-accent)"
+                      : "var(--text-muted)",
+                  background:
+                    activeSection === label ? "var(--bg-badge)" : "transparent",
+                  border:
+                    activeSection === label
+                      ? "1px solid var(--border-accent)"
+                      : "1px solid transparent",
+                }}
+              >
+                {label}
+              </Link>
+            ),
+          )}
 
           {/* Theme toggle */}
           <button
@@ -267,27 +288,21 @@ export default function NavigationBar() {
             }}
           >
             <div className="flex flex-col gap-1">
-              {NAV_LINKS.map(({ label, href, external }) => (
-                <a
-                  key={label}
-                  href={href}
-                  target={external ? "_blank" : undefined}
-                  rel={external ? "noopener noreferrer" : undefined}
-                  onClick={() => setMobileOpen(false)}
-                  className="text-small text-sm px-3 py-2 rounded transition-colors"
-                  style={{
-                    color:
-                      !external && activeSection === label
-                        ? "var(--text-accent)"
-                        : "var(--text-secondary)",
-                    background:
-                      !external && activeSection === label
-                        ? "var(--bg-badge)"
-                        : "transparent",
-                  }}
-                >
-                  {label}
-                  {external && (
+              {NAV_LINKS.map(({ label, href, external }) =>
+                external ? (
+                  <a
+                    key={label}
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => setMobileOpen(false)}
+                    className="text-small text-sm px-3 py-2 rounded transition-colors"
+                    style={{
+                      color: "var(--text-secondary)",
+                      background: "transparent",
+                    }}
+                  >
+                    {label}
                     <svg
                       className="inline-block ml-1 -mt-0.5"
                       width="10"
@@ -302,9 +317,28 @@ export default function NavigationBar() {
                       <path d="M7 7h10v10" />
                       <path d="M7 17 21 3" />
                     </svg>
-                  )}
-                </a>
-              ))}
+                  </a>
+                ) : (
+                  <Link
+                    key={label}
+                    href={`/${href}`}
+                    onClick={() => setMobileOpen(false)}
+                    className="text-small text-sm px-3 py-2 rounded transition-colors"
+                    style={{
+                      color:
+                        activeSection === label
+                          ? "var(--text-accent)"
+                          : "var(--text-secondary)",
+                      background:
+                        activeSection === label
+                          ? "var(--bg-badge)"
+                          : "transparent",
+                    }}
+                  >
+                    {label}
+                  </Link>
+                ),
+              )}
             </div>
           </motion.div>
         )}

@@ -37,8 +37,7 @@ export default function SkillsSection() {
         </p>
 
         {/* ── Skills as AnimatedTooltip ──────────────────────────── */}
-
-        <AnimatedTooltip items={tooltipItems} iconSize={56} borderless />
+          <AnimatedTooltip items={tooltipItems} iconSize={54} borderless />
       </div>
     </section>
   );

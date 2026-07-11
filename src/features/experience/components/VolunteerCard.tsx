@@ -16,8 +16,6 @@ interface VolunteerCardProps {
 export function VolunteerCard({ item, index }: VolunteerCardProps) {
   return (
     <TimelineCard
-      type="volunteer"
-      isCurrent={!!item.is_currently_volunteering}
       index={index}
       ariaLabel={`${item.role} at ${item.organization_name}`}
     >

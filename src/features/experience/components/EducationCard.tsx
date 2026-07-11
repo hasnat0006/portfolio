@@ -25,8 +25,6 @@ export function EducationCard({ item, index }: EducationCardProps) {
 
   return (
     <TimelineCard
-      type="education"
-      isCurrent={isCurrent}
       index={index}
       ariaLabel={`${item.degree} at ${item.name_of_institution}`}
     >

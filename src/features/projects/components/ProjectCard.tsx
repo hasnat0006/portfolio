@@ -222,32 +222,12 @@ export default function ProjectCard({ project }: ProjectCardProps) {
 
           {/* Action Links */}
           <div className="flex items-center gap-1.5">
-            <Link
+            <ActionButton
               href={`/projects/${slugify(title)}`}
-              className="details-link inline-flex items-center gap-1 font-mono rounded-md whitespace-nowrap"
-              style={{
-                color: "var(--text-accent)",
-                background: "transparent",
-                border: "1px solid var(--border-accent)",
-                transition: "all 0.2s cubic-bezier(0.23,1,0.32,1)",
-                fontSize: "10px",
-                padding: "2px 8px",
-                lineHeight: "20px",
-              }}
-            >
-              <svg
-                width="10"
-                height="10"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                aria-hidden="true"
-              >
-                <path d="M9 5l7 7-7 7" />
-              </svg>
-              Details
-            </Link>
+              icon="details"
+              label="Details"
+              newTab={false}
+            />
             {liveUrl && (
               <ActionButton href={liveUrl} icon="live" label="Live" />
             )}

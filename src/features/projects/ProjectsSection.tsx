@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import ProjectCard from "@/components/ProjectCard";
+import ProjectCard from "@/features/projects/components/ProjectCard";
 import { INITIAL_COUNT } from "@/constants/projects";
 import { PROJECTS } from "@/data/projects";
 import { ProjectsHeader } from "./components/ProjectsHeader";
