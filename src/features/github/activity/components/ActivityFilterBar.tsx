@@ -12,7 +12,6 @@ const FILTERS: FilterOption[] = [
   { value: "all", label: "All" },
   { value: "commits", label: "Commits" },
   { value: "prs", label: "PRs" },
-  { value: "releases", label: "Releases" },
   { value: "stars", label: "Stars" },
   { value: "forks", label: "Forks" },
   { value: "issues", label: "Issues" },
@@ -23,10 +22,13 @@ interface ActivityFilterBarProps {
   onChange: (filter: ActivityFilter) => void;
 }
 
-export function ActivityFilterBar({ active, onChange }: ActivityFilterBarProps) {
+export function ActivityFilterBar({
+  active,
+  onChange,
+}: ActivityFilterBarProps) {
   return (
     <div
-      className="flex flex-wrap items-center gap-1.5 p-1 rounded-md mb-6"
+      className="flex flex-wrap items-center gap-1.5 p-1 rounded-md mb-6 overflow-hidden"
       style={{
         background: "var(--bg-secondary)",
         border: "1px solid var(--border-primary)",
@@ -45,7 +47,7 @@ export function ActivityFilterBar({ active, onChange }: ActivityFilterBarProps) 
               color: isActive ? "var(--text-accent)" : "var(--text-muted)",
               background: isActive ? "var(--bg-card)" : "transparent",
               border: isActive
-                ? "1px solid rgba(52,211,153,0.2)"
+                ? "1px solid"
                 : "1px solid transparent",
             }}
             role="tab"

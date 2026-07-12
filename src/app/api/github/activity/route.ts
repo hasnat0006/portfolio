@@ -44,7 +44,10 @@ const REST_HEADERS: Record<string, string> = {
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const page = parseInt(searchParams.get("page") ?? "1", 10);
-  const perPage = Math.min(parseInt(searchParams.get("per_page") ?? "30", 10), 100);
+  const perPage = Math.min(
+    parseInt(searchParams.get("per_page") ?? "30", 10),
+    100,
+  );
 
   // ── Check cache for page 1 ──────────────────────────────────────
   if (page === 1) {
@@ -132,7 +135,8 @@ export async function GET(request: Request) {
 
     return NextResponse.json(responseBody, {
       headers: {
-        "Cache-Control": "public, max-age=600, s-maxage=600, stale-while-revalidate=3600",
+        "Cache-Control":
+          "public, max-age=600, s-maxage=600, stale-while-revalidate=3600",
         "X-Cache": "MISS",
       },
     });

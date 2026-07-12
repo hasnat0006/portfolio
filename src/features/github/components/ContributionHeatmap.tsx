@@ -318,7 +318,7 @@ export function ContributionHeatmap({
               background: "var(--bg-card-hover)",
               border: "1px solid var(--border-primary)",
               boxShadow: "var(--shadow-lg)",
-              left: tooltip.x + 16,
+              left: tooltip.x + 0,
               top: tooltip.y - 80,
               color: "var(--text-primary)",
               minWidth: 140,

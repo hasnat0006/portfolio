@@ -1,10 +1,10 @@
 "use client";
 
-import { ActivityIcon } from "./ActivityIcon";
 import type { ActivityItem, ActivityType } from "@/types/github";
 import { timeAgo } from "@/utils/timeAgo";
 import { motion } from "framer-motion";
 import { GitCommit } from "lucide-react";
+import { ActivityIcon } from "./ActivityIcon";
 
 interface ActivityTimelineProps {
   grouped: {
@@ -74,7 +74,7 @@ function ActivityRow({ item, index }: { item: ActivityItem; index: number }) {
         <div className="flex items-start justify-between gap-2">
           <div className="min-w-0">
             <p
-              className="text-xs font-medium leading-snug"
+              className="text-xs font-medium leading-snug break-words"
               style={{ color: "var(--text-primary)" }}
             >
               {item.url ? (
@@ -91,12 +91,12 @@ function ActivityRow({ item, index }: { item: ActivityItem; index: number }) {
                 item.title
               )}
             </p>
-            <div className="flex items-center gap-1.5 mt-0.5">
+            <div className="flex items-center gap-1.5 mt-0.5 min-w-0">
               <a
                 href={item.repoUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[10px] font-mono hover:underline transition-colors"
+                className="text-[10px] font-mono hover:underline transition-colors truncate"
                 style={{ color: "var(--text-accent)" }}
               >
                 {item.repo}
@@ -127,35 +127,47 @@ function ActivityRow({ item, index }: { item: ActivityItem; index: number }) {
         </div>
 
         {/* Commit messages for push events */}
-        {item.type === "push" && item.commitMessages && item.commitMessages.length > 0 && (
-          <div
-            className="mt-1.5 rounded-md p-2 space-y-1"
-            style={{
-              background: "var(--bg-code)",
-              border: "1px solid var(--border-primary)",
-            }}
-          >
-            {item.commitMessages.slice(0, 3).map((msg, i) => (
-              <div key={i} className="flex items-start gap-1.5 text-[10px] font-mono leading-tight">
-                <GitCommit size={10} className="shrink-0 mt-0.5" style={{ color: "var(--text-muted)" }} />
-                <span style={{ color: "var(--text-secondary)" }}>
-                  {msg.length > 72 ? msg.slice(0, 72) + "…" : msg}
-                </span>
-              </div>
-            ))}
-            {item.hasMoreCommits && (
-              <a
-                href={item.url ?? item.repoUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[10px] font-mono inline-block mt-1 hover:underline"
-                style={{ color: "var(--text-accent)" }}
-              >
-                View more commits →
-              </a>
-            )}
-          </div>
-        )}
+        {item.type === "push" &&
+          item.commitMessages &&
+          item.commitMessages.length > 0 && (
+            <div
+              className="mt-1.5 rounded-md p-2 space-y-1"
+              style={{
+                background: "var(--bg-code)",
+                border: "1px solid var(--border-primary)",
+              }}
+            >
+              {item.commitMessages.slice(0, 3).map((msg, i) => (
+                <div
+                  key={i}
+                  className="flex items-start gap-1.5 text-[10px] font-mono leading-tight"
+                >
+                  <GitCommit
+                    size={10}
+                    className="shrink-0 mt-0.5"
+                    style={{ color: "var(--text-muted)" }}
+                  />
+                  <span
+                    className="break-words"
+                    style={{ color: "var(--text-secondary)" }}
+                  >
+                    {msg.length > 72 ? msg.slice(0, 72) + "…" : msg}
+                  </span>
+                </div>
+              ))}
+              {item.hasMoreCommits && (
+                <a
+                  href={item.url ?? item.repoUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[10px] font-mono inline-block mt-1 hover:underline"
+                  style={{ color: "var(--text-accent)" }}
+                >
+                  View more commits →
+                </a>
+              )}
+            </div>
+          )}
       </div>
     </motion.li>
   );

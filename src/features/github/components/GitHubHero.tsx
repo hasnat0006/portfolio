@@ -47,7 +47,7 @@ interface ChipProps {
 function InfoChip({ label, value, icon }: ChipProps) {
   return (
     <div
-      className="flex flex-col items-center gap-0.5 px-3 py-2.5 rounded-md"
+      className="flex flex-col items-center gap-0.5 p-2 rounded-md"
       style={{
         background: "var(--bg-code)",
         border: "1px solid var(--border-primary)",
@@ -66,12 +66,12 @@ function InfoChip({ label, value, icon }: ChipProps) {
         {value}
       </span>
       <span
-        className="text-meta"
+        className="font-mono tracking-light"
         style={{
           color: "var(--text-muted)",
           fontSize: "0.6rem",
           textTransform: "uppercase",
-          letterSpacing: "0.06em",
+          letterSpacing: "0.02em",
         }}
       >
         {label}
@@ -121,7 +121,7 @@ export function GitHubHero({ userInfo, stats }: Props) {
       <style>{CSS}</style>
       <div
         ref={ref}
-        className="gh-hero-card relative overflow-hidden rounded-md p-6 md:p-8"
+        className="gh-hero-card relative overflow-hidden rounded-md p-4"
         style={{
           background: "var(--bg-card)",
           border: "1px solid var(--border-primary)",
@@ -203,13 +203,20 @@ export function GitHubHero({ userInfo, stats }: Props) {
 
           {/* Info */}
           <div className="flex-1 text-center md:text-left">
-            <div className="flex flex-col md:flex-row items-center md:items-center gap-2">
+            <div className="flex flex-col md:flex-row items-center justify-between md:items-center gap-2">
               <h3
                 className="text-heading text-2xl md:text-3xl"
                 style={{ color: "var(--text-primary)" }}
               >
                 {userInfo.name ?? userInfo.login}
               </h3>
+              <div className="shrink-0">
+                <ActionButton
+                  href={userInfo.htmlUrl}
+                  icon="github"
+                  label="View Profile"
+                />
+              </div>
             </div>
 
             {userInfo.login && (
@@ -242,7 +249,7 @@ export function GitHubHero({ userInfo, stats }: Props) {
               </span>
             </div>
             {/* Chips */}
-            <div className="grid grid-cols-3 md:grid-cols-5 gap-2 mb-4">
+            <div className="grid grid-cols-3 md:grid-cols-4 gap-2 mb-4">
               <InfoChip label="Profile Views" value={visible ? views : "—"} />
               <InfoChip
                 label="Contributions"
@@ -250,7 +257,6 @@ export function GitHubHero({ userInfo, stats }: Props) {
               />
               <InfoChip label="Repositories" value={visible ? repos : "—"} />
               <InfoChip label="Followers" value={visible ? followers : "—"} />
-              <InfoChip label="Following" value={userInfo.following} />
               <InfoChip label="Stars Earned" value={visible ? stars : "—"} />
               <InfoChip
                 label="Commits/Year"
@@ -264,15 +270,6 @@ export function GitHubHero({ userInfo, stats }: Props) {
             </div>
 
             {/* Meta */}
-          </div>
-
-          {/* GitHub link */}
-          <div className="shrink-0">
-            <ActionButton
-              href={userInfo.htmlUrl}
-              icon="github"
-              label="View Profile"
-            />
           </div>
         </div>
       </div>

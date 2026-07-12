@@ -2,19 +2,19 @@
 
 import type { ActivityType } from "@/types/github";
 import {
+  BookOpen,
   CircleDot,
   GitCommit,
   GitFork,
   GitPullRequest,
+  Globe,
+  MessageCircle,
   MessageSquare,
-  type LucideIcon,
   Plus,
   Rocket,
   Star,
   Trash2,
-  BookOpen,
-  Globe,
-  MessageCircle,
+  type LucideIcon,
 } from "lucide-react";
 
 const ICON_MAP: Record<string, LucideIcon> = {

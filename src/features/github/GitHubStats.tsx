@@ -56,11 +56,6 @@ export default function GitHubStats() {
             totalContributions={stats.totalContributions}
           />
         </div>
-
-        {/* ── Recent Activity ──────────────────────────────────────── */}
-        <div className="gh-section">
-          <ContributionTimeline items={activityTimeline} maxItems={5} />
-        </div>
       </div>
     </>
   );

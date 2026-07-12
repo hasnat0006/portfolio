@@ -48,11 +48,21 @@ export default function HomePage() {
             >
               Open Source &amp; Development Analytics
             </p>
-            <GitHubStats />
+
+            {/* Grid: stacked on mobile, 60/40 columns on lg+ */}
+            <div className="grid grid-cols-1 lg:grid-cols-[3fr_2fr] gap-6 items-start">
+              {/* Left column: Hero + Contribution Heatmap */}
+              <div className="min-w-0">
+                <GitHubStats />
+              </div>
+
+              {/* Right column: Activity feed */}
+              <div className="min-w-0">
+                <GitHubActivity compact />
+              </div>
+            </div>
           </div>
         </section>
-
-        <GitHubActivity />
 
         <section
           id="codeforces"

@@ -131,7 +131,8 @@ function parseSingleEvent(ev: GitHubEvent): ActivityItem | null {
 
   switch (type) {
     case "push": {
-      const commits = (payload.commits as Array<{ message: string; sha?: string }>) ?? [];
+      const commits =
+        (payload.commits as Array<{ message: string; sha?: string }>) ?? [];
       const count = (payload.size as number) ?? commits.length;
 
       // GitHub Events API often omits commits/size for older push events.
@@ -177,11 +178,9 @@ function parseSingleEvent(ev: GitHubEvent): ActivityItem | null {
     case "pr": {
       const action = (payload.action as string) ?? "";
       const prNumber = extractPrNumber(payload);
-      const isMerged = (payload.pull_request as { merged?: boolean })
-        ?.merged;
+      const isMerged = (payload.pull_request as { merged?: boolean })?.merged;
       const prUrl = (payload.pull_request as { html_url?: string })?.html_url;
-      const prTitle =
-        (payload.pull_request as { title?: string })?.title ?? "";
+      const prTitle = (payload.pull_request as { title?: string })?.title ?? "";
       const repoShort = repoName.split("/").pop();
 
       let actionText: string;
@@ -227,8 +226,7 @@ function parseSingleEvent(ev: GitHubEvent): ActivityItem | null {
       const action = (payload.action as string) ?? "";
       const issueNumber = extractIssueNumber(payload);
       const issueUrl = (payload.issue as { html_url?: string })?.html_url;
-      const issueTitle =
-        (payload.issue as { title?: string })?.title ?? "";
+      const issueTitle = (payload.issue as { title?: string })?.title ?? "";
       const repoShort = repoName.split("/").pop();
 
       let actionText: string;
@@ -333,8 +331,7 @@ function parseSingleEvent(ev: GitHubEvent): ActivityItem | null {
     }
 
     case "fork": {
-      const forkRepo = (payload.forkee as { full_name?: string })
-        ?.full_name;
+      const forkRepo = (payload.forkee as { full_name?: string })?.full_name;
       return {
         ...base,
         type,
@@ -367,8 +364,7 @@ function parseSingleEvent(ev: GitHubEvent): ActivityItem | null {
 
     case "commit_comment": {
       const commentRepo = repoName.split("/").pop();
-      const commentUrl =
-        (payload.comment as { html_url?: string })?.html_url;
+      const commentUrl = (payload.comment as { html_url?: string })?.html_url;
       return {
         ...base,
         type: "commit_comment",
@@ -378,7 +374,8 @@ function parseSingleEvent(ev: GitHubEvent): ActivityItem | null {
     }
 
     case "wiki": {
-      const pages = (payload.pages as Array<{ action: string; title: string }>) ?? [];
+      const pages =
+        (payload.pages as Array<{ action: string; title: string }>) ?? [];
       const repoShort = repoName.split("/").pop();
       if (pages.length > 0) {
         const actions = [...new Set(pages.map((p) => p.action))];
@@ -428,7 +425,9 @@ export function groupByDate(items: ActivityItem[]): DateGroup[] {
   const now = new Date();
   const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const yesterdayStart = new Date(todayStart.getTime() - 86400000);
-  const weekStart = new Date(todayStart.getTime() - todayStart.getDay() * 86400000);
+  const weekStart = new Date(
+    todayStart.getTime() - todayStart.getDay() * 86400000,
+  );
 
   const groups: Record<DateGroupKey, ActivityItem[]> = {
     today: [],
@@ -451,10 +450,22 @@ export function groupByDate(items: ActivityItem[]): DateGroup[] {
   }
 
   const result: DateGroup[] = [];
-  if (groups.today.length > 0) result.push({ key: "today", label: "Today", items: groups.today });
-  if (groups.yesterday.length > 0) result.push({ key: "yesterday", label: "Yesterday", items: groups.yesterday });
-  if (groups.this_week.length > 0) result.push({ key: "this_week", label: "This Week", items: groups.this_week });
-  if (groups.older.length > 0) result.push({ key: "older", label: "Older", items: groups.older });
+  if (groups.today.length > 0)
+    result.push({ key: "today", label: "Today", items: groups.today });
+  if (groups.yesterday.length > 0)
+    result.push({
+      key: "yesterday",
+      label: "Yesterday",
+      items: groups.yesterday,
+    });
+  if (groups.this_week.length > 0)
+    result.push({
+      key: "this_week",
+      label: "This Week",
+      items: groups.this_week,
+    });
+  if (groups.older.length > 0)
+    result.push({ key: "older", label: "Older", items: groups.older });
 
   return result;
 }

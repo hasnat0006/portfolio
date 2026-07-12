@@ -1,7 +1,7 @@
 "use client";
 
 import { LOCAL_CACHE_TTL_MS } from "@/constants";
-import type { ActivityFilter, ActivityItem, GitHubActivityResponse } from "@/types/github";
+import type { ActivityItem, GitHubActivityResponse } from "@/types/github";
 import { useEffect, useRef, useState } from "react";
 
 const CACHE_KEY = "gh_activity_v1";
@@ -99,7 +99,9 @@ export function useGitHubActivity(): GitHubActivityState {
 
         if (cancelled) return;
 
-        setEvents((prev) => (page === 1 ? json.events : [...prev, ...json.events]));
+        setEvents((prev) =>
+          page === 1 ? json.events : [...prev, ...json.events],
+        );
         setHasMore(json.hasMore);
         setError(json.error ?? null);
 
@@ -118,7 +120,9 @@ export function useGitHubActivity(): GitHubActivityState {
     };
 
     load();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [page, refreshKey]);
 
   const loadMore = () => {
