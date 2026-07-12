@@ -9,34 +9,17 @@ interface MetaPillsProps {
   isCurrent?: boolean;
 }
 
-/**
- * Optional metadata pills row — CGPA badge, location chip, and website link.
- */
 export function MetaPills({
   location,
   website,
   cgpa,
-  isCurrent,
 }: MetaPillsProps) {
-  const hasPills = isCurrent || cgpa || location || website;
+  const hasPills = cgpa || location || website;
   if (!hasPills) return null;
 
   return (
     <div className="flex flex-wrap items-center gap-1.5 mt-2">
-      {isCurrent && (
-        <span
-          className="text-xs font-mono px-3 py-1 rounded-md"
-          style={{
-            color: "var(--text-accent)",
-            background:
-              "color-mix(in srgb, var(--text-accent) 8%, transparent)",
-            border:
-              "1px solid color-mix(in srgb, var(--text-accent) 20%, transparent)",
-          }}
-        >
-          Present
-        </span>
-      )}
+
 
       {cgpa && (
         <span

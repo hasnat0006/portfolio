@@ -1,7 +1,8 @@
 "use client";
 
-import { EXP_ANIMATION, TIMELINE_CARD_STYLE } from "@/constants/experience";
+import { EXP_ANIMATION } from "@/constants/experience";
 import { useInView } from "@/hooks/useInView";
+import { useTilt } from "@/hooks/useTilt";
 import type { ReactNode } from "react";
 
 interface TimelineCardProps {
@@ -12,18 +13,28 @@ interface TimelineCardProps {
 
 /**
  * Shared card container for timeline entries.
- * Handles scroll-into-view animation and hover lift.
+ * Handles scroll-into-view animation, 3D tilt, and spotlight hover effect —
+ * consistent with the project card and featured achievement card design pattern.
  */
 export function TimelineCard({
   index,
   ariaLabel,
   children,
 }: TimelineCardProps) {
-  const { ref, inView } = useInView();
+  const { ref: viewRef, inView } = useInView();
+  const {
+    ref: tiltRef,
+    tilt,
+    spotlight,
+    hovered,
+    onMove,
+    onEnter,
+    onLeave,
+  } = useTilt(5);
 
   return (
     <article
-      ref={ref}
+      ref={viewRef}
       className="exp-item group"
       style={{
         opacity: inView ? 1 : 0,
@@ -33,23 +44,56 @@ export function TimelineCard({
       aria-label={ariaLabel}
     >
       <div
-        className="rounded-md p-4 transition-all duration-300 relative"
+        ref={tiltRef}
+        className="relative rounded-md p-4 overflow-hidden"
         style={{
-          ...TIMELINE_CARD_STYLE,
-          transform: "translateY(0)",
+          background: "var(--bg-card)",
+          backdropFilter: "blur(20px)",
+          WebkitBackdropFilter: "blur(20px)",
+          border: hovered
+            ? "1px solid rgba(52,211,153,0.4)"
+            : "1px solid var(--border-accent)",
+          boxShadow: hovered
+            ? "0 20px 60px rgba(0,0,0,0.25), 0 0 0 1px rgba(52,211,153,0.15), 0 0 40px rgba(52,211,153,0.06)"
+            : "0 2px 12px rgba(0,0,0,0.08)",
+          transform: `perspective(900px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) translateZ(4px)`,
+          transition: hovered ? "all 0.15s ease-out" : "all 0.3s ease-in",
+          cursor: "default",
         }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.transform = "translateY(-2px)";
-          e.currentTarget.style.boxShadow = "var(--shadow-md)";
-          e.currentTarget.style.borderColor = "var(--text-accent)";
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.transform = "translateY(0)";
-          e.currentTarget.style.boxShadow = "var(--shadow-sm)";
-          e.currentTarget.style.borderColor = "var(--border-accent)";
-        }}
+        onMouseMove={onMove}
+        onMouseEnter={onEnter}
+        onMouseLeave={onLeave}
       >
-        {children}
+        {/* Gradient overlay on hover */}
+        <div
+          className="absolute inset-0 rounded-md pointer-events-none"
+          style={{
+            background: hovered
+              ? "linear-gradient(135deg, rgba(52,211,153,0.08) 0%, transparent 50%, rgba(34,211,238,0.04) 100%)"
+              : "transparent",
+            transition: "background 0.4s ease",
+          }}
+        />
+
+        {/* Cursor spotlight */}
+        {hovered && (
+          <div
+            className="absolute pointer-events-none"
+            style={{
+              left: spotlight.x,
+              top: spotlight.y,
+              width: 280,
+              height: 280,
+              transform: "translate(-50%, -50%)",
+              background:
+                "radial-gradient(circle, rgba(52,211,153,0.09) 0%, transparent 65%)",
+              borderRadius: "50%",
+            }}
+          />
+        )}
+
+        {/* Content */}
+        <div className="relative z-10">{children}</div>
       </div>
     </article>
   );

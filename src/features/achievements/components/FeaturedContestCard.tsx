@@ -128,7 +128,12 @@ export function FeaturedContestCard({
                   />
                 )}
                 {achievement.post_url?.map((url, i) => (
-                  <ActionButton key={i} href={url} label={`post_${i + 1}`} />
+                  <ActionButton
+                    key={i}
+                    label={`post_${i + 1}`}
+                    href={url}
+                    icon="live"
+                  />
                 ))}
               </div>
             )}

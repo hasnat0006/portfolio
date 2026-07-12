@@ -52,13 +52,9 @@ export interface Project {
   liveUrl?: string;
   photoUrl?: string[];
   collaborators?: Collaborator[];
-  /** The problem or motivation that sparked the project. */
   problem?: string;
-  /** How the project was built — approach, architecture, key decisions. */
   solution?: string;
-  /** Specific obstacles encountered during development. */
   challenges?: string[];
-  /** The broader impact or outcome of the project. */
   impact?: string;
   /** Quantifiable results (e.g. [{ label: "Users", value: "500+" }]). */
   metrics?: { label: string; value: string }[];

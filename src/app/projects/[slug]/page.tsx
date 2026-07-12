@@ -10,7 +10,6 @@ import {
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-// ISR: revalidate every 24 hours
 export const revalidate = 86400;
 
 export async function generateStaticParams() {
@@ -73,18 +72,11 @@ export default async function ProjectDetailPage({
           color: "var(--text-primary)",
         }}
       >
-        {/* ── Hero Section ─────────────────────────────── */}
         <ProjectHero project={project} />
-
-        {/* ── Background alternation rhythm ───────────── */}
-
-        {/* Overview */}
         <ProjectOverview
           fullDescription={full_description}
           collaborators={collaborators}
         />
-
-        {/* Tech Stack */}
         {techStack && techStack.length > 0 && (
           <>
             <div
@@ -97,8 +89,6 @@ export default async function ProjectDetailPage({
             />
           </>
         )}
-
-        {/* Bottom CTA */}
         <ProjectBottomCTA
           liveUrl={liveUrl}
           githubUrl={githubUrl}

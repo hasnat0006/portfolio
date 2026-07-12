@@ -16,9 +16,6 @@ export default function ScrollDownIndicator() {
     >
       <div
         className="flex flex-col items-center rounded-full px-1.5 py-1"
-        style={{
-          border: "1.5px solid var(--border-accent)",
-        }}
       >
         {[0, 1, 2].map((i) => (
           <motion.div

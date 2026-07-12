@@ -15,6 +15,9 @@ const GitHubStats = dynamic(() => import("@/features/github/GitHubStats"));
 const CodeforcesStats = dynamic(
   () => import("@/features/codeforces/CodeforcesStats"),
 );
+const GitHubActivity = dynamic(
+  () => import("@/features/github/activity/GitHubActivitySection"),
+);
 
 export default function HomePage() {
   return (
@@ -48,6 +51,8 @@ export default function HomePage() {
             <GitHubStats />
           </div>
         </section>
+
+        <GitHubActivity />
 
         <section
           id="codeforces"

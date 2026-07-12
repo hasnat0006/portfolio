@@ -1,7 +1,3 @@
-// ─────────────────────────────────────────────────────────────────────────────
-// Table
-// ─────────────────────────────────────────────────────────────────────────────
-
 export const TABLE_HEADERS = ["", "Rank", "Contest", "Team Name", "Articles"];
 
 export const TABLE_HEADER_WIDTHS = [
@@ -27,10 +23,6 @@ export const ANIMATION = {
   unhoverTransition:
     "transform 0.4s cubic-bezier(0.23,1,0.32,1), border-color 0.3s ease, box-shadow 0.3s ease",
 } as const;
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Glassmorphism base styles
-// ─────────────────────────────────────────────────────────────────────────────
 
 export const GLASS_BASE = {
   background: "rgba(52,211,153,0.03)",

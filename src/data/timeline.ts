@@ -18,11 +18,15 @@ export interface Education {
   notableAchievements?: string[];
 }
 
+interface Role {
+  name: string;
+  start_date: string;
+  end_date?: string;
+}
+
 export interface WorkExperience {
   company_name: string;
-  position: string;
-  start_date: string;
-  end_date: string;
+  role: Role[];
   responsibilities: string[];
   company_logo?: string;
   company_website?: string;
@@ -39,14 +43,11 @@ export interface WorkExperience {
 
 export interface VolunteerExperience {
   organization_name: string;
-  role: string;
-  start_date: string;
-  end_date: string;
+  role: Role[];
   responsibilities: string[];
   organization_logo?: string;
   organization_website?: string;
   organization_location?: string;
-  is_currently_volunteering?: boolean;
   description?: string;
 }
 
@@ -60,32 +61,28 @@ export const education: Education[] = [
     cgpa: "3.69/4.00",
     institution_location: "Dhaka, Bangladesh",
     institution_website: "https://mist.ac.bd",
-    coursework: [
-      "Data Structures & Algorithms",
-      "Database Management Systems",
-      "Software Engineering & Project Management",
-      "Artificial Intelligence & Machine Learning",
-      "Computer Networks",
-      "Operating Systems",
-      "Object-Oriented Programming (Java, C++)",
-      "Web Technologies",
-    ],
     activities: [
       {
         name: "MIST Computer Club",
-        role: "President & Assistant Secretary",
-        period: "Feb 2023 – Jun 2026",
+        role: "President",
+        period: "Jul'25 – Jun'26",
       },
       {
-        name: "MIST Competitive Programming Community",
-        role: "Core Member & Mentor",
+        name: "MIST Computer Club",
+        role: "Assistant Secretary",
+        period: "Feb'24 – Jun'25",
+      },
+      {
+        name: "MIST Computer Club",
+        role: "Core Member & Programming Mentor",
         period: "2022 – 2026",
       },
     ],
     notableAchievements: [
-      "Organized multiple intra-university programming contests",
-      "Mentored junior students in competitive programming and software development",
-      "Dean's List recognition for academic excellence",
+      "Won multiple intra-university programming contests and hackathons.",
+      "Organized Talent Hunt 2025 for Level-1 students as club president.",
+      "Mentored junior students in basic to competitive programming.",
+      "Dean's List recognition for academic excellence in level 3.",
     ],
   },
   {
@@ -96,16 +93,20 @@ export const education: Education[] = [
     end_date: "2021",
     cgpa: "5.00/5.00",
     institution_location: "Savar, Bangladesh",
-    institution_website: "https://www.savarcantonmentcollege.edu.bd",
+    institution_website: "https://www.scpsc.edu.bd/",
   },
 ];
 
 export const workExperience: WorkExperience[] = [
   {
     company_name: "Enosis Solutions",
-    position: "Software Engineer",
-    start_date: "Jul 2025",
-    end_date: "Present",
+    role: [
+      {
+        name: "Software Engineer L1",
+        start_date: "Jul 2025",
+        end_date: "Present",
+      },
+    ],
     description:
       "Working as a Software Engineer at Enosis Solutions, contributing to the development of innovative software solutions and collaborating with cross-functional teams to deliver high-quality products.",
     responsibilities: [
@@ -117,29 +118,30 @@ export const workExperience: WorkExperience[] = [
     is_currently_working: true,
     technologies: [
       "React",
+      "Next.js",
+      "JavaScript",
       "TypeScript",
-      "Node.js",
-      "PostgreSQL",
-      "Docker",
+      "C#",
+      ".NET",
+      "SQL",
       "Git",
     ],
-    achievements: [
-      "Contributed to production-level features in a cross-functional agile team",
-      "Participated in code reviews and knowledge-sharing sessions",
-      "Improved test coverage and code quality metrics through rigorous review practices",
-    ],
-    metrics: [
-      { label: "Team Size", value: "8+" },
-      { label: "Projects", value: "Multiple" },
-    ],
+    company_website: "https://www.enosisbd.com/",
+    company_location: "Dhaka, Bangladesh",
+    achievements: [],
+    metrics: [],
   },
   {
     company_name: "Tekarsh",
-    position: "Industrial Trainee",
-    start_date: "May 2025",
-    end_date: "Jun 2025",
+    role: [
+      {
+        name: "Software Engineer Intern",
+        start_date: "Jan 2025",
+        end_date: "Mar 2025",
+      },
+    ],
     description:
-      "Completed an industrial training program where I worked on a real-world web application while gaining practical experience with modern software development practices and collaborative workflows.",
+      "Completed an industrial training program where I worked on a web application while gaining practical experience with software development practices.",
     responsibilities: [
       "Participated in industry training sessions and project discussions.",
       "Developed the company's main platform website.",
@@ -154,7 +156,10 @@ export const workExperience: WorkExperience[] = [
       "Supabase",
       "PostgreSQL",
       "Express.js",
+      "Git",
     ],
+    company_website: "https://tekarsh.com/",
+    company_location: "Dhaka, Bangladesh",
     achievements: [
       "Delivered a production-ready company website within a tight 3-week timeline",
       "Integrated AI-powered resume screening feature in the admin panel",
@@ -170,25 +175,47 @@ export const workExperience: WorkExperience[] = [
 export const volunteerExperience: VolunteerExperience[] = [
   {
     organization_name: "MIST Computer Club",
-    role: "President, Assistant Secretary & Mentor",
-    start_date: "Feb 2023",
-    end_date: "Jun 2026",
+    role: [
+      {
+        name: "President",
+        start_date: "Jul 2025", 
+        end_date: "Jun 2026",
+      },
+      {
+        name: "Assistant Secretary",
+        start_date: "Feb 2024",
+        end_date: "Jun 2025",
+      },
+      {
+        name: "Programming Mentor",
+        start_date: "Feb 2023",
+        end_date: "Jun 2026",
+      },
+      {
+        name: "Club Member",
+        start_date: "Apr 2022",
+        end_date: "Feb 2023",
+      }
+    ],
     description:
-      "Leading one of the most active clubs at MIST which focuses on competitive programming, software development, and technology-related activities. As President and Assistant Secretary, I oversee the club's operations, mentor junior members, and organize events and workshops.",
+      "Leading one of the most active clubs at MIST which focuses on basic c programming to competitive programming and technology-related activities. As President and Assistant Secretary, I oversee the club's operations, mentor junior members and organize events and workshops.",
     responsibilities: [
       "Managed the overall operations of the club.",
       "Oversaw multiple committees and coordinated their activities.",
       "Introduced and managed programming courses for junior members.",
       "Represented MIST in national and international programming competitions.",
     ],
-    is_currently_volunteering: true,
-    organization_website: "https://mcc.mist.ac.bd",
+    organization_website: "https://computerclub.mist.ac.bd",
   },
   {
     organization_name: "MIST Talent Hunt 2025",
-    role: "Organizer, Problem Setter & Judge",
-    start_date: "Jul 2025",
-    end_date: "Jul 2025",
+    role: [
+      {
+        name: "Problem Setter, Organizer & Judge",
+        start_date: "Jul 2025",
+        end_date: "Jul 2025",
+      },
+    ],
     description:
       "Served as an organizer, problem setter and judge for the programming competition segment of MIST Talent Hunt 2025, ensuring a smooth and engaging contest experience.",
     responsibilities: [
@@ -196,7 +223,6 @@ export const volunteerExperience: VolunteerExperience[] = [
       "Designed and tested programming contest problems.",
       "Worked closely with other setters and testers.",
       "Judged submissions and ensured fair contest execution.",
-    ],
-    is_currently_volunteering: false,
+    ]
   },
 ];

@@ -127,7 +127,12 @@ export function ContestRow({ achievement, index, inView }: ContestRowProps) {
       <td className="py-3 px-3 pr-4">
         <div className="flex flex-wrap items-center gap-1.5">
           {achievement.post_url?.map((url, i) => (
-            <ActionButton key={i} href={url} label={`post_${i + 1}`} />
+            <ActionButton
+              key={i}
+              label={`post_${i + 1}`}
+              href={url}
+              icon="live"
+            />
           ))}
         </div>
       </td>

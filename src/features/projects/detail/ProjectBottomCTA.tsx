@@ -84,25 +84,12 @@ export function ProjectBottomCTA({
                     <ActionButton
                       href={githubUrl}
                       icon="github"
-                      label="View Source"
+                      label="View Source Code"
                       className="!text-sm !font-mono !px-5 !py-2.5 !rounded-md"
                     />
                   )}
                 </>
               )}
-
-              <Link
-                href="/#contact"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-md text-sm font-mono transition-all duration-200 hover:-translate-y-0.5"
-                style={{
-                  background: "var(--bg-card)",
-                  color: "var(--text-primary)",
-                  border: "1px solid var(--border-primary)",
-                }}
-              >
-                Get in Touch
-                <ArrowRight size={14} aria-hidden="true" />
-              </Link>
             </div>
           </div>
         </div>
